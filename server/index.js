@@ -315,6 +315,70 @@ const handlers = {
   //
   // Isi entri berupa id telanjang — klien menambahkan awalan "hair" sendiri,
   // pola yang sama dengan character_item.
+  // Rumah berburu lama. OldHuntingHouse.BattleStatusResponse():
+  //     if (validateAmfResponse(response)) {
+  //         this.enemyList = [];
+  //         for (i = 0; i < response.result.room.length; i++) { ... }
+  //         this.currPage = 1;
+  //         this.initDetail();
+  //         this.loadPanelContent();
+  //         this.gotoAndPlay(Timeline.SHOW);
+  //         Central.main.hideAmfLoading();          // <- PALING AKHIR
+  //     }
+  //
+  // Catch-all mengirim result: [] sehingga result.room undefined, dan
+  // `.length` melempar #1010. Karena hideAmfLoading() ada di baris terakhir,
+  // exception itu meninggalkan lapisan pemblokir tetap terpasang — layarnya
+  // macet, bukan sekadar panel kosong.
+  //
+  // `room` satu-satunya field yang dibaca dari result di seluruh SWF ini.
+  // Array kosong aman: perulangannya dilewati, dan initDetail() maupun
+  // loadPanelContent() tidak menyentuh enemyList sama sekali.
+  // Panel tail pet (popup_tail_pet.swf, kelas paymentTailPet).
+  //
+  //   getCanBuyTailsResponse(response) {
+  //       this.method_tokenBuy = response.active_tail_number;         // <- Array
+  //       this.ownedTailArr = (response.owned_tail_number != null)
+  //                           ? response.owned_tail_number as Array : [];
+  //       for (i = 0; i < tailPetCanShowArr.length; i++)
+  //           if (method_tokenBuy.indexOf(tailPetCanShowArr[i]) < 0) ...
+  //       this.defaultPost = method_tokenBuy[method_tokenBuy.length - 1];
+  //       Central.main.hideAmfLoading();                              // <- sesudahnya
+  //   }
+  //
+  // `method_tokenBuy` bertipe Array, jadi `active_tail_number` yang tidak ada
+  // ter-coerce jadi NULL (bukan undefined) — lalu .indexOf() atau .length
+  // melempar #1009. Karena hideAmfLoading() baru dipanggil sesudah itu,
+  // layarnya ikut macet.
+  //
+  // `owned_tail_number` sudah punya penjaga null di klien, jadi sebenarnya
+  // opsional — dikirim juga supaya bentuknya konsisten.
+  //
+  // Array KOSONG tidak cukup: defaultPost jadi undefined, lalu checkMcPost()
+  // dan updateTab() meledak saat panel digambar (#1009 dan #1010 di frame10).
+  //
+  // Isinya diambil dari nilai bawaan panel itu sendiri. Konstruktornya
+  // menyiapkan:
+  //     tailPetArr        = [141, 131, 86, 74, 73, 71, 68, 65]
+  //     tailSwfArr        = ['pet_146','pet_141','pet_131','tail_4_3',
+  //                          'tail_5','tail_6','tail_7','snake_0','fox_1']
+  //     tailBtnArr        = ['tailx','pet1Btn' ... 'pet9Btn']
+  //     tailPetCanShowArr = [1, 2]
+  //     method_tokenBuy   = [1, 2, 3, 4, 5, 6, 7, 8, 9]   <- lalu DITIMPA respons ini
+  //
+  // Jadi mengirim 1..9 mengembalikan panel ke perilaku bawaannya, dan
+  // defaultPost = method_tokenBuy[length-1] = 9 seperti semula.
+  'Anni5th.getTailPet': () => ({
+    status: 1, error: null, result: [],
+    active_tail_number: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    owned_tail_number: [],
+  }),
+
+  'EudemonGarden.getHuntingStatus': () => ({
+    status: 1, error: null,
+    result: { room: [] },
+  }),
+
   'CharacterManagement.getInvHair': () => ({
     status: 1, error: null, result: [],
     inv_hair: [],
@@ -759,6 +823,13 @@ const server = http.createServer((req, res) => {
   const chunks = [];
   req.on('data', c => chunks.push(c));
   req.on('end', () => {
+   // Seluruh pemrosesan dibungkus supaya server TIDAK PERNAH diam.
+   // decodePacket sudah punya penjaga sendiri, tapi log(), encodePacket(),
+   // dan penulisan respons belum. Kalau salah satunya melempar, koneksi
+   // menggantung tanpa jawaban: klien menunggu sampai timeout dan layarnya
+   // membeku tanpa satu pun pesan error. Itu mode kegagalan yang paling
+   // mahal untuk dilacak, jadi lebih baik membalas 500 daripada bisu.
+   try {
     const buf = Buffer.concat(chunks);
     let pkt;
     try { pkt = decodePacket(buf); }
@@ -782,6 +853,13 @@ const server = http.createServer((req, res) => {
     const body = encodePacket(out, amf3);
     res.writeHead(200, { 'Content-Type': 'application/x-amf', 'Content-Length': body.length });
     res.end(body);
+   } catch (e) {
+    console.log('!! ERROR MEMPROSES AMF: ' + (e && e.stack ? e.stack : String(e)));
+    try {
+      if (!res.headersSent) res.writeHead(500, { 'Content-Type': 'text/plain' });
+      res.end('error\n');
+    } catch { /* koneksi sudah tertutup */ }
+   }
   });
 });
 
