@@ -1,1 +1,10 @@
-popup_oldemblem
+hair_02_0
+hair_105_0
+hair_107_0
+hair_20_0
+hair_21_0
+hair_22_0
+popup_4th_claim_code_p10
+popup_4th_claim_code_p9
+skill_icon_281-290
+skill_icon_81-90

@@ -297,6 +297,29 @@ const handlers = {
   // amount 1 dipilih supaya cabang label "x<amount>" tidak diambil, dan
   // rewardId "item1" karena id itu terbukti dikenali ITEM_DATA (dipakai juga
   // oleh panel daily login).
+  // Daftar rambut yang DIMILIKI pemain. Katalognya sendiri sudah ada di
+  // klien (HAIR_DATA berisi 575 entri dari data_library), jadi server cuma
+  // perlu menyebut mana yang dipunya.
+  //
+  // StyleShop.getInvHairResponse():
+  //     Central.main.hideAmfLoading();
+  //     if (validateAmfResponse(response)) {
+  //         var arr:Array = response.inv_hair as Array;      // null kalau absen
+  //         this.invHair = arr;
+  //         for (i = 0; i < arr.length; i++)                 // null.length -> #1009
+  //             getMainChar().addInventory(InventoryData.TYPE_HAIR, "hair" + arr[i]);
+  //         this.gotoShow();                                 // <- tidak pernah tercapai
+  //     }
+  // Tanpa `inv_hair`, gotoShow() tidak jalan dan panelnya tinggal putih.
+  // Array kosong aman: perulangannya dilewati dan gotoShow() tetap dipanggil.
+  //
+  // Isi entri berupa id telanjang — klien menambahkan awalan "hair" sendiri,
+  // pola yang sama dengan character_item.
+  'CharacterManagement.getInvHair': () => ({
+    status: 1, error: null, result: [],
+    inv_hair: [],
+  }),
+
   'FacebookService.getInviteRecord': () => ({
     status: 1, error: null, result: [],
     friendship_kunai: 0,
@@ -659,27 +682,58 @@ function isSwf(p) {
  * Kandidat diurutkan dari yang terkecil, lalu dicoba satu per satu —
  * tidak semua SWF punya SymbolClass + DoABC yang dibutuhkan.
  */
+// Batas pemindaian donor. Folder swf/items/ berisi ribuan file (rambut,
+// senjata, body set, ikon), dan versi lama fungsi ini menyentuh SEMUANYA:
+//
+//     .filter(isSwf)                                    // buka & baca tiap file
+//     .sort((a,b) => fs.statSync(a).size - fs.statSync(b).size)
+//
+// `sort` memanggil statSync DUA KALI per perbandingan, jadi jumlah panggilan
+// sinkron tumbuh seperti n log n. Semuanya di thread tunggal Node, sehingga
+// event loop terkunci dan permintaan HTTP yang sedang berjalan tidak pernah
+// dijawab — klien melihat "http=-1 STALL=no-open" dan menunggu selamanya.
+//
+// Sekarang: nama file dulu (murah), stat SEKALI per kandidat, baru buka
+// beberapa yang terkecil.
+const MAKS_PINDAI = 200;   // nama file yang dipertimbangkan per folder
+const MAKS_COBA   = 8;     // file yang benar-benar dibuka sebagai calon donor
+
 function findDonor(dir) {
   if (donorCache.has(dir)) return donorCache.get(dir);
 
+  const t0 = Date.now();
   const cari = [dir, path.join(WEB_ROOT, 'cdn', 'swf', 'latest', 'swf', 'items')];
   let hasil = null;
 
   for (const d of cari) {
     if (!fs.existsSync(d)) continue;
-    const kandidat = fs.readdirSync(d)
-      .filter(x => x.toLowerCase().endsWith('.swf'))
-      .map(x => path.join(d, x))
-      .filter(isSwf)
-      .sort((a, b) => fs.statSync(a).size - fs.statSync(b).size)
-      .slice(0, 8);
 
-    for (const p of kandidat) {
-      try { cloneFrom(fs.readFileSync(p), 'uji_donor_x'); hasil = p; break; }
-      catch { /* donor ini tidak cocok, coba berikutnya */ }
+    const nama = fs.readdirSync(d)
+      .filter(x => x.toLowerCase().endsWith('.swf'))
+      .slice(0, MAKS_PINDAI);
+
+    // satu statSync per kandidat, ukurannya disimpan — bukan dihitung ulang
+    // di dalam pembanding sort.
+    const terukur = [];
+    for (const x of nama) {
+      const p = path.join(d, x);
+      try { terukur.push({ p, size: fs.statSync(p).size }); } catch { /* lewati */ }
+    }
+    terukur.sort((a, b) => a.size - b.size);
+
+    for (const { p } of terukur.slice(0, MAKS_COBA)) {
+      try {
+        if (!isSwf(p)) continue;
+        cloneFrom(fs.readFileSync(p), 'uji_donor_x');
+        hasil = p;
+        break;
+      } catch { /* donor ini tidak cocok, coba berikutnya */ }
     }
     if (hasil) break;
   }
+
+  const ms = Date.now() - t0;
+  if (ms > 200) log('   [donor] pemindaian ' + dir + ' makan ' + ms + 'ms');
 
   donorCache.set(dir, hasil);
   return hasil;
