@@ -1,0 +1,42 @@
+{
+  "1": {
+    "character_id": "1",
+    "id": "1",
+    "name": "Shen",
+    "gender": 0,
+    "element": 0,
+    "skin_color": 15,
+    "hair": "17_0",
+    "face": "01_0",
+    "level": 9,
+    "xp": 40,
+    "gold": 999999999,
+    "token": 999999999,
+    "crystal": 999999999,
+    "premium": 1,
+    "hp": 100,
+    "cp": 100,
+    "str": 9999,
+    "agi": 9999,
+    "sta": 9999,
+    "chakra": 9999,
+    "intel": 9999,
+    "ap": 99,
+    "elements": [
+      0,
+      0,
+      1,
+      0,
+      0
+    ],
+    "items": [
+      "1",
+      "2",
+      "3"
+    ],
+    "created": 1785341243,
+    "stats": {
+      "12": 250
+    }
+  }
+}

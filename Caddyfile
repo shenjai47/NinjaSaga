@@ -1,0 +1,7 @@
+# Caddy sekarang hanya menangani HTTPS lalu meneruskan semuanya ke Node.
+# Node yang melayani file aset sekaligus gateway AMF.
+
+cdn.ninjasaga.cc, amf.ninjasaga.cc, ninjasaga.cc, www.ninjasaga.cc, localhost {
+	reverse_proxy 127.0.0.1:8080
+	tls internal
+}

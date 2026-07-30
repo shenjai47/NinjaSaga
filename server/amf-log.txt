@@ -1,0 +1,10352 @@
+
+
+### Server jalan di http://127.0.0.1:8080 — 29/07/2026, 23.06.35
+### folder aset : C:\NinjaSaga\web
+### ninja_saga.swf : ADA
+### signature login = 401dfceb24aac074a62bf9b2fa6c10da4da3a728
+### ninja emblem = AKTIF (premium)
+
+======================================
+AMF -> SystemService.snsLogin   (responseURI=/1, amf3=false)
+   argumen: [
+ null,
+ "facebook",
+ "latest",
+ "",
+ "a4ce5790c3339a33e2f0ace8115d91468a96729a",
+ null,
+ null,
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  1,
+  2,
+  0,
+  "localdevsession0001"
+ ],
+ "signature": "401dfceb24aac074a62bf9b2fa6c10da4da3a728",
+ "country_area": "ID",
+ "isNewAccount": 0,
+ "promote_id": 0,
+ "isTrialEmblem": 0,
+ "isExpired": 0,
+ "account_lock": null,
+ "swf_versions": [
+  {
+   "type": "data",
+   "version": "latest"
+  },
+  {
+   "type": "library",
+   "version": "latest"
+  },
+  {
+   "type": "language",
+   "version": "latest"
+  },
+  {
+   "type": "panels",
+   "version": "latest"
+  },
+  {
+   "type": "items",
+   "version": "latest"
+  },
+  {
+   "type": "actions",
+   "version": "latest"
+  },
+  {
+   "type": "sns",
+   "version": "latest"
+  },
+  {
+   "type": "skills",
+   "version": "latest"
+  },
+  {
+   "type": "npc",
+   "version": "latest"
+  },
+  {
+   "type": "enemies",
+   "version": "latest"
+  },
+  {
+   "type": "mission",
+   "version": "latest"
+  },
+  {
+   "type": "pets",
+   "version": "latest"
+  },
+  {
+   "type": "icons",
+   "version": "latest"
+  },
+  {
+   "type": "sound",
+   "version": "latest"
+  }
+ ],
+ "lang": "en",
+ "serverTime": 1785341201
+}
+
+======================================
+AMF -> CharacterDAO.getCharactersList   (responseURI=/2, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   jumlah karakter: 0
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": []
+}
+
+======================================
+AMF -> CharacterDAO.createCharacter   (responseURI=/3, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "Shen",
+ 0,
+ 0,
+ 15,
+ "17_0",
+ "01_0"
+]
+   -> handler ADA
+   karakter dibuat: Shen (id 1)
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "account_id": 1,
+  "add_inv_arr": [],
+  "bloodline": [],
+  "character_armor": 0,
+  "character_bloodline": "",
+  "character_body_parts": {},
+  "character_body_set": "set1",
+  "character_chakra": 1,
+  "character_control": 0,
+  "character_cp": 100,
+  "character_earth": 0,
+  "character_equipped_back_item": "",
+  "character_equipped_trade_back_item": "",
+  "character_equipped_trade_body_set": "",
+  "character_equipped_trade_weapon": "",
+  "character_equipped_weapon": "",
+  "character_eye_color": 0,
+  "character_face": "01_0",
+  "character_fire": 0,
+  "character_gender": 0,
+  "character_genjutsu": 0,
+  "character_gold": 500,
+  "character_hair": "17_0",
+  "character_hair_color": [],
+  "character_hash": null,
+  "character_hp": 100,
+  "character_id": "1",
+  "character_intelligence": 1,
+  "character_inventory": {},
+  "character_level": 1,
+  "character_lightning": 0,
+  "character_max_cp": 100,
+  "character_max_hp": 100,
+  "character_max_sp": 0,
+  "character_name": "Shen",
+  "character_pet_cp": 0,
+  "character_pet_ep": 0,
+  "character_pet_max_cp": 0,
+  "character_pet_max_ep": 0,
+  "character_rank": 0,
+  "character_senjutsu": [],
+  "character_senjutsu_ss": "",
+  "character_skill_resistance": [],
+  "character_skill_resistance_unallocated": 0,
+  "character_skill_talent": [],
+  "character_skill_unallocated": 0,
+  "character_skills": [],
+  "character_skin_color": 15,
+  "character_sp": 0,
+  "character_speed": 1,
+  "character_stamina": 1,
+  "character_strength": 1,
+  "character_summon": 0,
+  "character_taijutsu": 0,
+  "character_trade_item": "",
+  "character_water": 0,
+  "character_wind": 0,
+  "character_xp": 0,
+  "current_expiry_arr": [],
+  "damage_cp": 0,
+  "damage_hp": 0,
+  "damage_sp": 0,
+  "equip_arr": [],
+  "expired_pet_arr": [],
+  "inv_slots_obj": {},
+  "remove_equip_arr": [],
+  "remove_inv_arr": [],
+  "restore_cp": 0,
+  "restore_hp": 0,
+  "restore_sp": 0,
+  "senjutsu": [],
+  "session_playtime": 0
+ },
+ "character_id": "1"
+}
+
+======================================
+AMF -> SystemData.getCreateCharacter   (responseURI=/4, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ false
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "server_time": 1785341243,
+  "current_date": 1785341243,
+  "pvp_server_status": 0,
+  "animation": [],
+  "news": [],
+  "ads_path": [],
+  "special_ads": [],
+  "proc": null
+ },
+ "server_time": 1785341243,
+ "current_date": 1785341243,
+ "pvp_server_status": 0,
+ "animation": [],
+ "news": [],
+ "ads_path": [],
+ "special_ads": [],
+ "proc": null
+}
+
+======================================
+AMF -> CharacterDAO.getExtraData   (responseURI=/5, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "7f223b2d51664df1b4573be5e13c4d61b87907d1",
+ null
+]
+   -> handler ADA
+   hash extra data: input="0,0,0,0,0,,,,0,0"
+                    hash =76e0e6f45c1c7dfb1d10f2f860befc560cdfb048
+   tipe rekaman karakter: semua benar (72 field)
+   character_skills = []
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "DailyReward": {
+   "allow_to_claim": 0
+  },
+  "GodSnapCountDown": null,
+  "UnstoppableRageCountDown": null,
+  "achievement": [],
+  "achievement_point": 0,
+  "adsArr": [],
+  "all_event_login_data": {},
+  "anni5th_tutorial_need_display": null,
+  "anni8thDoubleExpGold_times": null,
+  "anni_mission_id": null,
+  "arena_version": "",
+  "bloodline": [],
+  "bp_mission_id": null,
+  "canClaimFK": null,
+  "char_statistic": {},
+  "character_create_date": "2026-07-29 23:07:23",
+  "christmas_2014_special_reward": null,
+  "christmas_coin": null,
+  "claim_remain": null,
+  "clan_chain": "",
+  "clan_id": 0,
+  "clan_version": "",
+  "combine_boost_time": null,
+  "combine_boost_time_in_period": null,
+  "combine_boost_time_period_end_left": null,
+  "combine_boost_time_period_start_left": null,
+  "consecutive_days": "",
+  "daily_login": {},
+  "daily_login_data": [],
+  "daily_stamp_available": null,
+  "dailygift_gift_list": [],
+  "dailygift_request_limit": null,
+  "date": null,
+  "double_exp": null,
+  "dragon_pet_christmas": null,
+  "event_170m_like": null,
+  "event_daily_login": {},
+  "event_gift_bag": null,
+  "extra_data_hash": "76e0e6f45c1c7dfb1d10f2f860befc560cdfb048",
+  "file_1": [],
+  "file_2": [],
+  "file_3": [],
+  "football_2018_claim": null,
+  "free_roulette_times": null,
+  "friend_accept_reward": null,
+  "friendship_kunai": null,
+  "gacha": {},
+  "get_hunting_passport": null,
+  "get_learning_status": [],
+  "handoff_nonce": "",
+  "handoff_token": "",
+  "invite_accepted": null,
+  "isGraphic": null,
+  "is_fan": null,
+  "is_founder": null,
+  "is_hard_mode_locked": null,
+  "is_valentine": null,
+  "kojima_event": null,
+  "layout": null,
+  "level_80_exam_reward_list_read": null,
+  "lny_2012_cake": null,
+  "lny_2012_cake_added": null,
+  "lucky_draw_case": [],
+  "lucky_spin_consecutive_day": null,
+  "lucky_spin_multiplier": null,
+  "lucky_spin_remaining_spin": null,
+  "lucky_spin_show_wheel": null,
+  "map_key": "00",
+  "minik_xmas_gift": "",
+  "new_account_reward": null,
+  "new_clan_promote": {},
+  "new_mail": false,
+  "new_year_2015_clothes": null,
+  "newsArr": [],
+  "newsId": null,
+  "newsfeed_easter_2014_posted": null,
+  "newsfeed_material_posted": null,
+  "noticeText": null,
+  "once_gift": [],
+  "option_data": {
+   "music_index": 0,
+   "music_volume": 1,
+   "sound_on": 1
+  },
+  "player_pet": [],
+  "popup_arr": [],
+  "premium_claim_level": null,
+  "premium_claim_skill_set": null,
+  "premium_daily_token": null,
+  "prestige": 0,
+  "proc": null,
+  "promo_expired": null,
+  "promotion": null,
+  "pve_version": "",
+  "pvpSchedule": [],
+  "pvp_invite": [],
+  "pvp_record": null,
+  "reaming_pet": null,
+  "recent_achievement": [],
+  "remaining_skill": null,
+  "request_list_length": null,
+  "requests": [],
+  "roulette_allowed": false,
+  "sakura_event": null,
+  "se_day_count_open": null,
+  "se_end_date": null,
+  "se_end_date_notice": null,
+  "seasonNumber": 0,
+  "seasonNumber_crew": 0,
+  "senjutsu": [],
+  "senjutsu_system": null,
+  "showFanPage": null,
+  "showNotice": null,
+  "sje_end_date": 0,
+  "sje_end_date_notice": 0,
+  "statistic_battle": {},
+  "sum_1": [],
+  "sum_2": [],
+  "sum_3": [],
+  "total_friend_accepted": null,
+  "trainingFdSkill": {
+   "trainingTime": 0
+  },
+  "training_skill": null,
+  "tutorial_expiry_item": null,
+  "valentine_event": null,
+  "veteran_return_fk_accepted": null,
+  "xmas2014_tutorial_need_display": null,
+  "skills": [],
+  "socket": null,
+  "coreData": {},
+  "requestData": [],
+  "databaseCharacter": {
+   "account_id": 1,
+   "add_inv_arr": [],
+   "bloodline": [],
+   "character_armor": 0,
+   "character_bloodline": "",
+   "character_body_parts": {},
+   "character_body_set": "set1",
+   "character_chakra": 1,
+   "character_control": 0,
+   "character_cp": 100,
+   "character_earth": 0,
+   "character_equipped_back_item": "",
+   "character_equipped_trade_back_item": "",
+   "character_equipped_trade_body_set": "",
+   "character_equipped_trade_weapon": "",
+   "character_equipped_weapon": "",
+   "character_eye_color": 0,
+   "character_face": "01_0",
+   "character_fire": 0,
+   "character_gender": 0,
+   "character_genjutsu": 0,
+   "character_gold": 500,
+   "character_hair": "17_0",
+   "character_hair_color": [],
+   "character_hash": null,
+   "character_hp": 100,
+   "character_id": "1",
+   "character_intelligence": 1,
+   "character_inventory": {},
+   "character_level": 1,
+   "character_lightning": 0,
+   "character_max_cp": 100,
+   "character_max_hp": 100,
+   "character_max_sp": 0,
+   "character_name": "Shen",
+   "character_pet_cp": 0,
+   "character_pet_ep": 0,
+   "character_pet_max_cp": 0,
+   "character_pet_max_ep": 0,
+   "character_rank": 0,
+   "character_senjutsu": [],
+   "character_senjutsu_ss": "",
+   "character_skill_resistance": [],
+   "character_skill_resistance_unallocated": 0,
+   "character_skill_talent": [],
+   "character_skill_unallocated": 0,
+   "character_skills": [],
+   "character_skin_color": 15,
+   "character_sp": 0,
+   "character_speed": 1,
+   "character_stamina": 1,
+   "character_strength": 1,
+   "character_summon": 0,
+   "character_taijutsu": 0,
+   "character_trade_item": "",
+   "character_water": 0,
+   "character_wind": 0,
+   "character_xp": 0,
+   "current_expiry_arr": [],
+   "damage_cp": 0,
+   "damage_hp": 0,
+   "damage_sp": 0,
+   "equip_arr": [],
+   "expired_pet_arr": [],
+   "inv_slots_obj": {},
+   "remove_equip_arr": [],
+   "remove_inv_arr": [],
+   "restore_cp": 0,
+   "restore_hp": 0,
+   "restore_sp": 0,
+   "senjutsu": [],
+   "session_playtime": 0
+  },
+  "server_time": 1785341243,
+  "current_date": 1785341243,
+  "pvp_server_status": 0
+ }
+}
+
+======================================
+AMF -> CharacterService.selectFreeSkill   (responseURI=/6, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "skill13"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": 1
+}
+
+======================================
+AMF -> Achievement.flushCharStat   (responseURI=/7, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "615e8c2104c8e22131a2748d34193f13eec7bc5b",
+ "a4e6490a29d613dd6f5c5d53070d5842aec55dc2",
+ {
+  "12": 250,
+  "13": 0,
+  "14": 0,
+  "15": 0,
+  "16": 0,
+  "17": 0,
+  "18": 0,
+  "19": 0,
+  "20": 0,
+  "21": 0,
+  "22": 0,
+  "23": 0,
+  "27": 0,
+  "28": 0,
+  "29": 0,
+  "30": 0
+ }
+]
+   -> handler ADA
+   statistik disimpan: 12=+250
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": []
+}
+
+======================================
+AMF -> SpecialReward.getLvUpReward   (responseURI=/8, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "reward_list": []
+}
+
+======================================
+AMF -> NewDailyRewardStamp2017.getStatus   (responseURI=/9, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "loginDay": [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+  "24",
+  "25",
+  "26",
+  "27",
+  "28",
+  "29",
+  "30",
+  "31"
+ ],
+ "rewardDay": [
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "item_list": [
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ]
+ ],
+ "claimReward": [
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "txt": {
+  "desc1": "",
+  "desc2": "",
+  "desc3": ""
+ },
+ "now_time": 1785341248,
+ "part2": false
+}
+
+======================================
+AMF -> CharacterDAO.updateAP   (responseURI=/10, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "1",
+ [
+  0,
+  0,
+  1,
+  0,
+  0
+ ]
+]
+   -> handler ADA
+   poin elemen -> api=0 air=0 angin=1 tanah=0 petir=0
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": 1
+}
+
+======================================
+AMF -> SpecialReward.getLvUpReward   (responseURI=/11, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "reward_list": []
+}
+
+======================================
+AMF -> CharacterService.startMission   (responseURI=/12, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "msn2",
+ "f1f0c96f01fa116058465e1868ea9e7df5c474db",
+ "f14eed6605215c55f630ca63a5ea563da2c27213a1ae5882dd51ec392230b351c5f5d7fc131e638b9686d77d098832fd9ae77f2e28710546c2b8a527937759e9",
+ 1785341266
+]
+   -> handler ADA
+   mulai misi: msn2  startBattleId=1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "startBattleId": 1
+}
+
+======================================
+AMF -> CharacterService.updateCharacter   (responseURI=/13, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "1",
+ 2,
+ 20,
+ 15,
+ [],
+ 0,
+ 0,
+ "msn2",
+ "19f75489a039431f6778d6d76521a1772f38170f",
+ "158c0544ab0536b1d428e0c7f7c5b0ac94c06613",
+ 0,
+ "904e9bc79d5db2d33d36deab77af7ffa6aa4e7f3",
+ "1",
+ "1",
+ "{\"battles\":[{\"enemyid\":[\"ene_179\"],\"start_log\":\"wpn1,,\",\"step\":0,\"step_log\":[{\"tgtMaxHP\":10,\"side\":\"enemy\",\"hpBefore\":10,\"src\":1,\"deducted\":1,\"dmg\":-23,\"round\":1,\"effect\":null,\"hpAfter\":0,\"type\":\"attack\",\"action\":\"skill13\",\"tgt\":\"ene_179\"}]}]}",
+ "e6ab05a47df8177f98cd3a1e1f6214367aef0061",
+ "19d2fb35b85436bda5d8f7e536fd45ec0ffdebb5beb9e32682f9"
+]
+   -> handler ADA
+   +20 xp, +15 gold  ->  xp=20 gold=515 level=1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "maintenance": 0,
+ "reward_items": [],
+ "update_inventory": {
+  "xp": 20,
+  "gold": 515,
+  "token": 0
+ }
+}
+
+======================================
+AMF -> SpecialReward.getLvUpReward   (responseURI=/14, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "reward_list": []
+}
+
+======================================
+AMF -> SpecialReward.getLvUpReward   (responseURI=/15, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "reward_list": []
+}
+   [klon] popup_claimSkill  <- achievement.swf
+   [klon] popup_newemblem  <- achievement.swf
+
+======================================
+AMF -> SpecialReward.getLvUpReward   (responseURI=/16, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "reward_list": []
+}
+
+======================================
+AMF -> SystemService.snsLogin   (responseURI=/1, amf3=false)
+   argumen: [
+ null,
+ "facebook",
+ "latest",
+ "",
+ "a4ce5790c3339a33e2f0ace8115d91468a96729a",
+ null,
+ null,
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  1,
+  2,
+  0,
+  "localdevsession0001"
+ ],
+ "signature": "401dfceb24aac074a62bf9b2fa6c10da4da3a728",
+ "country_area": "ID",
+ "isNewAccount": 0,
+ "promote_id": 0,
+ "isTrialEmblem": 0,
+ "isExpired": 0,
+ "account_lock": null,
+ "swf_versions": [
+  {
+   "type": "data",
+   "version": "latest"
+  },
+  {
+   "type": "library",
+   "version": "latest"
+  },
+  {
+   "type": "language",
+   "version": "latest"
+  },
+  {
+   "type": "panels",
+   "version": "latest"
+  },
+  {
+   "type": "items",
+   "version": "latest"
+  },
+  {
+   "type": "actions",
+   "version": "latest"
+  },
+  {
+   "type": "sns",
+   "version": "latest"
+  },
+  {
+   "type": "skills",
+   "version": "latest"
+  },
+  {
+   "type": "npc",
+   "version": "latest"
+  },
+  {
+   "type": "enemies",
+   "version": "latest"
+  },
+  {
+   "type": "mission",
+   "version": "latest"
+  },
+  {
+   "type": "pets",
+   "version": "latest"
+  },
+  {
+   "type": "icons",
+   "version": "latest"
+  },
+  {
+   "type": "sound",
+   "version": "latest"
+  }
+ ],
+ "lang": "en",
+ "serverTime": 1785341351
+}
+
+======================================
+AMF -> CharacterDAO.getCharactersList   (responseURI=/2, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   jumlah karakter: 1  ->  Shen lv1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  [
+   "1",
+   "Shen",
+   "1",
+   0
+  ]
+ ]
+}
+
+
+### Server jalan di http://127.0.0.1:8080 — 29/07/2026, 23.09.17
+### folder aset : C:\NinjaSaga\web
+### ninja_saga.swf : ADA
+### signature login = 401dfceb24aac074a62bf9b2fa6c10da4da3a728
+### ninja emblem = AKTIF (premium)
+
+======================================
+AMF -> SystemService.snsLogin   (responseURI=/1, amf3=false)
+   argumen: [
+ null,
+ "facebook",
+ "latest",
+ "",
+ "a4ce5790c3339a33e2f0ace8115d91468a96729a",
+ null,
+ null,
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  1,
+  2,
+  0,
+  "localdevsession0001"
+ ],
+ "signature": "401dfceb24aac074a62bf9b2fa6c10da4da3a728",
+ "country_area": "ID",
+ "isNewAccount": 0,
+ "promote_id": 0,
+ "isTrialEmblem": 0,
+ "isExpired": 0,
+ "account_lock": null,
+ "swf_versions": [
+  {
+   "type": "data",
+   "version": "latest"
+  },
+  {
+   "type": "library",
+   "version": "latest"
+  },
+  {
+   "type": "language",
+   "version": "latest"
+  },
+  {
+   "type": "panels",
+   "version": "latest"
+  },
+  {
+   "type": "items",
+   "version": "latest"
+  },
+  {
+   "type": "actions",
+   "version": "latest"
+  },
+  {
+   "type": "sns",
+   "version": "latest"
+  },
+  {
+   "type": "skills",
+   "version": "latest"
+  },
+  {
+   "type": "npc",
+   "version": "latest"
+  },
+  {
+   "type": "enemies",
+   "version": "latest"
+  },
+  {
+   "type": "mission",
+   "version": "latest"
+  },
+  {
+   "type": "pets",
+   "version": "latest"
+  },
+  {
+   "type": "icons",
+   "version": "latest"
+  },
+  {
+   "type": "sound",
+   "version": "latest"
+  }
+ ],
+ "lang": "en",
+ "serverTime": 1785341361
+}
+
+======================================
+AMF -> CharacterDAO.getCharactersList   (responseURI=/2, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   jumlah karakter: 1  ->  Shen lv9
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  [
+   "1",
+   "Shen",
+   "9",
+   0
+  ]
+ ]
+}
+
+======================================
+AMF -> CharacterDAO.getCharacterById   (responseURI=/3, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ 1
+]
+   -> handler ADA
+   karakter dipilih: Shen lv9
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "bloodline": [],
+  "character_accessory": "",
+  "character_armor": 0,
+  "character_back_item": "",
+  "character_bloodline": 0,
+  "character_body_set": "set1",
+  "character_common_currency": "",
+  "character_control": 0,
+  "character_earth": 0,
+  "character_equipped_accessory": "",
+  "character_equipped_back_item": "",
+  "character_equipped_body_set": [],
+  "character_equipped_skills": "",
+  "character_equipped_trade_back_item": "",
+  "character_equipped_trade_body_set": "",
+  "character_equipped_trade_weapon": "",
+  "character_equipped_weapon": "",
+  "character_face": "01_0",
+  "character_fire": 0,
+  "character_gender": 0,
+  "character_genjutsu": 0,
+  "character_gold": 515,
+  "character_hair": "17_0",
+  "character_hair_color": [],
+  "character_hash": "",
+  "character_id": "1",
+  "character_inv_hair": "",
+  "character_inv_slots": {
+   "item": 40,
+   "weapon": 200,
+   "body_set": 200,
+   "back": 200,
+   "accessory": 200,
+   "essence": 200,
+   "material": 200,
+   "pet": 99
+  },
+  "character_item": "",
+  "character_level": "9",
+  "character_lightning": 0,
+  "character_magatama": "",
+  "character_material": "",
+  "character_mission": "",
+  "character_name": "Shen",
+  "character_ninja_essence": "",
+  "character_npc": "",
+  "character_pre_hash": "ce5caf2c79b4809862461c96b910ee45c97b6f18",
+  "character_rank": "",
+  "character_skill": "",
+  "character_skin_color": 15,
+  "character_summon": 0,
+  "character_taijutsu": 0,
+  "character_trade_item": "",
+  "character_water": 0,
+  "character_weapon": "",
+  "character_wind": 1,
+  "character_xp": "20",
+  "daily": {},
+  "expiry_data": {
+   "remove_inv_arr": [],
+   "add_inv_arr": [],
+   "equip_arr": [],
+   "remove_equip_arr": [],
+   "current_expiry_arr": [],
+   "expiry_pet_data": [],
+   "expiry_hash": "a0277539cac6c47ec693d705e366d4b397f26cd3"
+  },
+  "stateInventory": {},
+  "senjutsu": [],
+  "senjutsu_spirit": "",
+  "stateInv": {}
+ }
+}
+
+======================================
+AMF -> SystemService.snsLogin   (responseURI=/1, amf3=false)
+   argumen: [
+ null,
+ "facebook",
+ "latest",
+ "",
+ "a4ce5790c3339a33e2f0ace8115d91468a96729a",
+ null,
+ null,
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  1,
+  2,
+  0,
+  "localdevsession0001"
+ ],
+ "signature": "401dfceb24aac074a62bf9b2fa6c10da4da3a728",
+ "country_area": "ID",
+ "isNewAccount": 0,
+ "promote_id": 0,
+ "isTrialEmblem": 0,
+ "isExpired": 0,
+ "account_lock": null,
+ "swf_versions": [
+  {
+   "type": "data",
+   "version": "latest"
+  },
+  {
+   "type": "library",
+   "version": "latest"
+  },
+  {
+   "type": "language",
+   "version": "latest"
+  },
+  {
+   "type": "panels",
+   "version": "latest"
+  },
+  {
+   "type": "items",
+   "version": "latest"
+  },
+  {
+   "type": "actions",
+   "version": "latest"
+  },
+  {
+   "type": "sns",
+   "version": "latest"
+  },
+  {
+   "type": "skills",
+   "version": "latest"
+  },
+  {
+   "type": "npc",
+   "version": "latest"
+  },
+  {
+   "type": "enemies",
+   "version": "latest"
+  },
+  {
+   "type": "mission",
+   "version": "latest"
+  },
+  {
+   "type": "pets",
+   "version": "latest"
+  },
+  {
+   "type": "icons",
+   "version": "latest"
+  },
+  {
+   "type": "sound",
+   "version": "latest"
+  }
+ ],
+ "lang": "en",
+ "serverTime": 1785341399
+}
+
+======================================
+AMF -> CharacterDAO.getCharactersList   (responseURI=/2, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   jumlah karakter: 1  ->  Shen lv9
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  [
+   "1",
+   "Shen",
+   "9",
+   0
+  ]
+ ]
+}
+
+
+### Server jalan di http://127.0.0.1:8080 — 29/07/2026, 23.10.04
+### folder aset : C:\NinjaSaga\web
+### ninja_saga.swf : ADA
+### signature login = 401dfceb24aac074a62bf9b2fa6c10da4da3a728
+### ninja emblem = AKTIF (premium)
+
+======================================
+AMF -> SystemService.snsLogin   (responseURI=/1, amf3=false)
+   argumen: [
+ null,
+ "facebook",
+ "latest",
+ "",
+ "a4ce5790c3339a33e2f0ace8115d91468a96729a",
+ null,
+ null,
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  1,
+  2,
+  0,
+  "localdevsession0001"
+ ],
+ "signature": "401dfceb24aac074a62bf9b2fa6c10da4da3a728",
+ "country_area": "ID",
+ "isNewAccount": 0,
+ "promote_id": 0,
+ "isTrialEmblem": 0,
+ "isExpired": 0,
+ "account_lock": null,
+ "swf_versions": [
+  {
+   "type": "data",
+   "version": "latest"
+  },
+  {
+   "type": "library",
+   "version": "latest"
+  },
+  {
+   "type": "language",
+   "version": "latest"
+  },
+  {
+   "type": "panels",
+   "version": "latest"
+  },
+  {
+   "type": "items",
+   "version": "latest"
+  },
+  {
+   "type": "actions",
+   "version": "latest"
+  },
+  {
+   "type": "sns",
+   "version": "latest"
+  },
+  {
+   "type": "skills",
+   "version": "latest"
+  },
+  {
+   "type": "npc",
+   "version": "latest"
+  },
+  {
+   "type": "enemies",
+   "version": "latest"
+  },
+  {
+   "type": "mission",
+   "version": "latest"
+  },
+  {
+   "type": "pets",
+   "version": "latest"
+  },
+  {
+   "type": "icons",
+   "version": "latest"
+  },
+  {
+   "type": "sound",
+   "version": "latest"
+  }
+ ],
+ "lang": "en",
+ "serverTime": 1785341408
+}
+
+======================================
+AMF -> CharacterDAO.getCharactersList   (responseURI=/2, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   jumlah karakter: 1  ->  Shen lv1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  [
+   "1",
+   "Shen",
+   "1",
+   0
+  ]
+ ]
+}
+
+======================================
+AMF -> CharacterDAO.getCharacterById   (responseURI=/3, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ 1
+]
+   -> handler ADA
+   karakter dipilih: Shen lv1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "bloodline": [],
+  "character_accessory": "",
+  "character_armor": 0,
+  "character_back_item": "",
+  "character_bloodline": 0,
+  "character_body_set": "set1",
+  "character_common_currency": "",
+  "character_control": 0,
+  "character_earth": 0,
+  "character_equipped_accessory": "",
+  "character_equipped_back_item": "",
+  "character_equipped_body_set": [],
+  "character_equipped_skills": "",
+  "character_equipped_trade_back_item": "",
+  "character_equipped_trade_body_set": "",
+  "character_equipped_trade_weapon": "",
+  "character_equipped_weapon": "",
+  "character_face": "01_0",
+  "character_fire": 0,
+  "character_gender": 0,
+  "character_genjutsu": 0,
+  "character_gold": 515,
+  "character_hair": "17_0",
+  "character_hair_color": [],
+  "character_hash": "",
+  "character_id": "1",
+  "character_inv_hair": "",
+  "character_inv_slots": {
+   "item": 40,
+   "weapon": 200,
+   "body_set": 200,
+   "back": 200,
+   "accessory": 200,
+   "essence": 200,
+   "material": 200,
+   "pet": 99
+  },
+  "character_item": "",
+  "character_level": "1",
+  "character_lightning": 0,
+  "character_magatama": "",
+  "character_material": "",
+  "character_mission": "",
+  "character_name": "Shen",
+  "character_ninja_essence": "",
+  "character_npc": "",
+  "character_pre_hash": "a7cf18766034fdc35c1c4c4150888cca59bd12a4",
+  "character_rank": "",
+  "character_skill": "",
+  "character_skin_color": 15,
+  "character_summon": 0,
+  "character_taijutsu": 0,
+  "character_trade_item": "",
+  "character_water": 0,
+  "character_weapon": "",
+  "character_wind": 1,
+  "character_xp": "20",
+  "daily": {},
+  "expiry_data": {
+   "remove_inv_arr": [],
+   "add_inv_arr": [],
+   "equip_arr": [],
+   "remove_equip_arr": [],
+   "current_expiry_arr": [],
+   "expiry_pet_data": [],
+   "expiry_hash": "a0277539cac6c47ec693d705e366d4b397f26cd3"
+  },
+  "stateInventory": {},
+  "senjutsu": [],
+  "senjutsu_spirit": "",
+  "stateInv": {}
+ }
+}
+
+======================================
+AMF -> CharacterDAO.getExtraData   (responseURI=/4, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "ff838d2d3765ca9bf7730eaa85ce2fbe77fa6974",
+ null
+]
+   -> handler ADA
+   hash extra data: input="0,0,0,0,0,,,,0,0"
+                    hash =76e0e6f45c1c7dfb1d10f2f860befc560cdfb048
+   tipe rekaman karakter: semua benar (72 field)
+   character_skills = []
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "DailyReward": {
+   "allow_to_claim": 0
+  },
+  "GodSnapCountDown": null,
+  "UnstoppableRageCountDown": null,
+  "achievement": [],
+  "achievement_point": 0,
+  "adsArr": [],
+  "all_event_login_data": {},
+  "anni5th_tutorial_need_display": null,
+  "anni8thDoubleExpGold_times": null,
+  "anni_mission_id": null,
+  "arena_version": "",
+  "bloodline": [],
+  "bp_mission_id": null,
+  "canClaimFK": null,
+  "char_statistic": {
+   "12": 250
+  },
+  "character_create_date": "2026-07-29 23:07:23",
+  "christmas_2014_special_reward": null,
+  "christmas_coin": null,
+  "claim_remain": null,
+  "clan_chain": "",
+  "clan_id": 0,
+  "clan_version": "",
+  "combine_boost_time": null,
+  "combine_boost_time_in_period": null,
+  "combine_boost_time_period_end_left": null,
+  "combine_boost_time_period_start_left": null,
+  "consecutive_days": "",
+  "daily_login": {},
+  "daily_login_data": [],
+  "daily_stamp_available": null,
+  "dailygift_gift_list": [],
+  "dailygift_request_limit": null,
+  "date": null,
+  "double_exp": null,
+  "dragon_pet_christmas": null,
+  "event_170m_like": null,
+  "event_daily_login": {},
+  "event_gift_bag": null,
+  "extra_data_hash": "76e0e6f45c1c7dfb1d10f2f860befc560cdfb048",
+  "file_1": [],
+  "file_2": [],
+  "file_3": [],
+  "football_2018_claim": null,
+  "free_roulette_times": null,
+  "friend_accept_reward": null,
+  "friendship_kunai": null,
+  "gacha": {},
+  "get_hunting_passport": null,
+  "get_learning_status": [],
+  "handoff_nonce": "",
+  "handoff_token": "",
+  "invite_accepted": null,
+  "isGraphic": null,
+  "is_fan": null,
+  "is_founder": null,
+  "is_hard_mode_locked": null,
+  "is_valentine": null,
+  "kojima_event": null,
+  "layout": null,
+  "level_80_exam_reward_list_read": null,
+  "lny_2012_cake": null,
+  "lny_2012_cake_added": null,
+  "lucky_draw_case": [],
+  "lucky_spin_consecutive_day": null,
+  "lucky_spin_multiplier": null,
+  "lucky_spin_remaining_spin": null,
+  "lucky_spin_show_wheel": null,
+  "map_key": "00",
+  "minik_xmas_gift": "",
+  "new_account_reward": null,
+  "new_clan_promote": {},
+  "new_mail": false,
+  "new_year_2015_clothes": null,
+  "newsArr": [],
+  "newsId": null,
+  "newsfeed_easter_2014_posted": null,
+  "newsfeed_material_posted": null,
+  "noticeText": null,
+  "once_gift": [],
+  "option_data": {
+   "music_index": 0,
+   "music_volume": 1,
+   "sound_on": 1
+  },
+  "player_pet": [],
+  "popup_arr": [],
+  "premium_claim_level": null,
+  "premium_claim_skill_set": null,
+  "premium_daily_token": null,
+  "prestige": 0,
+  "proc": null,
+  "promo_expired": null,
+  "promotion": null,
+  "pve_version": "",
+  "pvpSchedule": [],
+  "pvp_invite": [],
+  "pvp_record": null,
+  "reaming_pet": null,
+  "recent_achievement": [],
+  "remaining_skill": null,
+  "request_list_length": null,
+  "requests": [],
+  "roulette_allowed": false,
+  "sakura_event": null,
+  "se_day_count_open": null,
+  "se_end_date": null,
+  "se_end_date_notice": null,
+  "seasonNumber": 0,
+  "seasonNumber_crew": 0,
+  "senjutsu": [],
+  "senjutsu_system": null,
+  "showFanPage": null,
+  "showNotice": null,
+  "sje_end_date": 0,
+  "sje_end_date_notice": 0,
+  "statistic_battle": {},
+  "sum_1": [],
+  "sum_2": [],
+  "sum_3": [],
+  "total_friend_accepted": null,
+  "trainingFdSkill": {
+   "trainingTime": 0
+  },
+  "training_skill": null,
+  "tutorial_expiry_item": null,
+  "valentine_event": null,
+  "veteran_return_fk_accepted": null,
+  "xmas2014_tutorial_need_display": null,
+  "skills": [],
+  "socket": null,
+  "coreData": {},
+  "requestData": [],
+  "databaseCharacter": {
+   "account_id": 1,
+   "add_inv_arr": [],
+   "bloodline": [],
+   "character_armor": 0,
+   "character_bloodline": "",
+   "character_body_parts": {},
+   "character_body_set": "set1",
+   "character_chakra": 1,
+   "character_control": 0,
+   "character_cp": 100,
+   "character_earth": 0,
+   "character_equipped_back_item": "",
+   "character_equipped_trade_back_item": "",
+   "character_equipped_trade_body_set": "",
+   "character_equipped_trade_weapon": "",
+   "character_equipped_weapon": "",
+   "character_eye_color": 0,
+   "character_face": "01_0",
+   "character_fire": 0,
+   "character_gender": 0,
+   "character_genjutsu": 0,
+   "character_gold": 515,
+   "character_hair": "17_0",
+   "character_hair_color": [],
+   "character_hash": null,
+   "character_hp": 100,
+   "character_id": "1",
+   "character_intelligence": 1,
+   "character_inventory": {},
+   "character_level": 1,
+   "character_lightning": 0,
+   "character_max_cp": 100,
+   "character_max_hp": 100,
+   "character_max_sp": 0,
+   "character_name": "Shen",
+   "character_pet_cp": 0,
+   "character_pet_ep": 0,
+   "character_pet_max_cp": 0,
+   "character_pet_max_ep": 0,
+   "character_rank": 0,
+   "character_senjutsu": [],
+   "character_senjutsu_ss": "",
+   "character_skill_resistance": [],
+   "character_skill_resistance_unallocated": 0,
+   "character_skill_talent": [],
+   "character_skill_unallocated": 0,
+   "character_skills": [],
+   "character_skin_color": 15,
+   "character_sp": 0,
+   "character_speed": 1,
+   "character_stamina": 1,
+   "character_strength": 1,
+   "character_summon": 0,
+   "character_taijutsu": 0,
+   "character_trade_item": "",
+   "character_water": 0,
+   "character_wind": 1,
+   "character_xp": 20,
+   "current_expiry_arr": [],
+   "damage_cp": 0,
+   "damage_hp": 0,
+   "damage_sp": 0,
+   "equip_arr": [],
+   "expired_pet_arr": [],
+   "inv_slots_obj": {},
+   "remove_equip_arr": [],
+   "remove_inv_arr": [],
+   "restore_cp": 0,
+   "restore_hp": 0,
+   "restore_sp": 0,
+   "senjutsu": [],
+   "session_playtime": 0
+  },
+  "server_time": 1785341410,
+  "current_date": 1785341410,
+  "pvp_server_status": 0
+ }
+}
+
+======================================
+AMF -> FacebookService.getFriendList   (responseURI=/5, amf3=false)
+   argumen: [
+ null
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "friend_list": []
+}
+
+======================================
+AMF -> NewDailyRewardStamp2017.getStatus   (responseURI=/6, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "loginDay": [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+  "24",
+  "25",
+  "26",
+  "27",
+  "28",
+  "29",
+  "30",
+  "31"
+ ],
+ "rewardDay": [
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "item_list": [
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ]
+ ],
+ "claimReward": [
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "txt": {
+  "desc1": "",
+  "desc2": "",
+  "desc3": ""
+ },
+ "now_time": 1785341412,
+ "part2": false
+}
+
+======================================
+AMF -> CharacterDAO.buyItem   (responseURI=/7, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "item1",
+ 1
+]
+   -> handler ADA
+   beli item1 x1  -> inventaris: [1]
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": 1,
+ "update_inventory": {
+  "xp": 20,
+  "gold": 515,
+  "token": 0
+ }
+}
+
+======================================
+AMF -> CharacterDAO.buyItem   (responseURI=/8, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "item2",
+ 1
+]
+   -> handler ADA
+   beli item2 x1  -> inventaris: [1,2]
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": 1,
+ "update_inventory": {
+  "xp": 20,
+  "gold": 515,
+  "token": 0
+ }
+}
+
+======================================
+AMF -> CharacterDAO.buyItem   (responseURI=/9, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "item3",
+ 1
+]
+   -> handler ADA
+   beli item3 x1  -> inventaris: [1,2,3]
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": 1,
+ "update_inventory": {
+  "xp": 20,
+  "gold": 515,
+  "token": 0
+ }
+}
+   [klon] popup_newemblem  <- achievement.swf
+   [klon] popup_claimSkill  <- achievement.swf
+
+======================================
+AMF -> FriendReward.getDailygiftStatus   (responseURI=/10, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+======================================
+AMF -> FriendReward.getDailygiftStatus   (responseURI=/11, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+======================================
+AMF -> GiftService.createGiftRecord   (responseURI=/12, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "daily_gift_bag",
+ 0
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+======================================
+AMF -> MailService.getMail   (responseURI=/13, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+======================================
+AMF -> FacebookService.getRequestList   (responseURI=/14, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ null
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+======================================
+AMF -> SystemService.snsLogin   (responseURI=/1, amf3=false)
+   argumen: [
+ null,
+ "facebook",
+ "latest",
+ "",
+ "a4ce5790c3339a33e2f0ace8115d91468a96729a",
+ null,
+ null,
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  1,
+  2,
+  0,
+  "localdevsession0001"
+ ],
+ "signature": "401dfceb24aac074a62bf9b2fa6c10da4da3a728",
+ "country_area": "ID",
+ "isNewAccount": 0,
+ "promote_id": 0,
+ "isTrialEmblem": 0,
+ "isExpired": 0,
+ "account_lock": null,
+ "swf_versions": [
+  {
+   "type": "data",
+   "version": "latest"
+  },
+  {
+   "type": "library",
+   "version": "latest"
+  },
+  {
+   "type": "language",
+   "version": "latest"
+  },
+  {
+   "type": "panels",
+   "version": "latest"
+  },
+  {
+   "type": "items",
+   "version": "latest"
+  },
+  {
+   "type": "actions",
+   "version": "latest"
+  },
+  {
+   "type": "sns",
+   "version": "latest"
+  },
+  {
+   "type": "skills",
+   "version": "latest"
+  },
+  {
+   "type": "npc",
+   "version": "latest"
+  },
+  {
+   "type": "enemies",
+   "version": "latest"
+  },
+  {
+   "type": "mission",
+   "version": "latest"
+  },
+  {
+   "type": "pets",
+   "version": "latest"
+  },
+  {
+   "type": "icons",
+   "version": "latest"
+  },
+  {
+   "type": "sound",
+   "version": "latest"
+  }
+ ],
+ "lang": "en",
+ "serverTime": 1785341488
+}
+
+======================================
+AMF -> CharacterDAO.getCharactersList   (responseURI=/2, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   jumlah karakter: 1  ->  Shen lv1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  [
+   "1",
+   "Shen",
+   "1",
+   0
+  ]
+ ]
+}
+
+======================================
+AMF -> CharacterDAO.getCharacterById   (responseURI=/3, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ 1
+]
+   -> handler ADA
+   karakter dipilih: Shen lv1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "bloodline": [],
+  "character_accessory": "",
+  "character_armor": 0,
+  "character_back_item": "",
+  "character_bloodline": 0,
+  "character_body_set": "set1",
+  "character_common_currency": "",
+  "character_control": 0,
+  "character_earth": 0,
+  "character_equipped_accessory": "",
+  "character_equipped_back_item": "",
+  "character_equipped_body_set": [],
+  "character_equipped_skills": "",
+  "character_equipped_trade_back_item": "",
+  "character_equipped_trade_body_set": "",
+  "character_equipped_trade_weapon": "",
+  "character_equipped_weapon": "",
+  "character_face": "01_0",
+  "character_fire": 0,
+  "character_gender": 0,
+  "character_genjutsu": 0,
+  "character_gold": 515,
+  "character_hair": "17_0",
+  "character_hair_color": [],
+  "character_hash": "",
+  "character_id": "1",
+  "character_inv_hair": "",
+  "character_inv_slots": {
+   "item": 40,
+   "weapon": 200,
+   "body_set": 200,
+   "back": 200,
+   "accessory": 200,
+   "essence": 200,
+   "material": 200,
+   "pet": 99
+  },
+  "character_item": "1,2,3",
+  "character_level": "1",
+  "character_lightning": 0,
+  "character_magatama": "",
+  "character_material": "",
+  "character_mission": "",
+  "character_name": "Shen",
+  "character_ninja_essence": "",
+  "character_npc": "",
+  "character_pre_hash": "a7cf18766034fdc35c1c4c4150888cca59bd12a4",
+  "character_rank": "",
+  "character_skill": "",
+  "character_skin_color": 15,
+  "character_summon": 0,
+  "character_taijutsu": 0,
+  "character_trade_item": "",
+  "character_water": 0,
+  "character_weapon": "",
+  "character_wind": 1,
+  "character_xp": "20",
+  "daily": {},
+  "expiry_data": {
+   "remove_inv_arr": [],
+   "add_inv_arr": [],
+   "equip_arr": [],
+   "remove_equip_arr": [],
+   "current_expiry_arr": [],
+   "expiry_pet_data": [],
+   "expiry_hash": "a0277539cac6c47ec693d705e366d4b397f26cd3"
+  },
+  "stateInventory": {},
+  "senjutsu": [],
+  "senjutsu_spirit": "",
+  "stateInv": {}
+ }
+}
+
+======================================
+AMF -> CharacterDAO.getExtraData   (responseURI=/4, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "ff838d2d3765ca9bf7730eaa85ce2fbe77fa6974",
+ null
+]
+   -> handler ADA
+   hash extra data: input="0,0,0,0,0,,,,0,0"
+                    hash =76e0e6f45c1c7dfb1d10f2f860befc560cdfb048
+   tipe rekaman karakter: semua benar (72 field)
+   character_skills = []
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "DailyReward": {
+   "allow_to_claim": 0
+  },
+  "GodSnapCountDown": null,
+  "UnstoppableRageCountDown": null,
+  "achievement": [],
+  "achievement_point": 0,
+  "adsArr": [],
+  "all_event_login_data": {},
+  "anni5th_tutorial_need_display": null,
+  "anni8thDoubleExpGold_times": null,
+  "anni_mission_id": null,
+  "arena_version": "",
+  "bloodline": [],
+  "bp_mission_id": null,
+  "canClaimFK": null,
+  "char_statistic": {
+   "12": 250
+  },
+  "character_create_date": "2026-07-29 23:07:23",
+  "christmas_2014_special_reward": null,
+  "christmas_coin": null,
+  "claim_remain": null,
+  "clan_chain": "",
+  "clan_id": 0,
+  "clan_version": "",
+  "combine_boost_time": null,
+  "combine_boost_time_in_period": null,
+  "combine_boost_time_period_end_left": null,
+  "combine_boost_time_period_start_left": null,
+  "consecutive_days": "",
+  "daily_login": {},
+  "daily_login_data": [],
+  "daily_stamp_available": null,
+  "dailygift_gift_list": [],
+  "dailygift_request_limit": null,
+  "date": null,
+  "double_exp": null,
+  "dragon_pet_christmas": null,
+  "event_170m_like": null,
+  "event_daily_login": {},
+  "event_gift_bag": null,
+  "extra_data_hash": "76e0e6f45c1c7dfb1d10f2f860befc560cdfb048",
+  "file_1": [],
+  "file_2": [],
+  "file_3": [],
+  "football_2018_claim": null,
+  "free_roulette_times": null,
+  "friend_accept_reward": null,
+  "friendship_kunai": null,
+  "gacha": {},
+  "get_hunting_passport": null,
+  "get_learning_status": [],
+  "handoff_nonce": "",
+  "handoff_token": "",
+  "invite_accepted": null,
+  "isGraphic": null,
+  "is_fan": null,
+  "is_founder": null,
+  "is_hard_mode_locked": null,
+  "is_valentine": null,
+  "kojima_event": null,
+  "layout": null,
+  "level_80_exam_reward_list_read": null,
+  "lny_2012_cake": null,
+  "lny_2012_cake_added": null,
+  "lucky_draw_case": [],
+  "lucky_spin_consecutive_day": null,
+  "lucky_spin_multiplier": null,
+  "lucky_spin_remaining_spin": null,
+  "lucky_spin_show_wheel": null,
+  "map_key": "00",
+  "minik_xmas_gift": "",
+  "new_account_reward": null,
+  "new_clan_promote": {},
+  "new_mail": false,
+  "new_year_2015_clothes": null,
+  "newsArr": [],
+  "newsId": null,
+  "newsfeed_easter_2014_posted": null,
+  "newsfeed_material_posted": null,
+  "noticeText": null,
+  "once_gift": [],
+  "option_data": {
+   "music_index": 0,
+   "music_volume": 1,
+   "sound_on": 1
+  },
+  "player_pet": [],
+  "popup_arr": [],
+  "premium_claim_level": null,
+  "premium_claim_skill_set": null,
+  "premium_daily_token": null,
+  "prestige": 0,
+  "proc": null,
+  "promo_expired": null,
+  "promotion": null,
+  "pve_version": "",
+  "pvpSchedule": [],
+  "pvp_invite": [],
+  "pvp_record": null,
+  "reaming_pet": null,
+  "recent_achievement": [],
+  "remaining_skill": null,
+  "request_list_length": null,
+  "requests": [],
+  "roulette_allowed": false,
+  "sakura_event": null,
+  "se_day_count_open": null,
+  "se_end_date": null,
+  "se_end_date_notice": null,
+  "seasonNumber": 0,
+  "seasonNumber_crew": 0,
+  "senjutsu": [],
+  "senjutsu_system": null,
+  "showFanPage": null,
+  "showNotice": null,
+  "sje_end_date": 0,
+  "sje_end_date_notice": 0,
+  "statistic_battle": {},
+  "sum_1": [],
+  "sum_2": [],
+  "sum_3": [],
+  "total_friend_accepted": null,
+  "trainingFdSkill": {
+   "trainingTime": 0
+  },
+  "training_skill": null,
+  "tutorial_expiry_item": null,
+  "valentine_event": null,
+  "veteran_return_fk_accepted": null,
+  "xmas2014_tutorial_need_display": null,
+  "skills": [],
+  "socket": null,
+  "coreData": {},
+  "requestData": [],
+  "databaseCharacter": {
+   "account_id": 1,
+   "add_inv_arr": [],
+   "bloodline": [],
+   "character_armor": 0,
+   "character_bloodline": "",
+   "character_body_parts": {},
+   "character_body_set": "set1",
+   "character_chakra": 1,
+   "character_control": 0,
+   "character_cp": 100,
+   "character_earth": 0,
+   "character_equipped_back_item": "",
+   "character_equipped_trade_back_item": "",
+   "character_equipped_trade_body_set": "",
+   "character_equipped_trade_weapon": "",
+   "character_equipped_weapon": "",
+   "character_eye_color": 0,
+   "character_face": "01_0",
+   "character_fire": 0,
+   "character_gender": 0,
+   "character_genjutsu": 0,
+   "character_gold": 515,
+   "character_hair": "17_0",
+   "character_hair_color": [],
+   "character_hash": null,
+   "character_hp": 100,
+   "character_id": "1",
+   "character_intelligence": 1,
+   "character_inventory": {},
+   "character_level": 1,
+   "character_lightning": 0,
+   "character_max_cp": 100,
+   "character_max_hp": 100,
+   "character_max_sp": 0,
+   "character_name": "Shen",
+   "character_pet_cp": 0,
+   "character_pet_ep": 0,
+   "character_pet_max_cp": 0,
+   "character_pet_max_ep": 0,
+   "character_rank": 0,
+   "character_senjutsu": [],
+   "character_senjutsu_ss": "",
+   "character_skill_resistance": [],
+   "character_skill_resistance_unallocated": 0,
+   "character_skill_talent": [],
+   "character_skill_unallocated": 0,
+   "character_skills": [],
+   "character_skin_color": 15,
+   "character_sp": 0,
+   "character_speed": 1,
+   "character_stamina": 1,
+   "character_strength": 1,
+   "character_summon": 0,
+   "character_taijutsu": 0,
+   "character_trade_item": "",
+   "character_water": 0,
+   "character_wind": 1,
+   "character_xp": 20,
+   "current_expiry_arr": [],
+   "damage_cp": 0,
+   "damage_hp": 0,
+   "damage_sp": 0,
+   "equip_arr": [],
+   "expired_pet_arr": [],
+   "inv_slots_obj": {},
+   "remove_equip_arr": [],
+   "remove_inv_arr": [],
+   "restore_cp": 0,
+   "restore_hp": 0,
+   "restore_sp": 0,
+   "senjutsu": [],
+   "session_playtime": 0
+  },
+  "server_time": 1785341491,
+  "current_date": 1785341491,
+  "pvp_server_status": 0
+ }
+}
+
+======================================
+AMF -> FacebookService.getFriendList   (responseURI=/5, amf3=false)
+   argumen: [
+ null
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "friend_list": []
+}
+
+======================================
+AMF -> NewDailyRewardStamp2017.getStatus   (responseURI=/6, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "loginDay": [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+  "24",
+  "25",
+  "26",
+  "27",
+  "28",
+  "29",
+  "30",
+  "31"
+ ],
+ "rewardDay": [
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "item_list": [
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ]
+ ],
+ "claimReward": [
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "txt": {
+  "desc1": "",
+  "desc2": "",
+  "desc3": ""
+ },
+ "now_time": 1785341493,
+ "part2": false
+}
+
+======================================
+AMF -> SpecialReward.getLvUpReward   (responseURI=/7, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "reward_list": []
+}
+
+======================================
+AMF -> CharacterDAO.trainSkill   (responseURI=/8, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "skill13",
+ "b1e984fb50b39cd0d5baadd76d138586ce5ab203"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "recall": 1,
+ "result": 0
+}
+
+======================================
+AMF -> CharacterDAO.trainSkill   (responseURI=/9, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "skill10",
+ "615e8c2104c8e22131a2748d34193f13eec7bc5b"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "recall": 1,
+ "result": 0
+}
+
+======================================
+AMF -> CharacterDAO.trainSkill   (responseURI=/10, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "skill12",
+ "158c0544ab0536b1d428e0c7f7c5b0ac94c06613"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "recall": 1,
+ "result": 0
+}
+
+======================================
+AMF -> SpecialReward.getLvUpReward   (responseURI=/11, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "reward_list": []
+}
+
+======================================
+AMF -> SpecialReward.getLvUpReward   (responseURI=/12, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "reward_list": []
+}
+
+======================================
+AMF -> CharacterService.startMission   (responseURI=/13, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "msn2",
+ "f1f0c96f01fa116058465e1868ea9e7df5c474db",
+ "aa2cdd734cb8015f4eec7881bd25caa1a6d8c0c8af568e6fbf115479e56c67f6608abdb313c4fe4994f8d60bc9a9d50308dc2a3ba8238ba21e6a4d5bcf33719e",
+ 1785341575
+]
+   -> handler ADA
+   mulai misi: msn2  startBattleId=1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "startBattleId": 1
+}
+
+======================================
+AMF -> CharacterService.updateCharacter   (responseURI=/14, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "1",
+ 1,
+ 20,
+ 15,
+ [],
+ 0,
+ 0,
+ "msn2",
+ "418c8dfa13f8f109b0d005d7a32d6565e1968f89",
+ "5d6fdbbb0b8f7e2b46815c83632c25b779b63d54",
+ 0,
+ "904e9bc79d5db2d33d36deab77af7ffa6aa4e7f3",
+ "1",
+ "1",
+ "{\"battles\":[{\"step\":1,\"start_log\":\"wpn1,,\",\"step_log\":[{\"effect\":null,\"type\":\"attack\",\"round\":1,\"tgt\":\"ene_179\",\"action\":\"wpn1\",\"hpBefore\":10,\"side\":\"enemy\",\"dmg\":-6,\"tgtMaxHP\":10,\"hpAfter\":4,\"deducted\":1,\"src\":1},{\"effect\":null,\"type\":\"attack\",\"round\":1,\"tgt\":1,\"action\":\"wpn1\",\"hpBefore\":100,\"side\":\"ally\",\"dmg\":-2,\"tgtMaxHP\":100,\"hpAfter\":98,\"deducted\":1,\"src\":533732},{\"effect\":null,\"type\":\"attack\",\"round\":2,\"tgt\":\"ene_179\",\"action\":\"wpn1\",\"hpBefore\":4,\"side\":\"enemy\",\"dmg\":-7,\"tgtMaxHP\":10,\"hpAfter\":0,\"deducted\":1,\"src\":1}],\"enemyid\":[\"ene_179\"]}]}",
+ "41bf20fe6a0ae0a24f09fa49834da13d8165115a",
+ "9c9fb632b08c1259129294a9bbc208eb1755c7516fefc25207a2"
+]
+   -> handler ADA
+   +20 xp, +15 gold  ->  xp=40 gold=530 level=1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "maintenance": 0,
+ "reward_items": [],
+ "update_inventory": {
+  "xp": 40,
+  "gold": 530,
+  "token": 0
+ }
+}
+
+======================================
+AMF -> SpecialReward.getLvUpReward   (responseURI=/15, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "reward_list": []
+}
+
+======================================
+AMF -> SpecialReward.getLvUpReward   (responseURI=/16, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "reward_list": []
+}
+
+
+### Server jalan di http://127.0.0.1:8080 — 30/07/2026, 06.16.55
+### folder aset : C:\NinjaSaga\web
+### ninja_saga.swf : ADA
+### signature login = 401dfceb24aac074a62bf9b2fa6c10da4da3a728
+### ninja emblem = AKTIF (premium)
+
+======================================
+AMF -> SystemService.snsLogin   (responseURI=/1, amf3=false)
+   argumen: [
+ null,
+ "facebook",
+ "latest",
+ "",
+ "a4ce5790c3339a33e2f0ace8115d91468a96729a",
+ null,
+ null,
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  1,
+  2,
+  0,
+  "localdevsession0001"
+ ],
+ "signature": "401dfceb24aac074a62bf9b2fa6c10da4da3a728",
+ "country_area": "ID",
+ "isNewAccount": 0,
+ "promote_id": 0,
+ "isTrialEmblem": 0,
+ "isExpired": 0,
+ "account_lock": null,
+ "swf_versions": [
+  {
+   "type": "data",
+   "version": "latest"
+  },
+  {
+   "type": "library",
+   "version": "latest"
+  },
+  {
+   "type": "language",
+   "version": "latest"
+  },
+  {
+   "type": "panels",
+   "version": "latest"
+  },
+  {
+   "type": "items",
+   "version": "latest"
+  },
+  {
+   "type": "actions",
+   "version": "latest"
+  },
+  {
+   "type": "sns",
+   "version": "latest"
+  },
+  {
+   "type": "skills",
+   "version": "latest"
+  },
+  {
+   "type": "npc",
+   "version": "latest"
+  },
+  {
+   "type": "enemies",
+   "version": "latest"
+  },
+  {
+   "type": "mission",
+   "version": "latest"
+  },
+  {
+   "type": "pets",
+   "version": "latest"
+  },
+  {
+   "type": "icons",
+   "version": "latest"
+  },
+  {
+   "type": "sound",
+   "version": "latest"
+  }
+ ],
+ "lang": "en",
+ "serverTime": 1785367022
+}
+
+======================================
+AMF -> CharacterDAO.getCharactersList   (responseURI=/2, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   jumlah karakter: 1  ->  Shen lv1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  [
+   "1",
+   "Shen",
+   "1",
+   0
+  ]
+ ]
+}
+
+======================================
+AMF -> CharacterDAO.getCharacterById   (responseURI=/3, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ 1
+]
+   -> handler ADA
+   karakter dipilih: Shen lv1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "bloodline": [],
+  "character_accessory": "",
+  "character_armor": 0,
+  "character_back_item": "",
+  "character_bloodline": 0,
+  "character_body_set": "set1",
+  "character_common_currency": "",
+  "character_control": 0,
+  "character_earth": 0,
+  "character_equipped_accessory": "",
+  "character_equipped_back_item": "",
+  "character_equipped_body_set": [],
+  "character_equipped_skills": "",
+  "character_equipped_trade_back_item": "",
+  "character_equipped_trade_body_set": "",
+  "character_equipped_trade_weapon": "",
+  "character_equipped_weapon": "",
+  "character_face": "01_0",
+  "character_fire": 0,
+  "character_gender": 0,
+  "character_genjutsu": 0,
+  "character_gold": 530,
+  "character_hair": "17_0",
+  "character_hair_color": [],
+  "character_hash": "",
+  "character_id": "1",
+  "character_inv_hair": "",
+  "character_inv_slots": {
+   "item": 40,
+   "weapon": 200,
+   "body_set": 200,
+   "back": 200,
+   "accessory": 200,
+   "essence": 200,
+   "material": 200,
+   "pet": 99
+  },
+  "character_item": "1,2,3",
+  "character_level": "1",
+  "character_lightning": 0,
+  "character_magatama": "",
+  "character_material": "",
+  "character_mission": "",
+  "character_name": "Shen",
+  "character_ninja_essence": "",
+  "character_npc": "",
+  "character_pre_hash": "44a41252dc8724cca867264e169ceeba96b93e6b",
+  "character_rank": "",
+  "character_skill": "",
+  "character_skin_color": 15,
+  "character_summon": 0,
+  "character_taijutsu": 0,
+  "character_trade_item": "",
+  "character_water": 0,
+  "character_weapon": "",
+  "character_wind": 1,
+  "character_xp": "40",
+  "daily": {},
+  "expiry_data": {
+   "remove_inv_arr": [],
+   "add_inv_arr": [],
+   "equip_arr": [],
+   "remove_equip_arr": [],
+   "current_expiry_arr": [],
+   "expiry_pet_data": [],
+   "expiry_hash": "a0277539cac6c47ec693d705e366d4b397f26cd3"
+  },
+  "stateInventory": {},
+  "senjutsu": [],
+  "senjutsu_spirit": "",
+  "stateInv": {}
+ }
+}
+
+======================================
+AMF -> CharacterDAO.getExtraData   (responseURI=/4, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "4b47c1369b9288578b08922d4f79e4a8971aab0c",
+ null
+]
+   -> handler ADA
+   hash extra data: input="0,0,0,0,0,,,,0,0"
+                    hash =76e0e6f45c1c7dfb1d10f2f860befc560cdfb048
+   tipe rekaman karakter: semua benar (72 field)
+   character_skills = []
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "DailyReward": {
+   "allow_to_claim": 0
+  },
+  "GodSnapCountDown": null,
+  "UnstoppableRageCountDown": null,
+  "achievement": [],
+  "achievement_point": 0,
+  "adsArr": [],
+  "all_event_login_data": {},
+  "anni5th_tutorial_need_display": null,
+  "anni8thDoubleExpGold_times": null,
+  "anni_mission_id": null,
+  "arena_version": "",
+  "bloodline": [],
+  "bp_mission_id": null,
+  "canClaimFK": null,
+  "char_statistic": {
+   "12": 250
+  },
+  "character_create_date": "2026-07-29 23:07:23",
+  "christmas_2014_special_reward": null,
+  "christmas_coin": null,
+  "claim_remain": null,
+  "clan_chain": "",
+  "clan_id": 0,
+  "clan_version": "",
+  "combine_boost_time": null,
+  "combine_boost_time_in_period": null,
+  "combine_boost_time_period_end_left": null,
+  "combine_boost_time_period_start_left": null,
+  "consecutive_days": "",
+  "daily_login": {},
+  "daily_login_data": [],
+  "daily_stamp_available": null,
+  "dailygift_gift_list": [],
+  "dailygift_request_limit": null,
+  "date": null,
+  "double_exp": null,
+  "dragon_pet_christmas": null,
+  "event_170m_like": null,
+  "event_daily_login": {},
+  "event_gift_bag": null,
+  "extra_data_hash": "76e0e6f45c1c7dfb1d10f2f860befc560cdfb048",
+  "file_1": [],
+  "file_2": [],
+  "file_3": [],
+  "football_2018_claim": null,
+  "free_roulette_times": null,
+  "friend_accept_reward": null,
+  "friendship_kunai": null,
+  "gacha": {},
+  "get_hunting_passport": null,
+  "get_learning_status": [],
+  "handoff_nonce": "",
+  "handoff_token": "",
+  "invite_accepted": null,
+  "isGraphic": null,
+  "is_fan": null,
+  "is_founder": null,
+  "is_hard_mode_locked": null,
+  "is_valentine": null,
+  "kojima_event": null,
+  "layout": null,
+  "level_80_exam_reward_list_read": null,
+  "lny_2012_cake": null,
+  "lny_2012_cake_added": null,
+  "lucky_draw_case": [],
+  "lucky_spin_consecutive_day": null,
+  "lucky_spin_multiplier": null,
+  "lucky_spin_remaining_spin": null,
+  "lucky_spin_show_wheel": null,
+  "map_key": "00",
+  "minik_xmas_gift": "",
+  "new_account_reward": null,
+  "new_clan_promote": {},
+  "new_mail": false,
+  "new_year_2015_clothes": null,
+  "newsArr": [],
+  "newsId": null,
+  "newsfeed_easter_2014_posted": null,
+  "newsfeed_material_posted": null,
+  "noticeText": null,
+  "once_gift": [],
+  "option_data": {
+   "music_index": 0,
+   "music_volume": 1,
+   "sound_on": 1
+  },
+  "player_pet": [],
+  "popup_arr": [],
+  "premium_claim_level": null,
+  "premium_claim_skill_set": null,
+  "premium_daily_token": null,
+  "prestige": 0,
+  "proc": null,
+  "promo_expired": null,
+  "promotion": null,
+  "pve_version": "",
+  "pvpSchedule": [],
+  "pvp_invite": [],
+  "pvp_record": null,
+  "reaming_pet": null,
+  "recent_achievement": [],
+  "remaining_skill": null,
+  "request_list_length": null,
+  "requests": [],
+  "roulette_allowed": false,
+  "sakura_event": null,
+  "se_day_count_open": null,
+  "se_end_date": null,
+  "se_end_date_notice": null,
+  "seasonNumber": 0,
+  "seasonNumber_crew": 0,
+  "senjutsu": [],
+  "senjutsu_system": null,
+  "showFanPage": null,
+  "showNotice": null,
+  "sje_end_date": 0,
+  "sje_end_date_notice": 0,
+  "statistic_battle": {},
+  "sum_1": [],
+  "sum_2": [],
+  "sum_3": [],
+  "total_friend_accepted": null,
+  "trainingFdSkill": {
+   "trainingTime": 0
+  },
+  "training_skill": null,
+  "tutorial_expiry_item": null,
+  "valentine_event": null,
+  "veteran_return_fk_accepted": null,
+  "xmas2014_tutorial_need_display": null,
+  "skills": [],
+  "socket": null,
+  "coreData": {},
+  "requestData": [],
+  "databaseCharacter": {
+   "account_id": 1,
+   "add_inv_arr": [],
+   "bloodline": [],
+   "character_armor": 0,
+   "character_bloodline": "",
+   "character_body_parts": {},
+   "character_body_set": "set1",
+   "character_chakra": 1,
+   "character_control": 0,
+   "character_cp": 100,
+   "character_earth": 0,
+   "character_equipped_back_item": "",
+   "character_equipped_trade_back_item": "",
+   "character_equipped_trade_body_set": "",
+   "character_equipped_trade_weapon": "",
+   "character_equipped_weapon": "",
+   "character_eye_color": 0,
+   "character_face": "01_0",
+   "character_fire": 0,
+   "character_gender": 0,
+   "character_genjutsu": 0,
+   "character_gold": 530,
+   "character_hair": "17_0",
+   "character_hair_color": [],
+   "character_hash": null,
+   "character_hp": 100,
+   "character_id": "1",
+   "character_intelligence": 1,
+   "character_inventory": {},
+   "character_level": 1,
+   "character_lightning": 0,
+   "character_max_cp": 100,
+   "character_max_hp": 100,
+   "character_max_sp": 0,
+   "character_name": "Shen",
+   "character_pet_cp": 0,
+   "character_pet_ep": 0,
+   "character_pet_max_cp": 0,
+   "character_pet_max_ep": 0,
+   "character_rank": 0,
+   "character_senjutsu": [],
+   "character_senjutsu_ss": "",
+   "character_skill_resistance": [],
+   "character_skill_resistance_unallocated": 0,
+   "character_skill_talent": [],
+   "character_skill_unallocated": 0,
+   "character_skills": [],
+   "character_skin_color": 15,
+   "character_sp": 0,
+   "character_speed": 1,
+   "character_stamina": 1,
+   "character_strength": 1,
+   "character_summon": 0,
+   "character_taijutsu": 0,
+   "character_trade_item": "",
+   "character_water": 0,
+   "character_wind": 1,
+   "character_xp": 40,
+   "current_expiry_arr": [],
+   "damage_cp": 0,
+   "damage_hp": 0,
+   "damage_sp": 0,
+   "equip_arr": [],
+   "expired_pet_arr": [],
+   "inv_slots_obj": {},
+   "remove_equip_arr": [],
+   "remove_inv_arr": [],
+   "restore_cp": 0,
+   "restore_hp": 0,
+   "restore_sp": 0,
+   "senjutsu": [],
+   "session_playtime": 0
+  },
+  "server_time": 1785367025,
+  "current_date": 1785367025,
+  "pvp_server_status": 0
+ }
+}
+
+======================================
+AMF -> FacebookService.getFriendList   (responseURI=/5, amf3=false)
+   argumen: [
+ null
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "friend_list": []
+}
+
+======================================
+AMF -> NewDailyRewardStamp2017.getStatus   (responseURI=/6, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "loginDay": [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+  "24",
+  "25",
+  "26",
+  "27",
+  "28",
+  "29",
+  "30",
+  "31"
+ ],
+ "rewardDay": [
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "item_list": [
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ]
+ ],
+ "claimReward": [
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "txt": {
+  "desc1": "",
+  "desc2": "",
+  "desc3": ""
+ },
+ "now_time": 1785367027,
+ "part2": false
+}
+
+======================================
+AMF -> SystemService.snsLogin   (responseURI=/1, amf3=false)
+   argumen: [
+ null,
+ "facebook",
+ "latest",
+ "",
+ "a4ce5790c3339a33e2f0ace8115d91468a96729a",
+ null,
+ null,
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  1,
+  2,
+  0,
+  "localdevsession0001"
+ ],
+ "signature": "401dfceb24aac074a62bf9b2fa6c10da4da3a728",
+ "country_area": "ID",
+ "isNewAccount": 0,
+ "promote_id": 0,
+ "isTrialEmblem": 0,
+ "isExpired": 0,
+ "account_lock": null,
+ "swf_versions": [
+  {
+   "type": "data",
+   "version": "latest"
+  },
+  {
+   "type": "library",
+   "version": "latest"
+  },
+  {
+   "type": "language",
+   "version": "latest"
+  },
+  {
+   "type": "panels",
+   "version": "latest"
+  },
+  {
+   "type": "items",
+   "version": "latest"
+  },
+  {
+   "type": "actions",
+   "version": "latest"
+  },
+  {
+   "type": "sns",
+   "version": "latest"
+  },
+  {
+   "type": "skills",
+   "version": "latest"
+  },
+  {
+   "type": "npc",
+   "version": "latest"
+  },
+  {
+   "type": "enemies",
+   "version": "latest"
+  },
+  {
+   "type": "mission",
+   "version": "latest"
+  },
+  {
+   "type": "pets",
+   "version": "latest"
+  },
+  {
+   "type": "icons",
+   "version": "latest"
+  },
+  {
+   "type": "sound",
+   "version": "latest"
+  }
+ ],
+ "lang": "en",
+ "serverTime": 1785367037
+}
+
+======================================
+AMF -> CharacterDAO.getCharactersList   (responseURI=/2, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   jumlah karakter: 1  ->  Shen lv1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  [
+   "1",
+   "Shen",
+   "1",
+   0
+  ]
+ ]
+}
+
+
+### Server jalan di http://127.0.0.1:8080 — 30/07/2026, 06.18.30
+### folder aset : C:\NinjaSaga\web
+### ninja_saga.swf : ADA
+### signature login = 401dfceb24aac074a62bf9b2fa6c10da4da3a728
+### ninja emblem = AKTIF (premium)
+
+======================================
+AMF -> SystemService.snsLogin   (responseURI=/1, amf3=false)
+   argumen: [
+ null,
+ "facebook",
+ "latest",
+ "",
+ "a4ce5790c3339a33e2f0ace8115d91468a96729a",
+ null,
+ null,
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  1,
+  2,
+  0,
+  "localdevsession0001"
+ ],
+ "signature": "401dfceb24aac074a62bf9b2fa6c10da4da3a728",
+ "country_area": "ID",
+ "isNewAccount": 0,
+ "promote_id": 0,
+ "isTrialEmblem": 0,
+ "isExpired": 0,
+ "account_lock": null,
+ "swf_versions": [
+  {
+   "type": "data",
+   "version": "latest"
+  },
+  {
+   "type": "library",
+   "version": "latest"
+  },
+  {
+   "type": "language",
+   "version": "latest"
+  },
+  {
+   "type": "panels",
+   "version": "latest"
+  },
+  {
+   "type": "items",
+   "version": "latest"
+  },
+  {
+   "type": "actions",
+   "version": "latest"
+  },
+  {
+   "type": "sns",
+   "version": "latest"
+  },
+  {
+   "type": "skills",
+   "version": "latest"
+  },
+  {
+   "type": "npc",
+   "version": "latest"
+  },
+  {
+   "type": "enemies",
+   "version": "latest"
+  },
+  {
+   "type": "mission",
+   "version": "latest"
+  },
+  {
+   "type": "pets",
+   "version": "latest"
+  },
+  {
+   "type": "icons",
+   "version": "latest"
+  },
+  {
+   "type": "sound",
+   "version": "latest"
+  }
+ ],
+ "lang": "en",
+ "serverTime": 1785367116
+}
+
+======================================
+AMF -> CharacterDAO.getCharactersList   (responseURI=/2, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   jumlah karakter: 1  ->  Shen lv9
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  [
+   "1",
+   "Shen",
+   "9",
+   0
+  ]
+ ]
+}
+
+======================================
+AMF -> CharacterDAO.getCharacterById   (responseURI=/3, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ 1
+]
+   -> handler ADA
+   karakter dipilih: Shen lv1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "bloodline": [],
+  "character_accessory": "",
+  "character_armor": 0,
+  "character_back_item": "",
+  "character_bloodline": 0,
+  "character_body_set": "set1",
+  "character_common_currency": "",
+  "character_control": 0,
+  "character_earth": 0,
+  "character_equipped_accessory": "",
+  "character_equipped_back_item": "",
+  "character_equipped_body_set": [],
+  "character_equipped_skills": "",
+  "character_equipped_trade_back_item": "",
+  "character_equipped_trade_body_set": "",
+  "character_equipped_trade_weapon": "",
+  "character_equipped_weapon": "",
+  "character_face": "01_0",
+  "character_fire": 0,
+  "character_gender": 0,
+  "character_genjutsu": 0,
+  "character_gold": 999999999,
+  "character_hair": "17_0",
+  "character_hair_color": [],
+  "character_hash": "",
+  "character_id": "1",
+  "character_inv_hair": "",
+  "character_inv_slots": {
+   "item": 40,
+   "weapon": 200,
+   "body_set": 200,
+   "back": 200,
+   "accessory": 200,
+   "essence": 200,
+   "material": 200,
+   "pet": 99
+  },
+  "character_item": "1,2,3",
+  "character_level": "1",
+  "character_lightning": 0,
+  "character_magatama": "",
+  "character_material": "",
+  "character_mission": "",
+  "character_name": "Shen",
+  "character_ninja_essence": "",
+  "character_npc": "",
+  "character_pre_hash": "44a41252dc8724cca867264e169ceeba96b93e6b",
+  "character_rank": "",
+  "character_skill": "",
+  "character_skin_color": 15,
+  "character_summon": 0,
+  "character_taijutsu": 0,
+  "character_trade_item": "",
+  "character_water": 0,
+  "character_weapon": "",
+  "character_wind": 1,
+  "character_xp": "40",
+  "daily": {},
+  "expiry_data": {
+   "remove_inv_arr": [],
+   "add_inv_arr": [],
+   "equip_arr": [],
+   "remove_equip_arr": [],
+   "current_expiry_arr": [],
+   "expiry_pet_data": [],
+   "expiry_hash": "a0277539cac6c47ec693d705e366d4b397f26cd3"
+  },
+  "stateInventory": {},
+  "senjutsu": [],
+  "senjutsu_spirit": "",
+  "stateInv": {}
+ }
+}
+
+======================================
+AMF -> CharacterDAO.getExtraData   (responseURI=/4, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "4b47c1369b9288578b08922d4f79e4a8971aab0c",
+ null
+]
+   -> handler ADA
+   hash extra data: input="0,0,0,0,0,,,,0,0"
+                    hash =76e0e6f45c1c7dfb1d10f2f860befc560cdfb048
+   tipe rekaman karakter: semua benar (72 field)
+   character_skills = []
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "DailyReward": {
+   "allow_to_claim": 0
+  },
+  "GodSnapCountDown": null,
+  "UnstoppableRageCountDown": null,
+  "achievement": [],
+  "achievement_point": 0,
+  "adsArr": [],
+  "all_event_login_data": {},
+  "anni5th_tutorial_need_display": null,
+  "anni8thDoubleExpGold_times": null,
+  "anni_mission_id": null,
+  "arena_version": "",
+  "bloodline": [],
+  "bp_mission_id": null,
+  "canClaimFK": null,
+  "char_statistic": {
+   "12": 250
+  },
+  "character_create_date": "2026-07-29 23:07:23",
+  "christmas_2014_special_reward": null,
+  "christmas_coin": null,
+  "claim_remain": null,
+  "clan_chain": "",
+  "clan_id": 0,
+  "clan_version": "",
+  "combine_boost_time": null,
+  "combine_boost_time_in_period": null,
+  "combine_boost_time_period_end_left": null,
+  "combine_boost_time_period_start_left": null,
+  "consecutive_days": "",
+  "daily_login": {},
+  "daily_login_data": [],
+  "daily_stamp_available": null,
+  "dailygift_gift_list": [],
+  "dailygift_request_limit": null,
+  "date": null,
+  "double_exp": null,
+  "dragon_pet_christmas": null,
+  "event_170m_like": null,
+  "event_daily_login": {},
+  "event_gift_bag": null,
+  "extra_data_hash": "76e0e6f45c1c7dfb1d10f2f860befc560cdfb048",
+  "file_1": [],
+  "file_2": [],
+  "file_3": [],
+  "football_2018_claim": null,
+  "free_roulette_times": null,
+  "friend_accept_reward": null,
+  "friendship_kunai": null,
+  "gacha": {},
+  "get_hunting_passport": null,
+  "get_learning_status": [],
+  "handoff_nonce": "",
+  "handoff_token": "",
+  "invite_accepted": null,
+  "isGraphic": null,
+  "is_fan": null,
+  "is_founder": null,
+  "is_hard_mode_locked": null,
+  "is_valentine": null,
+  "kojima_event": null,
+  "layout": null,
+  "level_80_exam_reward_list_read": null,
+  "lny_2012_cake": null,
+  "lny_2012_cake_added": null,
+  "lucky_draw_case": [],
+  "lucky_spin_consecutive_day": null,
+  "lucky_spin_multiplier": null,
+  "lucky_spin_remaining_spin": null,
+  "lucky_spin_show_wheel": null,
+  "map_key": "00",
+  "minik_xmas_gift": "",
+  "new_account_reward": null,
+  "new_clan_promote": {},
+  "new_mail": false,
+  "new_year_2015_clothes": null,
+  "newsArr": [],
+  "newsId": null,
+  "newsfeed_easter_2014_posted": null,
+  "newsfeed_material_posted": null,
+  "noticeText": null,
+  "once_gift": [],
+  "option_data": {
+   "music_index": 0,
+   "music_volume": 1,
+   "sound_on": 1
+  },
+  "player_pet": [],
+  "popup_arr": [],
+  "premium_claim_level": null,
+  "premium_claim_skill_set": null,
+  "premium_daily_token": null,
+  "prestige": 0,
+  "proc": null,
+  "promo_expired": null,
+  "promotion": null,
+  "pve_version": "",
+  "pvpSchedule": [],
+  "pvp_invite": [],
+  "pvp_record": null,
+  "reaming_pet": null,
+  "recent_achievement": [],
+  "remaining_skill": null,
+  "request_list_length": null,
+  "requests": [],
+  "roulette_allowed": false,
+  "sakura_event": null,
+  "se_day_count_open": null,
+  "se_end_date": null,
+  "se_end_date_notice": null,
+  "seasonNumber": 0,
+  "seasonNumber_crew": 0,
+  "senjutsu": [],
+  "senjutsu_system": null,
+  "showFanPage": null,
+  "showNotice": null,
+  "sje_end_date": 0,
+  "sje_end_date_notice": 0,
+  "statistic_battle": {},
+  "sum_1": [],
+  "sum_2": [],
+  "sum_3": [],
+  "total_friend_accepted": null,
+  "trainingFdSkill": {
+   "trainingTime": 0
+  },
+  "training_skill": null,
+  "tutorial_expiry_item": null,
+  "valentine_event": null,
+  "veteran_return_fk_accepted": null,
+  "xmas2014_tutorial_need_display": null,
+  "skills": [],
+  "socket": null,
+  "coreData": {},
+  "requestData": [],
+  "databaseCharacter": {
+   "account_id": 1,
+   "add_inv_arr": [],
+   "bloodline": [],
+   "character_armor": 0,
+   "character_bloodline": "",
+   "character_body_parts": {},
+   "character_body_set": "set1",
+   "character_chakra": 9999,
+   "character_control": 0,
+   "character_cp": 100,
+   "character_earth": 0,
+   "character_equipped_back_item": "",
+   "character_equipped_trade_back_item": "",
+   "character_equipped_trade_body_set": "",
+   "character_equipped_trade_weapon": "",
+   "character_equipped_weapon": "",
+   "character_eye_color": 0,
+   "character_face": "01_0",
+   "character_fire": 0,
+   "character_gender": 0,
+   "character_genjutsu": 0,
+   "character_gold": 999999999,
+   "character_hair": "17_0",
+   "character_hair_color": [],
+   "character_hash": null,
+   "character_hp": 100,
+   "character_id": "1",
+   "character_intelligence": 9999,
+   "character_inventory": {},
+   "character_level": 1,
+   "character_lightning": 0,
+   "character_max_cp": 100,
+   "character_max_hp": 100,
+   "character_max_sp": 0,
+   "character_name": "Shen",
+   "character_pet_cp": 0,
+   "character_pet_ep": 0,
+   "character_pet_max_cp": 0,
+   "character_pet_max_ep": 0,
+   "character_rank": 0,
+   "character_senjutsu": [],
+   "character_senjutsu_ss": "",
+   "character_skill_resistance": [],
+   "character_skill_resistance_unallocated": 0,
+   "character_skill_talent": [],
+   "character_skill_unallocated": 0,
+   "character_skills": [],
+   "character_skin_color": 15,
+   "character_sp": 0,
+   "character_speed": 9999,
+   "character_stamina": 9999,
+   "character_strength": 9999,
+   "character_summon": 0,
+   "character_taijutsu": 0,
+   "character_trade_item": "",
+   "character_water": 0,
+   "character_wind": 1,
+   "character_xp": 40,
+   "current_expiry_arr": [],
+   "damage_cp": 0,
+   "damage_hp": 0,
+   "damage_sp": 0,
+   "equip_arr": [],
+   "expired_pet_arr": [],
+   "inv_slots_obj": {},
+   "remove_equip_arr": [],
+   "remove_inv_arr": [],
+   "restore_cp": 0,
+   "restore_hp": 0,
+   "restore_sp": 0,
+   "senjutsu": [],
+   "session_playtime": 0
+  },
+  "server_time": 1785367119,
+  "current_date": 1785367119,
+  "pvp_server_status": 0
+ }
+}
+
+======================================
+AMF -> FacebookService.getFriendList   (responseURI=/5, amf3=false)
+   argumen: [
+ null
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "friend_list": []
+}
+
+======================================
+AMF -> NewDailyRewardStamp2017.getStatus   (responseURI=/6, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "loginDay": [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+  "24",
+  "25",
+  "26",
+  "27",
+  "28",
+  "29",
+  "30",
+  "31"
+ ],
+ "rewardDay": [
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "item_list": [
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ]
+ ],
+ "claimReward": [
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "txt": {
+  "desc1": "",
+  "desc2": "",
+  "desc3": ""
+ },
+ "now_time": 1785367121,
+ "part2": false
+}
+   [klon] popup_claimSkill  <- achievement.swf
+   [klon] popup_newemblem  <- achievement.swf
+
+======================================
+AMF -> FriendReward.getDailygiftStatus   (responseURI=/7, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+======================================
+AMF -> FriendReward.getDailygiftStatus   (responseURI=/8, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+======================================
+AMF -> GiftService.createGiftRecord   (responseURI=/9, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "daily_gift_bag",
+ 0
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+======================================
+AMF -> MailService.getMail   (responseURI=/10, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+======================================
+AMF -> FacebookService.getRequestList   (responseURI=/11, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ null
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+
+### Server jalan di http://127.0.0.1:8080 — 30/07/2026, 06.32.24
+### folder aset : C:\NinjaSaga\web
+### ninja_saga.swf : ADA
+### signature login = 401dfceb24aac074a62bf9b2fa6c10da4da3a728
+### ninja emblem = AKTIF (premium)
+
+======================================
+AMF -> SystemService.snsLogin   (responseURI=/1, amf3=false)
+   argumen: [
+ null,
+ "facebook",
+ "latest",
+ "",
+ "a4ce5790c3339a33e2f0ace8115d91468a96729a",
+ null,
+ null,
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  1,
+  2,
+  0,
+  "localdevsession0001"
+ ],
+ "signature": "401dfceb24aac074a62bf9b2fa6c10da4da3a728",
+ "country_area": "ID",
+ "isNewAccount": 0,
+ "promote_id": 0,
+ "isTrialEmblem": 0,
+ "isExpired": 0,
+ "account_lock": null,
+ "swf_versions": [
+  {
+   "type": "data",
+   "version": "latest"
+  },
+  {
+   "type": "library",
+   "version": "latest"
+  },
+  {
+   "type": "language",
+   "version": "latest"
+  },
+  {
+   "type": "panels",
+   "version": "latest"
+  },
+  {
+   "type": "items",
+   "version": "latest"
+  },
+  {
+   "type": "actions",
+   "version": "latest"
+  },
+  {
+   "type": "sns",
+   "version": "latest"
+  },
+  {
+   "type": "skills",
+   "version": "latest"
+  },
+  {
+   "type": "npc",
+   "version": "latest"
+  },
+  {
+   "type": "enemies",
+   "version": "latest"
+  },
+  {
+   "type": "mission",
+   "version": "latest"
+  },
+  {
+   "type": "pets",
+   "version": "latest"
+  },
+  {
+   "type": "icons",
+   "version": "latest"
+  },
+  {
+   "type": "sound",
+   "version": "latest"
+  }
+ ],
+ "lang": "en",
+ "serverTime": 1785367950
+}
+
+======================================
+AMF -> CharacterDAO.getCharactersList   (responseURI=/2, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   jumlah karakter: 1  ->  Shen lv1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  [
+   "1",
+   "Shen",
+   "1",
+   0
+  ]
+ ]
+}
+
+======================================
+AMF -> CharacterDAO.getCharacterById   (responseURI=/3, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ 1
+]
+   -> handler ADA
+   karakter dipilih: Shen lv1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "bloodline": [],
+  "character_accessory": "",
+  "character_armor": 0,
+  "character_back_item": "",
+  "character_bloodline": 0,
+  "character_body_set": "set1",
+  "character_common_currency": "",
+  "character_control": 0,
+  "character_earth": 0,
+  "character_equipped_accessory": "",
+  "character_equipped_back_item": "",
+  "character_equipped_body_set": [],
+  "character_equipped_skills": "",
+  "character_equipped_trade_back_item": "",
+  "character_equipped_trade_body_set": "",
+  "character_equipped_trade_weapon": "",
+  "character_equipped_weapon": "",
+  "character_face": "01_0",
+  "character_fire": 0,
+  "character_gender": 0,
+  "character_genjutsu": 0,
+  "character_gold": 999999999,
+  "character_hair": "17_0",
+  "character_hair_color": [],
+  "character_hash": "",
+  "character_id": "1",
+  "character_inv_hair": "",
+  "character_inv_slots": {
+   "item": 40,
+   "weapon": 200,
+   "body_set": 200,
+   "back": 200,
+   "accessory": 200,
+   "essence": 200,
+   "material": 200,
+   "pet": 99
+  },
+  "character_item": "1,2,3",
+  "character_level": "1",
+  "character_lightning": 0,
+  "character_magatama": "",
+  "character_material": "",
+  "character_mission": "",
+  "character_name": "Shen",
+  "character_ninja_essence": "",
+  "character_npc": "",
+  "character_pre_hash": "44a41252dc8724cca867264e169ceeba96b93e6b",
+  "character_rank": "",
+  "character_skill": "",
+  "character_skin_color": 15,
+  "character_summon": 0,
+  "character_taijutsu": 0,
+  "character_trade_item": "",
+  "character_water": 0,
+  "character_weapon": "",
+  "character_wind": 1,
+  "character_xp": "40",
+  "daily": {},
+  "expiry_data": {
+   "remove_inv_arr": [],
+   "add_inv_arr": [],
+   "equip_arr": [],
+   "remove_equip_arr": [],
+   "current_expiry_arr": [],
+   "expiry_pet_data": [],
+   "expiry_hash": "a0277539cac6c47ec693d705e366d4b397f26cd3"
+  },
+  "stateInventory": {},
+  "senjutsu": [],
+  "senjutsu_spirit": "",
+  "stateInv": {}
+ }
+}
+
+======================================
+AMF -> CharacterDAO.getExtraData   (responseURI=/4, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "4b47c1369b9288578b08922d4f79e4a8971aab0c",
+ null
+]
+   -> handler ADA
+   hash extra data: input="0,0,0,0,0,,,,0,0"
+                    hash =76e0e6f45c1c7dfb1d10f2f860befc560cdfb048
+   tipe rekaman karakter: semua benar (72 field)
+   character_skills = []
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "DailyReward": {
+   "allow_to_claim": 0,
+   "claimed_times": 0,
+   "items": [
+    "item1_1",
+    "item1_1",
+    "item1_1",
+    "item1_1",
+    "item1_1",
+    "item1_1",
+    "item1_1"
+   ]
+  },
+  "GodSnapCountDown": null,
+  "UnstoppableRageCountDown": null,
+  "achievement": [],
+  "achievement_point": 0,
+  "adsArr": [],
+  "all_event_login_data": {},
+  "anni5th_tutorial_need_display": null,
+  "anni8thDoubleExpGold_times": null,
+  "anni_mission_id": null,
+  "arena_version": "",
+  "bloodline": [],
+  "bp_mission_id": null,
+  "canClaimFK": null,
+  "char_statistic": {
+   "12": 250
+  },
+  "character_create_date": "2026-07-29 23:07:23",
+  "christmas_2014_special_reward": null,
+  "christmas_coin": null,
+  "claim_remain": null,
+  "clan_chain": "",
+  "clan_id": 0,
+  "clan_version": "",
+  "combine_boost_time": null,
+  "combine_boost_time_in_period": null,
+  "combine_boost_time_period_end_left": null,
+  "combine_boost_time_period_start_left": null,
+  "consecutive_days": "",
+  "daily_login": {},
+  "daily_login_data": [],
+  "daily_stamp_available": null,
+  "dailygift_gift_list": [],
+  "dailygift_request_limit": null,
+  "date": null,
+  "double_exp": null,
+  "dragon_pet_christmas": null,
+  "event_170m_like": null,
+  "event_daily_login": {},
+  "event_gift_bag": null,
+  "extra_data_hash": "76e0e6f45c1c7dfb1d10f2f860befc560cdfb048",
+  "file_1": [],
+  "file_2": [],
+  "file_3": [],
+  "football_2018_claim": null,
+  "free_roulette_times": null,
+  "friend_accept_reward": null,
+  "friendship_kunai": null,
+  "gacha": {},
+  "get_hunting_passport": null,
+  "get_learning_status": [],
+  "handoff_nonce": "",
+  "handoff_token": "",
+  "invite_accepted": null,
+  "isGraphic": null,
+  "is_fan": null,
+  "is_founder": null,
+  "is_hard_mode_locked": null,
+  "is_valentine": null,
+  "kojima_event": null,
+  "layout": null,
+  "level_80_exam_reward_list_read": null,
+  "lny_2012_cake": null,
+  "lny_2012_cake_added": null,
+  "lucky_draw_case": [],
+  "lucky_spin_consecutive_day": null,
+  "lucky_spin_multiplier": null,
+  "lucky_spin_remaining_spin": null,
+  "lucky_spin_show_wheel": null,
+  "map_key": "00",
+  "minik_xmas_gift": "",
+  "new_account_reward": null,
+  "new_clan_promote": {},
+  "new_mail": false,
+  "new_year_2015_clothes": null,
+  "newsArr": [],
+  "newsId": null,
+  "newsfeed_easter_2014_posted": null,
+  "newsfeed_material_posted": null,
+  "noticeText": null,
+  "once_gift": [],
+  "option_data": {
+   "music_index": 0,
+   "music_volume": 1,
+   "sound_on": 1
+  },
+  "player_pet": [],
+  "popup_arr": [],
+  "premium_claim_level": null,
+  "premium_claim_skill_set": null,
+  "premium_daily_token": null,
+  "prestige": 0,
+  "proc": null,
+  "promo_expired": null,
+  "promotion": null,
+  "pve_version": "",
+  "pvpSchedule": [],
+  "pvp_invite": [],
+  "pvp_record": null,
+  "reaming_pet": null,
+  "recent_achievement": [],
+  "remaining_skill": null,
+  "request_list_length": null,
+  "requests": [],
+  "roulette_allowed": false,
+  "sakura_event": null,
+  "se_day_count_open": null,
+  "se_end_date": null,
+  "se_end_date_notice": null,
+  "seasonNumber": 0,
+  "seasonNumber_crew": 0,
+  "senjutsu": [],
+  "senjutsu_system": null,
+  "showFanPage": null,
+  "showNotice": null,
+  "sje_end_date": 0,
+  "sje_end_date_notice": 0,
+  "statistic_battle": {},
+  "sum_1": [],
+  "sum_2": [],
+  "sum_3": [],
+  "total_friend_accepted": null,
+  "trainingFdSkill": {
+   "trainingTime": 0
+  },
+  "training_skill": null,
+  "tutorial_expiry_item": null,
+  "valentine_event": null,
+  "veteran_return_fk_accepted": null,
+  "xmas2014_tutorial_need_display": null,
+  "skills": [],
+  "socket": null,
+  "coreData": {},
+  "requestData": [],
+  "databaseCharacter": {
+   "account_id": 1,
+   "add_inv_arr": [],
+   "bloodline": [],
+   "character_armor": 0,
+   "character_bloodline": "",
+   "character_body_parts": {},
+   "character_body_set": "set1",
+   "character_chakra": 9999,
+   "character_control": 0,
+   "character_cp": 100,
+   "character_earth": 0,
+   "character_equipped_back_item": "",
+   "character_equipped_trade_back_item": "",
+   "character_equipped_trade_body_set": "",
+   "character_equipped_trade_weapon": "",
+   "character_equipped_weapon": "",
+   "character_eye_color": 0,
+   "character_face": "01_0",
+   "character_fire": 0,
+   "character_gender": 0,
+   "character_genjutsu": 0,
+   "character_gold": 999999999,
+   "character_hair": "17_0",
+   "character_hair_color": [],
+   "character_hash": null,
+   "character_hp": 100,
+   "character_id": "1",
+   "character_intelligence": 9999,
+   "character_inventory": {},
+   "character_level": 1,
+   "character_lightning": 0,
+   "character_max_cp": 100,
+   "character_max_hp": 100,
+   "character_max_sp": 0,
+   "character_name": "Shen",
+   "character_pet_cp": 0,
+   "character_pet_ep": 0,
+   "character_pet_max_cp": 0,
+   "character_pet_max_ep": 0,
+   "character_rank": 0,
+   "character_senjutsu": [],
+   "character_senjutsu_ss": "",
+   "character_skill_resistance": [],
+   "character_skill_resistance_unallocated": 0,
+   "character_skill_talent": [],
+   "character_skill_unallocated": 0,
+   "character_skills": [],
+   "character_skin_color": 15,
+   "character_sp": 0,
+   "character_speed": 9999,
+   "character_stamina": 9999,
+   "character_strength": 9999,
+   "character_summon": 0,
+   "character_taijutsu": 0,
+   "character_trade_item": "",
+   "character_water": 0,
+   "character_wind": 1,
+   "character_xp": 40,
+   "current_expiry_arr": [],
+   "damage_cp": 0,
+   "damage_hp": 0,
+   "damage_sp": 0,
+   "equip_arr": [],
+   "expired_pet_arr": [],
+   "inv_slots_obj": {},
+   "remove_equip_arr": [],
+   "remove_inv_arr": [],
+   "restore_cp": 0,
+   "restore_hp": 0,
+   "restore_sp": 0,
+   "senjutsu": [],
+   "session_playtime": 0
+  },
+  "server_time": 1785367952,
+  "current_date": 1785367952,
+  "pvp_server_status": 0
+ }
+}
+
+======================================
+AMF -> FacebookService.getFriendList   (responseURI=/5, amf3=false)
+   argumen: [
+ null
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "friend_list": []
+}
+
+======================================
+AMF -> NewDailyRewardStamp2017.getStatus   (responseURI=/6, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "loginDay": [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+  "24",
+  "25",
+  "26",
+  "27",
+  "28",
+  "29",
+  "30",
+  "31"
+ ],
+ "rewardDay": [
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "item_list": [
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ]
+ ],
+ "claimReward": [
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "txt": {
+  "desc1": "",
+  "desc2": "",
+  "desc3": ""
+ },
+ "now_time": 1785367954,
+ "part2": false
+}
+
+======================================
+AMF -> CharacterDAO.trainSkill   (responseURI=/7, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "skill13",
+ "b1e984fb50b39cd0d5baadd76d138586ce5ab203"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "recall": 1,
+ "result": 0
+}
+
+======================================
+AMF -> CharacterDAO.trainSkill   (responseURI=/8, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "skill10",
+ "615e8c2104c8e22131a2748d34193f13eec7bc5b"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "recall": 1,
+ "result": 0
+}
+
+======================================
+AMF -> CharacterDAO.trainSkill   (responseURI=/9, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "skill12",
+ "158c0544ab0536b1d428e0c7f7c5b0ac94c06613"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "recall": 1,
+ "result": 0
+}
+
+======================================
+AMF -> FriendReward.getDailygiftStatus   (responseURI=/10, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+======================================
+AMF -> FriendReward.getDailygiftStatus   (responseURI=/11, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+======================================
+AMF -> GiftService.createGiftRecord   (responseURI=/12, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "daily_gift_bag",
+ 0
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+======================================
+AMF -> MailService.getMail   (responseURI=/13, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+======================================
+AMF -> FacebookService.getRequestList   (responseURI=/14, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ null
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "requests": [],
+ "remain": {}
+}
+
+
+### Server jalan di http://127.0.0.1:8080 — 30/07/2026, 06.35.15
+### folder aset : C:\NinjaSaga\web
+### ninja_saga.swf : ADA
+### signature login = 401dfceb24aac074a62bf9b2fa6c10da4da3a728
+### ninja emblem = AKTIF (premium)
+
+======================================
+AMF -> SystemService.snsLogin   (responseURI=/1, amf3=false)
+   argumen: [
+ null,
+ "facebook",
+ "latest",
+ "",
+ "a4ce5790c3339a33e2f0ace8115d91468a96729a",
+ null,
+ null,
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  1,
+  2,
+  0,
+  "localdevsession0001"
+ ],
+ "signature": "401dfceb24aac074a62bf9b2fa6c10da4da3a728",
+ "country_area": "ID",
+ "isNewAccount": 0,
+ "promote_id": 0,
+ "isTrialEmblem": 0,
+ "isExpired": 0,
+ "account_lock": null,
+ "swf_versions": [
+  {
+   "type": "data",
+   "version": "latest"
+  },
+  {
+   "type": "library",
+   "version": "latest"
+  },
+  {
+   "type": "language",
+   "version": "latest"
+  },
+  {
+   "type": "panels",
+   "version": "latest"
+  },
+  {
+   "type": "items",
+   "version": "latest"
+  },
+  {
+   "type": "actions",
+   "version": "latest"
+  },
+  {
+   "type": "sns",
+   "version": "latest"
+  },
+  {
+   "type": "skills",
+   "version": "latest"
+  },
+  {
+   "type": "npc",
+   "version": "latest"
+  },
+  {
+   "type": "enemies",
+   "version": "latest"
+  },
+  {
+   "type": "mission",
+   "version": "latest"
+  },
+  {
+   "type": "pets",
+   "version": "latest"
+  },
+  {
+   "type": "icons",
+   "version": "latest"
+  },
+  {
+   "type": "sound",
+   "version": "latest"
+  }
+ ],
+ "lang": "en",
+ "serverTime": 1785368123
+}
+
+======================================
+AMF -> CharacterDAO.getCharactersList   (responseURI=/2, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   jumlah karakter: 1  ->  Shen lv9
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  [
+   "1",
+   "Shen",
+   "9",
+   0
+  ]
+ ]
+}
+
+======================================
+AMF -> CharacterDAO.getCharacterById   (responseURI=/3, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ 1
+]
+   -> handler ADA
+   karakter dipilih: Shen lv1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "bloodline": [],
+  "character_accessory": "",
+  "character_armor": 0,
+  "character_back_item": "",
+  "character_bloodline": 0,
+  "character_body_set": "set1",
+  "character_common_currency": "",
+  "character_control": 0,
+  "character_earth": 0,
+  "character_equipped_accessory": "",
+  "character_equipped_back_item": "",
+  "character_equipped_body_set": [],
+  "character_equipped_skills": "",
+  "character_equipped_trade_back_item": "",
+  "character_equipped_trade_body_set": "",
+  "character_equipped_trade_weapon": "",
+  "character_equipped_weapon": "",
+  "character_face": "01_0",
+  "character_fire": 0,
+  "character_gender": 0,
+  "character_genjutsu": 0,
+  "character_gold": 999999999,
+  "character_hair": "17_0",
+  "character_hair_color": [],
+  "character_hash": "",
+  "character_id": "1",
+  "character_inv_hair": "",
+  "character_inv_slots": {
+   "item": 40,
+   "weapon": 200,
+   "body_set": 200,
+   "back": 200,
+   "accessory": 200,
+   "essence": 200,
+   "material": 200,
+   "pet": 99
+  },
+  "character_item": "1,2,3",
+  "character_level": "1",
+  "character_lightning": 0,
+  "character_magatama": "",
+  "character_material": "",
+  "character_mission": "",
+  "character_name": "Shen",
+  "character_ninja_essence": "",
+  "character_npc": "",
+  "character_pre_hash": "44a41252dc8724cca867264e169ceeba96b93e6b",
+  "character_rank": "",
+  "character_skill": "",
+  "character_skin_color": 15,
+  "character_summon": 0,
+  "character_taijutsu": 0,
+  "character_trade_item": "",
+  "character_water": 0,
+  "character_weapon": "",
+  "character_wind": 1,
+  "character_xp": "40",
+  "daily": {},
+  "expiry_data": {
+   "remove_inv_arr": [],
+   "add_inv_arr": [],
+   "equip_arr": [],
+   "remove_equip_arr": [],
+   "current_expiry_arr": [],
+   "expiry_pet_data": [],
+   "expiry_hash": "a0277539cac6c47ec693d705e366d4b397f26cd3"
+  },
+  "stateInventory": {},
+  "senjutsu": [],
+  "senjutsu_spirit": "",
+  "stateInv": {}
+ }
+}
+
+======================================
+AMF -> CharacterDAO.getExtraData   (responseURI=/4, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "4b47c1369b9288578b08922d4f79e4a8971aab0c",
+ null
+]
+   -> handler ADA
+   hash extra data: input="0,0,0,0,0,,,,0,0"
+                    hash =76e0e6f45c1c7dfb1d10f2f860befc560cdfb048
+   tipe rekaman karakter: semua benar (72 field)
+   character_skills = []
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "DailyReward": {
+   "allow_to_claim": 0,
+   "claimed_times": 0,
+   "items": [
+    "item1_1",
+    "item1_1",
+    "item1_1",
+    "item1_1",
+    "item1_1",
+    "item1_1",
+    "item1_1"
+   ]
+  },
+  "GodSnapCountDown": null,
+  "UnstoppableRageCountDown": null,
+  "achievement": [],
+  "achievement_point": 0,
+  "adsArr": [],
+  "all_event_login_data": {},
+  "anni5th_tutorial_need_display": null,
+  "anni8thDoubleExpGold_times": null,
+  "anni_mission_id": null,
+  "arena_version": "",
+  "bloodline": [],
+  "bp_mission_id": null,
+  "canClaimFK": null,
+  "char_statistic": {
+   "12": 250
+  },
+  "character_create_date": "2026-07-29 23:07:23",
+  "christmas_2014_special_reward": null,
+  "christmas_coin": null,
+  "claim_remain": null,
+  "clan_chain": "",
+  "clan_id": 0,
+  "clan_version": "",
+  "combine_boost_time": null,
+  "combine_boost_time_in_period": null,
+  "combine_boost_time_period_end_left": null,
+  "combine_boost_time_period_start_left": null,
+  "consecutive_days": "",
+  "daily_login": {},
+  "daily_login_data": [],
+  "daily_stamp_available": null,
+  "dailygift_gift_list": [],
+  "dailygift_request_limit": null,
+  "date": null,
+  "double_exp": null,
+  "dragon_pet_christmas": null,
+  "event_170m_like": null,
+  "event_daily_login": {},
+  "event_gift_bag": null,
+  "extra_data_hash": "76e0e6f45c1c7dfb1d10f2f860befc560cdfb048",
+  "file_1": [],
+  "file_2": [],
+  "file_3": [],
+  "football_2018_claim": null,
+  "free_roulette_times": null,
+  "friend_accept_reward": null,
+  "friendship_kunai": null,
+  "gacha": {},
+  "get_hunting_passport": null,
+  "get_learning_status": [],
+  "handoff_nonce": "",
+  "handoff_token": "",
+  "invite_accepted": null,
+  "isGraphic": null,
+  "is_fan": null,
+  "is_founder": null,
+  "is_hard_mode_locked": null,
+  "is_valentine": null,
+  "kojima_event": null,
+  "layout": null,
+  "level_80_exam_reward_list_read": null,
+  "lny_2012_cake": null,
+  "lny_2012_cake_added": null,
+  "lucky_draw_case": [],
+  "lucky_spin_consecutive_day": null,
+  "lucky_spin_multiplier": null,
+  "lucky_spin_remaining_spin": null,
+  "lucky_spin_show_wheel": null,
+  "map_key": "00",
+  "minik_xmas_gift": "",
+  "new_account_reward": null,
+  "new_clan_promote": {},
+  "new_mail": false,
+  "new_year_2015_clothes": null,
+  "newsArr": [],
+  "newsId": null,
+  "newsfeed_easter_2014_posted": null,
+  "newsfeed_material_posted": null,
+  "noticeText": null,
+  "once_gift": [],
+  "option_data": {
+   "music_index": 0,
+   "music_volume": 1,
+   "sound_on": 1
+  },
+  "player_pet": [],
+  "popup_arr": [],
+  "premium_claim_level": null,
+  "premium_claim_skill_set": null,
+  "premium_daily_token": null,
+  "prestige": 0,
+  "proc": null,
+  "promo_expired": null,
+  "promotion": null,
+  "pve_version": "",
+  "pvpSchedule": [],
+  "pvp_invite": [],
+  "pvp_record": null,
+  "reaming_pet": null,
+  "recent_achievement": [],
+  "remaining_skill": null,
+  "request_list_length": null,
+  "requests": [],
+  "roulette_allowed": false,
+  "sakura_event": null,
+  "se_day_count_open": null,
+  "se_end_date": null,
+  "se_end_date_notice": null,
+  "seasonNumber": 0,
+  "seasonNumber_crew": 0,
+  "senjutsu": [],
+  "senjutsu_system": null,
+  "showFanPage": null,
+  "showNotice": null,
+  "sje_end_date": 0,
+  "sje_end_date_notice": 0,
+  "statistic_battle": {},
+  "sum_1": [],
+  "sum_2": [],
+  "sum_3": [],
+  "total_friend_accepted": null,
+  "trainingFdSkill": {
+   "trainingTime": 0
+  },
+  "training_skill": null,
+  "tutorial_expiry_item": null,
+  "valentine_event": null,
+  "veteran_return_fk_accepted": null,
+  "xmas2014_tutorial_need_display": null,
+  "skills": [],
+  "socket": null,
+  "coreData": {},
+  "requestData": [],
+  "databaseCharacter": {
+   "account_id": 1,
+   "add_inv_arr": [],
+   "bloodline": [],
+   "character_armor": 0,
+   "character_bloodline": "",
+   "character_body_parts": {},
+   "character_body_set": "set1",
+   "character_chakra": 9999,
+   "character_control": 0,
+   "character_cp": 100,
+   "character_earth": 0,
+   "character_equipped_back_item": "",
+   "character_equipped_trade_back_item": "",
+   "character_equipped_trade_body_set": "",
+   "character_equipped_trade_weapon": "",
+   "character_equipped_weapon": "",
+   "character_eye_color": 0,
+   "character_face": "01_0",
+   "character_fire": 0,
+   "character_gender": 0,
+   "character_genjutsu": 0,
+   "character_gold": 999999999,
+   "character_hair": "17_0",
+   "character_hair_color": [],
+   "character_hash": null,
+   "character_hp": 100,
+   "character_id": "1",
+   "character_intelligence": 9999,
+   "character_inventory": {},
+   "character_level": 1,
+   "character_lightning": 0,
+   "character_max_cp": 100,
+   "character_max_hp": 100,
+   "character_max_sp": 0,
+   "character_name": "Shen",
+   "character_pet_cp": 0,
+   "character_pet_ep": 0,
+   "character_pet_max_cp": 0,
+   "character_pet_max_ep": 0,
+   "character_rank": 0,
+   "character_senjutsu": [],
+   "character_senjutsu_ss": "",
+   "character_skill_resistance": [],
+   "character_skill_resistance_unallocated": 0,
+   "character_skill_talent": [],
+   "character_skill_unallocated": 0,
+   "character_skills": [],
+   "character_skin_color": 15,
+   "character_sp": 0,
+   "character_speed": 9999,
+   "character_stamina": 9999,
+   "character_strength": 9999,
+   "character_summon": 0,
+   "character_taijutsu": 0,
+   "character_trade_item": "",
+   "character_water": 0,
+   "character_wind": 1,
+   "character_xp": 40,
+   "current_expiry_arr": [],
+   "damage_cp": 0,
+   "damage_hp": 0,
+   "damage_sp": 0,
+   "equip_arr": [],
+   "expired_pet_arr": [],
+   "inv_slots_obj": {},
+   "remove_equip_arr": [],
+   "remove_inv_arr": [],
+   "restore_cp": 0,
+   "restore_hp": 0,
+   "restore_sp": 0,
+   "senjutsu": [],
+   "session_playtime": 0
+  },
+  "server_time": 1785368126,
+  "current_date": 1785368126,
+  "pvp_server_status": 0
+ }
+}
+
+======================================
+AMF -> FacebookService.getFriendList   (responseURI=/5, amf3=false)
+   argumen: [
+ null
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "friend_list": []
+}
+
+======================================
+AMF -> NewDailyRewardStamp2017.getStatus   (responseURI=/6, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "loginDay": [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+  "24",
+  "25",
+  "26",
+  "27",
+  "28",
+  "29",
+  "30",
+  "31"
+ ],
+ "rewardDay": [
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "item_list": [
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ]
+ ],
+ "claimReward": [
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "txt": {
+  "desc1": "",
+  "desc2": "",
+  "desc3": ""
+ },
+ "now_time": 1785368128,
+ "part2": false
+}
+   [klon] challenge_friend  <- popup_newemblem.swf
+
+======================================
+AMF -> SystemService.snsLogin   (responseURI=/1, amf3=false)
+   argumen: [
+ null,
+ "facebook",
+ "latest",
+ "",
+ "a4ce5790c3339a33e2f0ace8115d91468a96729a",
+ null,
+ null,
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  1,
+  2,
+  0,
+  "localdevsession0001"
+ ],
+ "signature": "401dfceb24aac074a62bf9b2fa6c10da4da3a728",
+ "country_area": "ID",
+ "isNewAccount": 0,
+ "promote_id": 0,
+ "isTrialEmblem": 0,
+ "isExpired": 0,
+ "account_lock": null,
+ "swf_versions": [
+  {
+   "type": "data",
+   "version": "latest"
+  },
+  {
+   "type": "library",
+   "version": "latest"
+  },
+  {
+   "type": "language",
+   "version": "latest"
+  },
+  {
+   "type": "panels",
+   "version": "latest"
+  },
+  {
+   "type": "items",
+   "version": "latest"
+  },
+  {
+   "type": "actions",
+   "version": "latest"
+  },
+  {
+   "type": "sns",
+   "version": "latest"
+  },
+  {
+   "type": "skills",
+   "version": "latest"
+  },
+  {
+   "type": "npc",
+   "version": "latest"
+  },
+  {
+   "type": "enemies",
+   "version": "latest"
+  },
+  {
+   "type": "mission",
+   "version": "latest"
+  },
+  {
+   "type": "pets",
+   "version": "latest"
+  },
+  {
+   "type": "icons",
+   "version": "latest"
+  },
+  {
+   "type": "sound",
+   "version": "latest"
+  }
+ ],
+ "lang": "en",
+ "serverTime": 1785368183
+}
+
+======================================
+AMF -> CharacterDAO.getCharactersList   (responseURI=/2, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   jumlah karakter: 1  ->  Shen lv1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  [
+   "1",
+   "Shen",
+   "1",
+   0
+  ]
+ ]
+}
+
+======================================
+AMF -> CharacterDAO.getCharacterById   (responseURI=/3, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ 1
+]
+   -> handler ADA
+   karakter dipilih: Shen lv1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "bloodline": [],
+  "character_accessory": "",
+  "character_armor": 0,
+  "character_back_item": "",
+  "character_bloodline": 0,
+  "character_body_set": "set1",
+  "character_common_currency": "",
+  "character_control": 0,
+  "character_earth": 0,
+  "character_equipped_accessory": "",
+  "character_equipped_back_item": "",
+  "character_equipped_body_set": [],
+  "character_equipped_skills": "",
+  "character_equipped_trade_back_item": "",
+  "character_equipped_trade_body_set": "",
+  "character_equipped_trade_weapon": "",
+  "character_equipped_weapon": "",
+  "character_face": "01_0",
+  "character_fire": 0,
+  "character_gender": 0,
+  "character_genjutsu": 0,
+  "character_gold": 999999999,
+  "character_hair": "17_0",
+  "character_hair_color": [],
+  "character_hash": "",
+  "character_id": "1",
+  "character_inv_hair": "",
+  "character_inv_slots": {
+   "item": 40,
+   "weapon": 200,
+   "body_set": 200,
+   "back": 200,
+   "accessory": 200,
+   "essence": 200,
+   "material": 200,
+   "pet": 99
+  },
+  "character_item": "1,2,3",
+  "character_level": "1",
+  "character_lightning": 0,
+  "character_magatama": "",
+  "character_material": "",
+  "character_mission": "",
+  "character_name": "Shen",
+  "character_ninja_essence": "",
+  "character_npc": "",
+  "character_pre_hash": "44a41252dc8724cca867264e169ceeba96b93e6b",
+  "character_rank": "",
+  "character_skill": "",
+  "character_skin_color": 15,
+  "character_summon": 0,
+  "character_taijutsu": 0,
+  "character_trade_item": "",
+  "character_water": 0,
+  "character_weapon": "",
+  "character_wind": 1,
+  "character_xp": "40",
+  "daily": {},
+  "expiry_data": {
+   "remove_inv_arr": [],
+   "add_inv_arr": [],
+   "equip_arr": [],
+   "remove_equip_arr": [],
+   "current_expiry_arr": [],
+   "expiry_pet_data": [],
+   "expiry_hash": "a0277539cac6c47ec693d705e366d4b397f26cd3"
+  },
+  "stateInventory": {},
+  "senjutsu": [],
+  "senjutsu_spirit": "",
+  "stateInv": {}
+ }
+}
+
+======================================
+AMF -> CharacterDAO.getExtraData   (responseURI=/4, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "4b47c1369b9288578b08922d4f79e4a8971aab0c",
+ null
+]
+   -> handler ADA
+   hash extra data: input="0,0,0,0,0,,,,0,0"
+                    hash =76e0e6f45c1c7dfb1d10f2f860befc560cdfb048
+   tipe rekaman karakter: semua benar (72 field)
+   character_skills = []
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "DailyReward": {
+   "allow_to_claim": 0,
+   "claimed_times": 0,
+   "items": [
+    "item1_1",
+    "item1_1",
+    "item1_1",
+    "item1_1",
+    "item1_1",
+    "item1_1",
+    "item1_1"
+   ]
+  },
+  "GodSnapCountDown": null,
+  "UnstoppableRageCountDown": null,
+  "achievement": [],
+  "achievement_point": 0,
+  "adsArr": [],
+  "all_event_login_data": {},
+  "anni5th_tutorial_need_display": null,
+  "anni8thDoubleExpGold_times": null,
+  "anni_mission_id": null,
+  "arena_version": "",
+  "bloodline": [],
+  "bp_mission_id": null,
+  "canClaimFK": null,
+  "char_statistic": {
+   "12": 250
+  },
+  "character_create_date": "2026-07-29 23:07:23",
+  "christmas_2014_special_reward": null,
+  "christmas_coin": null,
+  "claim_remain": null,
+  "clan_chain": "",
+  "clan_id": 0,
+  "clan_version": "",
+  "combine_boost_time": null,
+  "combine_boost_time_in_period": null,
+  "combine_boost_time_period_end_left": null,
+  "combine_boost_time_period_start_left": null,
+  "consecutive_days": "",
+  "daily_login": {},
+  "daily_login_data": [],
+  "daily_stamp_available": null,
+  "dailygift_gift_list": [],
+  "dailygift_request_limit": null,
+  "date": null,
+  "double_exp": null,
+  "dragon_pet_christmas": null,
+  "event_170m_like": null,
+  "event_daily_login": {},
+  "event_gift_bag": null,
+  "extra_data_hash": "76e0e6f45c1c7dfb1d10f2f860befc560cdfb048",
+  "file_1": [],
+  "file_2": [],
+  "file_3": [],
+  "football_2018_claim": null,
+  "free_roulette_times": null,
+  "friend_accept_reward": null,
+  "friendship_kunai": null,
+  "gacha": {},
+  "get_hunting_passport": null,
+  "get_learning_status": [],
+  "handoff_nonce": "",
+  "handoff_token": "",
+  "invite_accepted": null,
+  "isGraphic": null,
+  "is_fan": null,
+  "is_founder": null,
+  "is_hard_mode_locked": null,
+  "is_valentine": null,
+  "kojima_event": null,
+  "layout": null,
+  "level_80_exam_reward_list_read": null,
+  "lny_2012_cake": null,
+  "lny_2012_cake_added": null,
+  "lucky_draw_case": [],
+  "lucky_spin_consecutive_day": null,
+  "lucky_spin_multiplier": null,
+  "lucky_spin_remaining_spin": null,
+  "lucky_spin_show_wheel": null,
+  "map_key": "00",
+  "minik_xmas_gift": "",
+  "new_account_reward": null,
+  "new_clan_promote": {},
+  "new_mail": false,
+  "new_year_2015_clothes": null,
+  "newsArr": [],
+  "newsId": null,
+  "newsfeed_easter_2014_posted": null,
+  "newsfeed_material_posted": null,
+  "noticeText": null,
+  "once_gift": [],
+  "option_data": {
+   "music_index": 0,
+   "music_volume": 1,
+   "sound_on": 1
+  },
+  "player_pet": [],
+  "popup_arr": [],
+  "premium_claim_level": null,
+  "premium_claim_skill_set": null,
+  "premium_daily_token": null,
+  "prestige": 0,
+  "proc": null,
+  "promo_expired": null,
+  "promotion": null,
+  "pve_version": "",
+  "pvpSchedule": [],
+  "pvp_invite": [],
+  "pvp_record": null,
+  "reaming_pet": null,
+  "recent_achievement": [],
+  "remaining_skill": null,
+  "request_list_length": null,
+  "requests": [],
+  "roulette_allowed": false,
+  "sakura_event": null,
+  "se_day_count_open": null,
+  "se_end_date": null,
+  "se_end_date_notice": null,
+  "seasonNumber": 0,
+  "seasonNumber_crew": 0,
+  "senjutsu": [],
+  "senjutsu_system": null,
+  "showFanPage": null,
+  "showNotice": null,
+  "sje_end_date": 0,
+  "sje_end_date_notice": 0,
+  "statistic_battle": {},
+  "sum_1": [],
+  "sum_2": [],
+  "sum_3": [],
+  "total_friend_accepted": null,
+  "trainingFdSkill": {
+   "trainingTime": 0
+  },
+  "training_skill": null,
+  "tutorial_expiry_item": null,
+  "valentine_event": null,
+  "veteran_return_fk_accepted": null,
+  "xmas2014_tutorial_need_display": null,
+  "skills": [],
+  "socket": null,
+  "coreData": {},
+  "requestData": [],
+  "databaseCharacter": {
+   "account_id": 1,
+   "add_inv_arr": [],
+   "bloodline": [],
+   "character_armor": 0,
+   "character_bloodline": "",
+   "character_body_parts": {},
+   "character_body_set": "set1",
+   "character_chakra": 9999,
+   "character_control": 0,
+   "character_cp": 100,
+   "character_earth": 0,
+   "character_equipped_back_item": "",
+   "character_equipped_trade_back_item": "",
+   "character_equipped_trade_body_set": "",
+   "character_equipped_trade_weapon": "",
+   "character_equipped_weapon": "",
+   "character_eye_color": 0,
+   "character_face": "01_0",
+   "character_fire": 0,
+   "character_gender": 0,
+   "character_genjutsu": 0,
+   "character_gold": 999999999,
+   "character_hair": "17_0",
+   "character_hair_color": [],
+   "character_hash": null,
+   "character_hp": 100,
+   "character_id": "1",
+   "character_intelligence": 9999,
+   "character_inventory": {},
+   "character_level": 1,
+   "character_lightning": 0,
+   "character_max_cp": 100,
+   "character_max_hp": 100,
+   "character_max_sp": 0,
+   "character_name": "Shen",
+   "character_pet_cp": 0,
+   "character_pet_ep": 0,
+   "character_pet_max_cp": 0,
+   "character_pet_max_ep": 0,
+   "character_rank": 0,
+   "character_senjutsu": [],
+   "character_senjutsu_ss": "",
+   "character_skill_resistance": [],
+   "character_skill_resistance_unallocated": 0,
+   "character_skill_talent": [],
+   "character_skill_unallocated": 0,
+   "character_skills": [],
+   "character_skin_color": 15,
+   "character_sp": 0,
+   "character_speed": 9999,
+   "character_stamina": 9999,
+   "character_strength": 9999,
+   "character_summon": 0,
+   "character_taijutsu": 0,
+   "character_trade_item": "",
+   "character_water": 0,
+   "character_wind": 1,
+   "character_xp": 40,
+   "current_expiry_arr": [],
+   "damage_cp": 0,
+   "damage_hp": 0,
+   "damage_sp": 0,
+   "equip_arr": [],
+   "expired_pet_arr": [],
+   "inv_slots_obj": {},
+   "remove_equip_arr": [],
+   "remove_inv_arr": [],
+   "restore_cp": 0,
+   "restore_hp": 0,
+   "restore_sp": 0,
+   "senjutsu": [],
+   "session_playtime": 0
+  },
+  "server_time": 1785368185,
+  "current_date": 1785368185,
+  "pvp_server_status": 0
+ }
+}
+
+======================================
+AMF -> FacebookService.getFriendList   (responseURI=/5, amf3=false)
+   argumen: [
+ null
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "friend_list": []
+}
+
+======================================
+AMF -> NewDailyRewardStamp2017.getStatus   (responseURI=/6, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "loginDay": [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+  "24",
+  "25",
+  "26",
+  "27",
+  "28",
+  "29",
+  "30",
+  "31"
+ ],
+ "rewardDay": [
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "item_list": [
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ]
+ ],
+ "claimReward": [
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "txt": {
+  "desc1": "",
+  "desc2": "",
+  "desc3": ""
+ },
+ "now_time": 1785368187,
+ "part2": false
+}
+
+======================================
+AMF -> FacebookService.getInviteRecord   (responseURI=/7, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+
+### Server jalan di http://127.0.0.1:8080 — 30/07/2026, 06.41.50
+### folder aset : C:\NinjaSaga\web
+### ninja_saga.swf : ADA
+### signature login = 401dfceb24aac074a62bf9b2fa6c10da4da3a728
+### ninja emblem = AKTIF (premium)
+
+======================================
+AMF -> SystemService.snsLogin   (responseURI=/1, amf3=false)
+   argumen: [
+ null,
+ "facebook",
+ "latest",
+ "",
+ "a4ce5790c3339a33e2f0ace8115d91468a96729a",
+ null,
+ null,
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  1,
+  2,
+  0,
+  "localdevsession0001"
+ ],
+ "signature": "401dfceb24aac074a62bf9b2fa6c10da4da3a728",
+ "country_area": "ID",
+ "isNewAccount": 0,
+ "promote_id": 0,
+ "isTrialEmblem": 0,
+ "isExpired": 0,
+ "account_lock": null,
+ "swf_versions": [
+  {
+   "type": "data",
+   "version": "latest"
+  },
+  {
+   "type": "library",
+   "version": "latest"
+  },
+  {
+   "type": "language",
+   "version": "latest"
+  },
+  {
+   "type": "panels",
+   "version": "latest"
+  },
+  {
+   "type": "items",
+   "version": "latest"
+  },
+  {
+   "type": "actions",
+   "version": "latest"
+  },
+  {
+   "type": "sns",
+   "version": "latest"
+  },
+  {
+   "type": "skills",
+   "version": "latest"
+  },
+  {
+   "type": "npc",
+   "version": "latest"
+  },
+  {
+   "type": "enemies",
+   "version": "latest"
+  },
+  {
+   "type": "mission",
+   "version": "latest"
+  },
+  {
+   "type": "pets",
+   "version": "latest"
+  },
+  {
+   "type": "icons",
+   "version": "latest"
+  },
+  {
+   "type": "sound",
+   "version": "latest"
+  }
+ ],
+ "lang": "en",
+ "serverTime": 1785368514
+}
+
+======================================
+AMF -> CharacterDAO.getCharactersList   (responseURI=/2, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   jumlah karakter: 1  ->  Shen lv1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  [
+   "1",
+   "Shen",
+   "1",
+   0
+  ]
+ ]
+}
+
+======================================
+AMF -> CharacterDAO.getCharacterById   (responseURI=/3, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ 1
+]
+   -> handler ADA
+   karakter dipilih: Shen lv1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "bloodline": [],
+  "character_accessory": "",
+  "character_armor": 0,
+  "character_back_item": "",
+  "character_bloodline": 0,
+  "character_body_set": "set1",
+  "character_common_currency": "",
+  "character_control": 0,
+  "character_earth": 0,
+  "character_equipped_accessory": "",
+  "character_equipped_back_item": "",
+  "character_equipped_body_set": [],
+  "character_equipped_skills": "",
+  "character_equipped_trade_back_item": "",
+  "character_equipped_trade_body_set": "",
+  "character_equipped_trade_weapon": "",
+  "character_equipped_weapon": "",
+  "character_face": "01_0",
+  "character_fire": 0,
+  "character_gender": 0,
+  "character_genjutsu": 0,
+  "character_gold": 999999999,
+  "character_hair": "17_0",
+  "character_hair_color": [],
+  "character_hash": "",
+  "character_id": "1",
+  "character_inv_hair": "",
+  "character_inv_slots": {
+   "item": 40,
+   "weapon": 200,
+   "body_set": 200,
+   "back": 200,
+   "accessory": 200,
+   "essence": 200,
+   "material": 200,
+   "pet": 99
+  },
+  "character_item": "1,2,3",
+  "character_level": "1",
+  "character_lightning": 0,
+  "character_magatama": "",
+  "character_material": "",
+  "character_mission": "",
+  "character_name": "Shen",
+  "character_ninja_essence": "",
+  "character_npc": "",
+  "character_pre_hash": "44a41252dc8724cca867264e169ceeba96b93e6b",
+  "character_rank": "",
+  "character_skill": "",
+  "character_skin_color": 15,
+  "character_summon": 0,
+  "character_taijutsu": 0,
+  "character_trade_item": "",
+  "character_water": 0,
+  "character_weapon": "",
+  "character_wind": 1,
+  "character_xp": "40",
+  "daily": {},
+  "expiry_data": {
+   "remove_inv_arr": [],
+   "add_inv_arr": [],
+   "equip_arr": [],
+   "remove_equip_arr": [],
+   "current_expiry_arr": [],
+   "expiry_pet_data": [],
+   "expiry_hash": "a0277539cac6c47ec693d705e366d4b397f26cd3"
+  },
+  "stateInventory": {},
+  "senjutsu": [],
+  "senjutsu_spirit": "",
+  "stateInv": {}
+ }
+}
+
+======================================
+AMF -> CharacterDAO.getExtraData   (responseURI=/4, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "4b47c1369b9288578b08922d4f79e4a8971aab0c",
+ null
+]
+   -> handler ADA
+   hash extra data: input="0,0,0,0,0,,,,0,0"
+                    hash =76e0e6f45c1c7dfb1d10f2f860befc560cdfb048
+   tipe rekaman karakter: semua benar (72 field)
+   character_skills = []
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "DailyReward": {
+   "allow_to_claim": 0,
+   "claimed_times": 0,
+   "items": [
+    {
+     "item_type": "GOLD",
+     "amount": 100
+    },
+    {
+     "item_type": "GOLD",
+     "amount": 150
+    },
+    {
+     "item_type": "GOLD",
+     "amount": 200
+    },
+    {
+     "item_type": "XP",
+     "amount": 100
+    },
+    {
+     "item_type": "GOLD",
+     "amount": 250
+    },
+    {
+     "item_type": "XP",
+     "amount": 150
+    },
+    {
+     "item_type": "GOLD",
+     "amount": 300
+    }
+   ]
+  },
+  "GodSnapCountDown": null,
+  "UnstoppableRageCountDown": null,
+  "achievement": [],
+  "achievement_point": 0,
+  "adsArr": [],
+  "all_event_login_data": {},
+  "anni5th_tutorial_need_display": null,
+  "anni8thDoubleExpGold_times": null,
+  "anni_mission_id": null,
+  "arena_version": "",
+  "bloodline": [],
+  "bp_mission_id": null,
+  "canClaimFK": null,
+  "char_statistic": {
+   "12": 250
+  },
+  "character_create_date": "2026-07-29 23:07:23",
+  "christmas_2014_special_reward": null,
+  "christmas_coin": null,
+  "claim_remain": null,
+  "clan_chain": "",
+  "clan_id": 0,
+  "clan_version": "",
+  "combine_boost_time": null,
+  "combine_boost_time_in_period": null,
+  "combine_boost_time_period_end_left": null,
+  "combine_boost_time_period_start_left": null,
+  "consecutive_days": "",
+  "daily_login": {},
+  "daily_login_data": [],
+  "daily_stamp_available": null,
+  "dailygift_gift_list": [],
+  "dailygift_request_limit": null,
+  "date": null,
+  "double_exp": null,
+  "dragon_pet_christmas": null,
+  "event_170m_like": null,
+  "event_daily_login": {},
+  "event_gift_bag": null,
+  "extra_data_hash": "76e0e6f45c1c7dfb1d10f2f860befc560cdfb048",
+  "file_1": [],
+  "file_2": [],
+  "file_3": [],
+  "football_2018_claim": null,
+  "free_roulette_times": null,
+  "friend_accept_reward": null,
+  "friendship_kunai": null,
+  "gacha": {},
+  "get_hunting_passport": null,
+  "get_learning_status": [],
+  "handoff_nonce": "",
+  "handoff_token": "",
+  "invite_accepted": null,
+  "isGraphic": null,
+  "is_fan": null,
+  "is_founder": null,
+  "is_hard_mode_locked": null,
+  "is_valentine": null,
+  "kojima_event": null,
+  "layout": null,
+  "level_80_exam_reward_list_read": null,
+  "lny_2012_cake": null,
+  "lny_2012_cake_added": null,
+  "lucky_draw_case": [],
+  "lucky_spin_consecutive_day": null,
+  "lucky_spin_multiplier": null,
+  "lucky_spin_remaining_spin": null,
+  "lucky_spin_show_wheel": null,
+  "map_key": "00",
+  "minik_xmas_gift": "",
+  "new_account_reward": null,
+  "new_clan_promote": {},
+  "new_mail": false,
+  "new_year_2015_clothes": null,
+  "newsArr": [],
+  "newsId": null,
+  "newsfeed_easter_2014_posted": null,
+  "newsfeed_material_posted": null,
+  "noticeText": null,
+  "once_gift": [],
+  "option_data": {
+   "music_index": 0,
+   "music_volume": 1,
+   "sound_on": 1
+  },
+  "player_pet": [],
+  "popup_arr": [],
+  "premium_claim_level": null,
+  "premium_claim_skill_set": null,
+  "premium_daily_token": null,
+  "prestige": 0,
+  "proc": null,
+  "promo_expired": null,
+  "promotion": null,
+  "pve_version": "",
+  "pvpSchedule": [],
+  "pvp_invite": [],
+  "pvp_record": null,
+  "reaming_pet": null,
+  "recent_achievement": [],
+  "remaining_skill": null,
+  "request_list_length": null,
+  "requests": [],
+  "roulette_allowed": false,
+  "sakura_event": null,
+  "se_day_count_open": null,
+  "se_end_date": null,
+  "se_end_date_notice": null,
+  "seasonNumber": 0,
+  "seasonNumber_crew": 0,
+  "senjutsu": [],
+  "senjutsu_system": null,
+  "showFanPage": null,
+  "showNotice": null,
+  "sje_end_date": 0,
+  "sje_end_date_notice": 0,
+  "statistic_battle": {},
+  "sum_1": [],
+  "sum_2": [],
+  "sum_3": [],
+  "total_friend_accepted": null,
+  "trainingFdSkill": {
+   "trainingTime": 0
+  },
+  "training_skill": null,
+  "tutorial_expiry_item": null,
+  "valentine_event": null,
+  "veteran_return_fk_accepted": null,
+  "xmas2014_tutorial_need_display": null,
+  "skills": [],
+  "socket": null,
+  "coreData": {},
+  "requestData": [],
+  "databaseCharacter": {
+   "account_id": 1,
+   "add_inv_arr": [],
+   "bloodline": [],
+   "character_armor": 0,
+   "character_bloodline": "",
+   "character_body_parts": {},
+   "character_body_set": "set1",
+   "character_chakra": 9999,
+   "character_control": 0,
+   "character_cp": 100,
+   "character_earth": 0,
+   "character_equipped_back_item": "",
+   "character_equipped_trade_back_item": "",
+   "character_equipped_trade_body_set": "",
+   "character_equipped_trade_weapon": "",
+   "character_equipped_weapon": "",
+   "character_eye_color": 0,
+   "character_face": "01_0",
+   "character_fire": 0,
+   "character_gender": 0,
+   "character_genjutsu": 0,
+   "character_gold": 999999999,
+   "character_hair": "17_0",
+   "character_hair_color": [],
+   "character_hash": null,
+   "character_hp": 100,
+   "character_id": "1",
+   "character_intelligence": 9999,
+   "character_inventory": {},
+   "character_level": 1,
+   "character_lightning": 0,
+   "character_max_cp": 100,
+   "character_max_hp": 100,
+   "character_max_sp": 0,
+   "character_name": "Shen",
+   "character_pet_cp": 0,
+   "character_pet_ep": 0,
+   "character_pet_max_cp": 0,
+   "character_pet_max_ep": 0,
+   "character_rank": 0,
+   "character_senjutsu": [],
+   "character_senjutsu_ss": "",
+   "character_skill_resistance": [],
+   "character_skill_resistance_unallocated": 0,
+   "character_skill_talent": [],
+   "character_skill_unallocated": 0,
+   "character_skills": [],
+   "character_skin_color": 15,
+   "character_sp": 0,
+   "character_speed": 9999,
+   "character_stamina": 9999,
+   "character_strength": 9999,
+   "character_summon": 0,
+   "character_taijutsu": 0,
+   "character_trade_item": "",
+   "character_water": 0,
+   "character_wind": 1,
+   "character_xp": 40,
+   "current_expiry_arr": [],
+   "damage_cp": 0,
+   "damage_hp": 0,
+   "damage_sp": 0,
+   "equip_arr": [],
+   "expired_pet_arr": [],
+   "inv_slots_obj": {},
+   "remove_equip_arr": [],
+   "remove_inv_arr": [],
+   "restore_cp": 0,
+   "restore_hp": 0,
+   "restore_sp": 0,
+   "senjutsu": [],
+   "session_playtime": 0
+  },
+  "server_time": 1785368517,
+  "current_date": 1785368517,
+  "pvp_server_status": 0
+ }
+}
+
+======================================
+AMF -> FacebookService.getFriendList   (responseURI=/5, amf3=false)
+   argumen: [
+ null
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "friend_list": []
+}
+
+======================================
+AMF -> NewDailyRewardStamp2017.getStatus   (responseURI=/6, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "loginDay": [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+  "24",
+  "25",
+  "26",
+  "27",
+  "28",
+  "29",
+  "30",
+  "31"
+ ],
+ "rewardDay": [
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "item_list": [
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ]
+ ],
+ "claimReward": [
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "txt": {
+  "desc1": "",
+  "desc2": "",
+  "desc3": ""
+ },
+ "now_time": 1785368519,
+ "part2": false
+}
+
+======================================
+AMF -> CharacterDAO.upgradeEmblemType   (responseURI=/7, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+======================================
+AMF -> CharacterDAO.claimEmblemType2XpBonus   (responseURI=/8, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+   [klon] popup_oldemblem  <- popup_newemblem.swf
+
+======================================
+AMF -> FriendReward.getDailygiftStatus   (responseURI=/9, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+======================================
+AMF -> FriendReward.getDailygiftStatus   (responseURI=/10, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+======================================
+AMF -> GiftService.createGiftRecord   (responseURI=/11, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "daily_gift_bag",
+ 0
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+======================================
+AMF -> MailService.getMail   (responseURI=/12, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+======================================
+AMF -> FacebookService.getRequestList   (responseURI=/13, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ null
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "requests": [],
+ "remain": {}
+}
+
+======================================
+AMF -> FacebookService.getInviteRecord   (responseURI=/14, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+
+### Server jalan di http://127.0.0.1:8080 — 30/07/2026, 06.52.08
+### folder aset : C:\NinjaSaga\web
+### ninja_saga.swf : ADA
+### signature login = 401dfceb24aac074a62bf9b2fa6c10da4da3a728
+### ninja emblem = AKTIF (premium)
+
+======================================
+AMF -> SystemService.snsLogin   (responseURI=/1, amf3=false)
+   argumen: [
+ null,
+ "facebook",
+ "latest",
+ "",
+ "a4ce5790c3339a33e2f0ace8115d91468a96729a",
+ null,
+ null,
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  1,
+  2,
+  0,
+  "localdevsession0001"
+ ],
+ "signature": "401dfceb24aac074a62bf9b2fa6c10da4da3a728",
+ "country_area": "ID",
+ "isNewAccount": 0,
+ "promote_id": 0,
+ "isTrialEmblem": 0,
+ "isExpired": 0,
+ "account_lock": null,
+ "swf_versions": [
+  {
+   "type": "data",
+   "version": "latest"
+  },
+  {
+   "type": "library",
+   "version": "latest"
+  },
+  {
+   "type": "language",
+   "version": "latest"
+  },
+  {
+   "type": "panels",
+   "version": "latest"
+  },
+  {
+   "type": "items",
+   "version": "latest"
+  },
+  {
+   "type": "actions",
+   "version": "latest"
+  },
+  {
+   "type": "sns",
+   "version": "latest"
+  },
+  {
+   "type": "skills",
+   "version": "latest"
+  },
+  {
+   "type": "npc",
+   "version": "latest"
+  },
+  {
+   "type": "enemies",
+   "version": "latest"
+  },
+  {
+   "type": "mission",
+   "version": "latest"
+  },
+  {
+   "type": "pets",
+   "version": "latest"
+  },
+  {
+   "type": "icons",
+   "version": "latest"
+  },
+  {
+   "type": "sound",
+   "version": "latest"
+  }
+ ],
+ "lang": "en",
+ "serverTime": 1785369134
+}
+
+======================================
+AMF -> CharacterDAO.getCharactersList   (responseURI=/2, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   jumlah karakter: 1  ->  Shen lv1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  [
+   "1",
+   "Shen",
+   "1",
+   0
+  ]
+ ]
+}
+
+======================================
+AMF -> CharacterDAO.getCharacterById   (responseURI=/3, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ 1
+]
+   -> handler ADA
+   karakter dipilih: Shen lv1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "bloodline": [],
+  "character_accessory": "",
+  "character_armor": 0,
+  "character_back_item": "",
+  "character_bloodline": 0,
+  "character_body_set": "set1",
+  "character_common_currency": "",
+  "character_control": 0,
+  "character_earth": 0,
+  "character_equipped_accessory": "",
+  "character_equipped_back_item": "",
+  "character_equipped_body_set": [],
+  "character_equipped_skills": "",
+  "character_equipped_trade_back_item": "",
+  "character_equipped_trade_body_set": "",
+  "character_equipped_trade_weapon": "",
+  "character_equipped_weapon": "",
+  "character_face": "01_0",
+  "character_fire": 0,
+  "character_gender": 0,
+  "character_genjutsu": 0,
+  "character_gold": 999999999,
+  "character_hair": "17_0",
+  "character_hair_color": [],
+  "character_hash": "",
+  "character_id": "1",
+  "character_inv_hair": "",
+  "character_inv_slots": {
+   "item": 40,
+   "weapon": 200,
+   "body_set": 200,
+   "back": 200,
+   "accessory": 200,
+   "essence": 200,
+   "material": 200,
+   "pet": 99
+  },
+  "character_item": "1,2,3",
+  "character_level": "1",
+  "character_lightning": 0,
+  "character_magatama": "",
+  "character_material": "",
+  "character_mission": "",
+  "character_name": "Shen",
+  "character_ninja_essence": "",
+  "character_npc": "",
+  "character_pre_hash": "44a41252dc8724cca867264e169ceeba96b93e6b",
+  "character_rank": "",
+  "character_skill": "",
+  "character_skin_color": 15,
+  "character_summon": 0,
+  "character_taijutsu": 0,
+  "character_trade_item": "",
+  "character_water": 0,
+  "character_weapon": "",
+  "character_wind": 1,
+  "character_xp": "40",
+  "daily": {},
+  "expiry_data": {
+   "remove_inv_arr": [],
+   "add_inv_arr": [],
+   "equip_arr": [],
+   "remove_equip_arr": [],
+   "current_expiry_arr": [],
+   "expiry_pet_data": [],
+   "expiry_hash": "a0277539cac6c47ec693d705e366d4b397f26cd3"
+  },
+  "stateInventory": {},
+  "senjutsu": [],
+  "senjutsu_spirit": "",
+  "stateInv": {}
+ }
+}
+
+======================================
+AMF -> CharacterDAO.getExtraData   (responseURI=/4, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "4b47c1369b9288578b08922d4f79e4a8971aab0c",
+ null
+]
+   -> handler ADA
+   hash extra data: input="0,0,0,0,0,,,,0,0"
+                    hash =76e0e6f45c1c7dfb1d10f2f860befc560cdfb048
+   tipe rekaman karakter: semua benar (72 field)
+   character_skills = []
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "DailyReward": {
+   "allow_to_claim": 0,
+   "claimed_times": 0,
+   "items": [
+    {
+     "item_type": "GOLD",
+     "amount": 100
+    },
+    {
+     "item_type": "GOLD",
+     "amount": 150
+    },
+    {
+     "item_type": "GOLD",
+     "amount": 200
+    },
+    {
+     "item_type": "XP",
+     "amount": 100
+    },
+    {
+     "item_type": "GOLD",
+     "amount": 250
+    },
+    {
+     "item_type": "XP",
+     "amount": 150
+    },
+    {
+     "item_type": "GOLD",
+     "amount": 300
+    }
+   ]
+  },
+  "GodSnapCountDown": null,
+  "UnstoppableRageCountDown": null,
+  "achievement": [],
+  "achievement_point": 0,
+  "adsArr": [],
+  "all_event_login_data": {},
+  "anni5th_tutorial_need_display": null,
+  "anni8thDoubleExpGold_times": null,
+  "anni_mission_id": null,
+  "arena_version": "",
+  "bloodline": [],
+  "bp_mission_id": null,
+  "canClaimFK": null,
+  "char_statistic": {
+   "12": 250
+  },
+  "character_create_date": "2026-07-29 23:07:23",
+  "christmas_2014_special_reward": null,
+  "christmas_coin": null,
+  "claim_remain": null,
+  "clan_chain": "",
+  "clan_id": 0,
+  "clan_version": "",
+  "combine_boost_time": null,
+  "combine_boost_time_in_period": null,
+  "combine_boost_time_period_end_left": null,
+  "combine_boost_time_period_start_left": null,
+  "consecutive_days": "",
+  "daily_login": {},
+  "daily_login_data": [],
+  "daily_stamp_available": null,
+  "dailygift_gift_list": [],
+  "dailygift_request_limit": null,
+  "date": null,
+  "double_exp": null,
+  "dragon_pet_christmas": null,
+  "event_170m_like": null,
+  "event_daily_login": {},
+  "event_gift_bag": null,
+  "extra_data_hash": "76e0e6f45c1c7dfb1d10f2f860befc560cdfb048",
+  "file_1": [],
+  "file_2": [],
+  "file_3": [],
+  "football_2018_claim": null,
+  "free_roulette_times": null,
+  "friend_accept_reward": null,
+  "friendship_kunai": null,
+  "gacha": {},
+  "get_hunting_passport": null,
+  "get_learning_status": [],
+  "handoff_nonce": "",
+  "handoff_token": "",
+  "invite_accepted": null,
+  "isGraphic": null,
+  "is_fan": null,
+  "is_founder": null,
+  "is_hard_mode_locked": null,
+  "is_valentine": null,
+  "kojima_event": null,
+  "layout": null,
+  "level_80_exam_reward_list_read": null,
+  "lny_2012_cake": null,
+  "lny_2012_cake_added": null,
+  "lucky_draw_case": [],
+  "lucky_spin_consecutive_day": null,
+  "lucky_spin_multiplier": null,
+  "lucky_spin_remaining_spin": null,
+  "lucky_spin_show_wheel": null,
+  "map_key": "00",
+  "minik_xmas_gift": "",
+  "new_account_reward": null,
+  "new_clan_promote": {},
+  "new_mail": false,
+  "new_year_2015_clothes": null,
+  "newsArr": [],
+  "newsId": null,
+  "newsfeed_easter_2014_posted": null,
+  "newsfeed_material_posted": null,
+  "noticeText": null,
+  "once_gift": [],
+  "option_data": {
+   "music_index": 0,
+   "music_volume": 1,
+   "sound_on": 1
+  },
+  "player_pet": [],
+  "popup_arr": [],
+  "premium_claim_level": null,
+  "premium_claim_skill_set": null,
+  "premium_daily_token": null,
+  "prestige": 0,
+  "proc": null,
+  "promo_expired": null,
+  "promotion": null,
+  "pve_version": "",
+  "pvpSchedule": [],
+  "pvp_invite": [],
+  "pvp_record": {
+   "play": 0,
+   "win": 0,
+   "lose": 0,
+   "disconnect": 0,
+   "avg_level_diff": 0,
+   "pvp_currency": 0
+  },
+  "reaming_pet": null,
+  "recent_achievement": [],
+  "remaining_skill": null,
+  "request_list_length": null,
+  "requests": [],
+  "roulette_allowed": false,
+  "sakura_event": null,
+  "se_day_count_open": null,
+  "se_end_date": null,
+  "se_end_date_notice": null,
+  "seasonNumber": 0,
+  "seasonNumber_crew": 0,
+  "senjutsu": [],
+  "senjutsu_system": null,
+  "showFanPage": null,
+  "showNotice": null,
+  "sje_end_date": 0,
+  "sje_end_date_notice": 0,
+  "statistic_battle": {},
+  "sum_1": [],
+  "sum_2": [],
+  "sum_3": [],
+  "total_friend_accepted": null,
+  "trainingFdSkill": {
+   "trainingTime": 0
+  },
+  "training_skill": null,
+  "tutorial_expiry_item": null,
+  "valentine_event": null,
+  "veteran_return_fk_accepted": null,
+  "xmas2014_tutorial_need_display": null,
+  "skills": [],
+  "socket": null,
+  "coreData": {},
+  "requestData": [],
+  "databaseCharacter": {
+   "account_id": 1,
+   "add_inv_arr": [],
+   "bloodline": [],
+   "character_armor": 0,
+   "character_bloodline": "",
+   "character_body_parts": {},
+   "character_body_set": "set1",
+   "character_chakra": 9999,
+   "character_control": 0,
+   "character_cp": 100,
+   "character_earth": 0,
+   "character_equipped_back_item": "",
+   "character_equipped_trade_back_item": "",
+   "character_equipped_trade_body_set": "",
+   "character_equipped_trade_weapon": "",
+   "character_equipped_weapon": "",
+   "character_eye_color": 0,
+   "character_face": "01_0",
+   "character_fire": 0,
+   "character_gender": 0,
+   "character_genjutsu": 0,
+   "character_gold": 999999999,
+   "character_hair": "17_0",
+   "character_hair_color": [],
+   "character_hash": null,
+   "character_hp": 100,
+   "character_id": "1",
+   "character_intelligence": 9999,
+   "character_inventory": {},
+   "character_level": 1,
+   "character_lightning": 0,
+   "character_max_cp": 100,
+   "character_max_hp": 100,
+   "character_max_sp": 0,
+   "character_name": "Shen",
+   "character_pet_cp": 0,
+   "character_pet_ep": 0,
+   "character_pet_max_cp": 0,
+   "character_pet_max_ep": 0,
+   "character_rank": 0,
+   "character_senjutsu": [],
+   "character_senjutsu_ss": "",
+   "character_skill_resistance": [],
+   "character_skill_resistance_unallocated": 0,
+   "character_skill_talent": [],
+   "character_skill_unallocated": 0,
+   "character_skills": [],
+   "character_skin_color": 15,
+   "character_sp": 0,
+   "character_speed": 9999,
+   "character_stamina": 9999,
+   "character_strength": 9999,
+   "character_summon": 0,
+   "character_taijutsu": 0,
+   "character_trade_item": "",
+   "character_water": 0,
+   "character_wind": 1,
+   "character_xp": 40,
+   "current_expiry_arr": [],
+   "damage_cp": 0,
+   "damage_hp": 0,
+   "damage_sp": 0,
+   "equip_arr": [],
+   "expired_pet_arr": [],
+   "inv_slots_obj": {},
+   "remove_equip_arr": [],
+   "remove_inv_arr": [],
+   "restore_cp": 0,
+   "restore_hp": 0,
+   "restore_sp": 0,
+   "senjutsu": [],
+   "session_playtime": 0
+  },
+  "server_time": 1785369137,
+  "current_date": 1785369137,
+  "pvp_server_status": 0
+ }
+}
+
+======================================
+AMF -> FacebookService.getFriendList   (responseURI=/5, amf3=false)
+   argumen: [
+ null
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "friend_list": []
+}
+
+======================================
+AMF -> NewDailyRewardStamp2017.getStatus   (responseURI=/6, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "loginDay": [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+  "24",
+  "25",
+  "26",
+  "27",
+  "28",
+  "29",
+  "30",
+  "31"
+ ],
+ "rewardDay": [
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "item_list": [
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ]
+ ],
+ "claimReward": [
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "txt": {
+  "desc1": "",
+  "desc2": "",
+  "desc3": ""
+ },
+ "now_time": 1785369139,
+ "part2": false
+}
+
+======================================
+AMF -> CharacterDAO.upgradeEmblemType   (responseURI=/7, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+======================================
+AMF -> CharacterDAO.claimEmblemType2XpBonus   (responseURI=/8, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+======================================
+AMF -> FriendReward.getDailygiftStatus   (responseURI=/9, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+======================================
+AMF -> FriendReward.getDailygiftStatus   (responseURI=/10, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+======================================
+AMF -> GiftService.createGiftRecord   (responseURI=/11, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "daily_gift_bag",
+ 0
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+======================================
+AMF -> MailService.getMail   (responseURI=/12, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+======================================
+AMF -> FacebookService.getRequestList   (responseURI=/13, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ null
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "requests": [],
+ "remain": {}
+}
+
+======================================
+AMF -> FacebookService.getInviteRecord   (responseURI=/14, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "friendship_kunai": 0,
+ "reward_list": []
+}
+
+
+### Server jalan di http://127.0.0.1:8080 — 30/07/2026, 07.14.43
+### folder aset : C:\NinjaSaga\web
+### ninja_saga.swf : ADA
+### signature login = 401dfceb24aac074a62bf9b2fa6c10da4da3a728
+### ninja emblem = AKTIF (premium)
+
+======================================
+AMF -> SystemService.snsLogin   (responseURI=/1, amf3=false)
+   argumen: [
+ null,
+ "facebook",
+ "latest",
+ "",
+ "a4ce5790c3339a33e2f0ace8115d91468a96729a",
+ null,
+ null,
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  1,
+  2,
+  0,
+  "localdevsession0001"
+ ],
+ "signature": "401dfceb24aac074a62bf9b2fa6c10da4da3a728",
+ "country_area": "ID",
+ "isNewAccount": 0,
+ "promote_id": 0,
+ "isTrialEmblem": 0,
+ "isExpired": 0,
+ "account_lock": null,
+ "swf_versions": [
+  {
+   "type": "data",
+   "version": "latest"
+  },
+  {
+   "type": "library",
+   "version": "latest"
+  },
+  {
+   "type": "language",
+   "version": "latest"
+  },
+  {
+   "type": "panels",
+   "version": "latest"
+  },
+  {
+   "type": "items",
+   "version": "latest"
+  },
+  {
+   "type": "actions",
+   "version": "latest"
+  },
+  {
+   "type": "sns",
+   "version": "latest"
+  },
+  {
+   "type": "skills",
+   "version": "latest"
+  },
+  {
+   "type": "npc",
+   "version": "latest"
+  },
+  {
+   "type": "enemies",
+   "version": "latest"
+  },
+  {
+   "type": "mission",
+   "version": "latest"
+  },
+  {
+   "type": "pets",
+   "version": "latest"
+  },
+  {
+   "type": "icons",
+   "version": "latest"
+  },
+  {
+   "type": "sound",
+   "version": "latest"
+  }
+ ],
+ "lang": "en",
+ "serverTime": 1785370487
+}
+
+======================================
+AMF -> CharacterDAO.getCharactersList   (responseURI=/2, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   jumlah karakter: 1  ->  Shen lv9
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  [
+   "1",
+   "Shen",
+   "9",
+   0
+  ]
+ ]
+}
+
+======================================
+AMF -> CharacterDAO.getCharacterById   (responseURI=/3, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ 1
+]
+   -> handler ADA
+   karakter dipilih: Shen lv1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "bloodline": [],
+  "character_accessory": "",
+  "character_armor": 0,
+  "character_back_item": "",
+  "character_bloodline": 0,
+  "character_body_set": "set1",
+  "character_common_currency": "",
+  "character_control": 0,
+  "character_earth": 0,
+  "character_equipped_accessory": "",
+  "character_equipped_back_item": "",
+  "character_equipped_body_set": [],
+  "character_equipped_skills": "",
+  "character_equipped_trade_back_item": "",
+  "character_equipped_trade_body_set": "",
+  "character_equipped_trade_weapon": "",
+  "character_equipped_weapon": "",
+  "character_face": "01_0",
+  "character_fire": 0,
+  "character_gender": 0,
+  "character_genjutsu": 0,
+  "character_gold": 999999999,
+  "character_hair": "17_0",
+  "character_hair_color": [],
+  "character_hash": "",
+  "character_id": "1",
+  "character_inv_hair": "",
+  "character_inv_slots": {
+   "item": 40,
+   "weapon": 200,
+   "body_set": 200,
+   "back": 200,
+   "accessory": 200,
+   "essence": 200,
+   "material": 200,
+   "pet": 99
+  },
+  "character_item": "1,2,3",
+  "character_level": "1",
+  "character_lightning": 0,
+  "character_magatama": "",
+  "character_material": "",
+  "character_mission": "",
+  "character_name": "Shen",
+  "character_ninja_essence": "",
+  "character_npc": "",
+  "character_pre_hash": "44a41252dc8724cca867264e169ceeba96b93e6b",
+  "character_rank": "",
+  "character_skill": "",
+  "character_skin_color": 15,
+  "character_summon": 0,
+  "character_taijutsu": 0,
+  "character_trade_item": "",
+  "character_water": 0,
+  "character_weapon": "",
+  "character_wind": 1,
+  "character_xp": "40",
+  "daily": {},
+  "expiry_data": {
+   "remove_inv_arr": [],
+   "add_inv_arr": [],
+   "equip_arr": [],
+   "remove_equip_arr": [],
+   "current_expiry_arr": [],
+   "expiry_pet_data": [],
+   "expiry_hash": "a0277539cac6c47ec693d705e366d4b397f26cd3"
+  },
+  "stateInventory": {},
+  "senjutsu": [],
+  "senjutsu_spirit": "",
+  "stateInv": {}
+ }
+}
+
+======================================
+AMF -> CharacterDAO.getExtraData   (responseURI=/4, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "4b47c1369b9288578b08922d4f79e4a8971aab0c",
+ null
+]
+   -> handler ADA
+   hash extra data: input="0,0,0,0,0,,,,0,0"
+                    hash =76e0e6f45c1c7dfb1d10f2f860befc560cdfb048
+   tipe rekaman karakter: semua benar (72 field)
+   character_skills = []
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "DailyReward": {
+   "allow_to_claim": 0,
+   "claimed_times": 0,
+   "items": [
+    {
+     "item_type": "GOLD",
+     "amount": 100
+    },
+    {
+     "item_type": "GOLD",
+     "amount": 150
+    },
+    {
+     "item_type": "GOLD",
+     "amount": 200
+    },
+    {
+     "item_type": "XP",
+     "amount": 100
+    },
+    {
+     "item_type": "GOLD",
+     "amount": 250
+    },
+    {
+     "item_type": "XP",
+     "amount": 150
+    },
+    {
+     "item_type": "GOLD",
+     "amount": 300
+    }
+   ]
+  },
+  "GodSnapCountDown": null,
+  "UnstoppableRageCountDown": null,
+  "achievement": [],
+  "achievement_point": 0,
+  "adsArr": [],
+  "all_event_login_data": {},
+  "anni5th_tutorial_need_display": null,
+  "anni8thDoubleExpGold_times": null,
+  "anni_mission_id": null,
+  "arena_version": "",
+  "bloodline": [],
+  "bp_mission_id": null,
+  "canClaimFK": null,
+  "char_statistic": {
+   "12": 250
+  },
+  "character_create_date": "2026-07-29 23:07:23",
+  "christmas_2014_special_reward": null,
+  "christmas_coin": null,
+  "claim_remain": null,
+  "clan_chain": "",
+  "clan_id": 0,
+  "clan_version": "",
+  "combine_boost_time": null,
+  "combine_boost_time_in_period": null,
+  "combine_boost_time_period_end_left": null,
+  "combine_boost_time_period_start_left": null,
+  "consecutive_days": "",
+  "daily_login": {},
+  "daily_login_data": [],
+  "daily_stamp_available": null,
+  "dailygift_gift_list": [],
+  "dailygift_request_limit": null,
+  "date": null,
+  "double_exp": null,
+  "dragon_pet_christmas": null,
+  "event_170m_like": null,
+  "event_daily_login": {},
+  "event_gift_bag": null,
+  "extra_data_hash": "76e0e6f45c1c7dfb1d10f2f860befc560cdfb048",
+  "file_1": [],
+  "file_2": [],
+  "file_3": [],
+  "football_2018_claim": null,
+  "free_roulette_times": null,
+  "friend_accept_reward": null,
+  "friendship_kunai": null,
+  "gacha": {},
+  "get_hunting_passport": null,
+  "get_learning_status": [],
+  "handoff_nonce": "",
+  "handoff_token": "",
+  "invite_accepted": null,
+  "isGraphic": null,
+  "is_fan": null,
+  "is_founder": null,
+  "is_hard_mode_locked": null,
+  "is_valentine": null,
+  "kojima_event": null,
+  "layout": null,
+  "level_80_exam_reward_list_read": null,
+  "lny_2012_cake": null,
+  "lny_2012_cake_added": null,
+  "lucky_draw_case": [],
+  "lucky_spin_consecutive_day": null,
+  "lucky_spin_multiplier": null,
+  "lucky_spin_remaining_spin": null,
+  "lucky_spin_show_wheel": null,
+  "map_key": "00",
+  "minik_xmas_gift": "",
+  "new_account_reward": null,
+  "new_clan_promote": {},
+  "new_mail": false,
+  "new_year_2015_clothes": null,
+  "newsArr": [],
+  "newsId": null,
+  "newsfeed_easter_2014_posted": null,
+  "newsfeed_material_posted": null,
+  "noticeText": null,
+  "once_gift": [],
+  "option_data": {
+   "music_index": 0,
+   "music_volume": 1,
+   "sound_on": 1
+  },
+  "player_pet": [],
+  "popup_arr": [],
+  "premium_claim_level": null,
+  "premium_claim_skill_set": null,
+  "premium_daily_token": null,
+  "prestige": 0,
+  "proc": null,
+  "promo_expired": null,
+  "promotion": null,
+  "pve_version": "",
+  "pvpSchedule": [],
+  "pvp_invite": [],
+  "pvp_record": {
+   "play": 0,
+   "win": 0,
+   "lose": 0,
+   "disconnect": 0,
+   "avg_level_diff": 0,
+   "pvp_currency": 0
+  },
+  "reaming_pet": null,
+  "recent_achievement": [],
+  "remaining_skill": null,
+  "request_list_length": null,
+  "requests": [],
+  "roulette_allowed": false,
+  "sakura_event": null,
+  "se_day_count_open": null,
+  "se_end_date": null,
+  "se_end_date_notice": null,
+  "seasonNumber": 0,
+  "seasonNumber_crew": 0,
+  "senjutsu": [],
+  "senjutsu_system": null,
+  "showFanPage": null,
+  "showNotice": null,
+  "sje_end_date": 0,
+  "sje_end_date_notice": 0,
+  "statistic_battle": {},
+  "sum_1": [],
+  "sum_2": [],
+  "sum_3": [],
+  "total_friend_accepted": null,
+  "trainingFdSkill": {
+   "trainingTime": 0
+  },
+  "training_skill": null,
+  "tutorial_expiry_item": null,
+  "valentine_event": null,
+  "veteran_return_fk_accepted": null,
+  "xmas2014_tutorial_need_display": null,
+  "skills": [],
+  "socket": null,
+  "coreData": {},
+  "requestData": [],
+  "databaseCharacter": {
+   "account_id": 1,
+   "add_inv_arr": [],
+   "bloodline": [],
+   "character_armor": 0,
+   "character_bloodline": "",
+   "character_body_parts": {},
+   "character_body_set": "set1",
+   "character_chakra": 9999,
+   "character_control": 0,
+   "character_cp": 100,
+   "character_earth": 0,
+   "character_equipped_back_item": "",
+   "character_equipped_trade_back_item": "",
+   "character_equipped_trade_body_set": "",
+   "character_equipped_trade_weapon": "",
+   "character_equipped_weapon": "",
+   "character_eye_color": 0,
+   "character_face": "01_0",
+   "character_fire": 0,
+   "character_gender": 0,
+   "character_genjutsu": 0,
+   "character_gold": 999999999,
+   "character_hair": "17_0",
+   "character_hair_color": [],
+   "character_hash": null,
+   "character_hp": 100,
+   "character_id": "1",
+   "character_intelligence": 9999,
+   "character_inventory": {},
+   "character_level": 1,
+   "character_lightning": 0,
+   "character_max_cp": 100,
+   "character_max_hp": 100,
+   "character_max_sp": 0,
+   "character_name": "Shen",
+   "character_pet_cp": 0,
+   "character_pet_ep": 0,
+   "character_pet_max_cp": 0,
+   "character_pet_max_ep": 0,
+   "character_rank": 0,
+   "character_senjutsu": [],
+   "character_senjutsu_ss": "",
+   "character_skill_resistance": [],
+   "character_skill_resistance_unallocated": 0,
+   "character_skill_talent": [],
+   "character_skill_unallocated": 0,
+   "character_skills": [],
+   "character_skin_color": 15,
+   "character_sp": 0,
+   "character_speed": 9999,
+   "character_stamina": 9999,
+   "character_strength": 9999,
+   "character_summon": 0,
+   "character_taijutsu": 0,
+   "character_trade_item": "",
+   "character_water": 0,
+   "character_wind": 1,
+   "character_xp": 40,
+   "current_expiry_arr": [],
+   "damage_cp": 0,
+   "damage_hp": 0,
+   "damage_sp": 0,
+   "equip_arr": [],
+   "expired_pet_arr": [],
+   "inv_slots_obj": {},
+   "remove_equip_arr": [],
+   "remove_inv_arr": [],
+   "restore_cp": 0,
+   "restore_hp": 0,
+   "restore_sp": 0,
+   "senjutsu": [],
+   "session_playtime": 0
+  },
+  "server_time": 1785370490,
+  "current_date": 1785370490,
+  "pvp_server_status": 0
+ }
+}
+
+======================================
+AMF -> FacebookService.getFriendList   (responseURI=/5, amf3=false)
+   argumen: [
+ null
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "friend_list": []
+}
+
+======================================
+AMF -> NewDailyRewardStamp2017.getStatus   (responseURI=/6, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "loginDay": [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+  "24",
+  "25",
+  "26",
+  "27",
+  "28",
+  "29",
+  "30",
+  "31"
+ ],
+ "rewardDay": [
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "item_list": [
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ]
+ ],
+ "claimReward": [
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "txt": {
+  "desc1": "",
+  "desc2": "",
+  "desc3": ""
+ },
+ "now_time": 1785370492,
+ "part2": false
+}
+
+======================================
+AMF -> CharacterDAO.upgradeEmblemType   (responseURI=/7, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+======================================
+AMF -> CharacterDAO.claimEmblemType2XpBonus   (responseURI=/8, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
+
+======================================
+AMF -> FacebookService.getInviteRecord   (responseURI=/9, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "friendship_kunai": 0,
+ "reward_list": [
+  {
+   "rewardId": "item1",
+   "type": "gold",
+   "amount": 1,
+   "price": 1,
+   "priority": 1
+  }
+ ]
+}
+
+======================================
+AMF -> SystemService.snsLogin   (responseURI=/1, amf3=false)
+   argumen: [
+ null,
+ "facebook",
+ "latest",
+ "",
+ "a4ce5790c3339a33e2f0ace8115d91468a96729a",
+ null,
+ null,
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  1,
+  2,
+  0,
+  "localdevsession0001"
+ ],
+ "signature": "401dfceb24aac074a62bf9b2fa6c10da4da3a728",
+ "country_area": "ID",
+ "isNewAccount": 0,
+ "promote_id": 0,
+ "isTrialEmblem": 0,
+ "isExpired": 0,
+ "account_lock": null,
+ "swf_versions": [
+  {
+   "type": "data",
+   "version": "latest"
+  },
+  {
+   "type": "library",
+   "version": "latest"
+  },
+  {
+   "type": "language",
+   "version": "latest"
+  },
+  {
+   "type": "panels",
+   "version": "latest"
+  },
+  {
+   "type": "items",
+   "version": "latest"
+  },
+  {
+   "type": "actions",
+   "version": "latest"
+  },
+  {
+   "type": "sns",
+   "version": "latest"
+  },
+  {
+   "type": "skills",
+   "version": "latest"
+  },
+  {
+   "type": "npc",
+   "version": "latest"
+  },
+  {
+   "type": "enemies",
+   "version": "latest"
+  },
+  {
+   "type": "mission",
+   "version": "latest"
+  },
+  {
+   "type": "pets",
+   "version": "latest"
+  },
+  {
+   "type": "icons",
+   "version": "latest"
+  },
+  {
+   "type": "sound",
+   "version": "latest"
+  }
+ ],
+ "lang": "en",
+ "serverTime": 1785422371
+}
+
+======================================
+AMF -> CharacterDAO.getCharactersList   (responseURI=/2, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   jumlah karakter: 1  ->  Shen lv1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  [
+   "1",
+   "Shen",
+   "1",
+   0
+  ]
+ ]
+}
+
+======================================
+AMF -> CharacterDAO.getCharacterById   (responseURI=/3, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ 1
+]
+   -> handler ADA
+   karakter dipilih: Shen lv1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "bloodline": [],
+  "character_accessory": "",
+  "character_armor": 0,
+  "character_back_item": "",
+  "character_bloodline": 0,
+  "character_body_set": "set1",
+  "character_common_currency": "",
+  "character_control": 0,
+  "character_earth": 0,
+  "character_equipped_accessory": "",
+  "character_equipped_back_item": "",
+  "character_equipped_body_set": [],
+  "character_equipped_skills": "",
+  "character_equipped_trade_back_item": "",
+  "character_equipped_trade_body_set": "",
+  "character_equipped_trade_weapon": "",
+  "character_equipped_weapon": "",
+  "character_face": "01_0",
+  "character_fire": 0,
+  "character_gender": 0,
+  "character_genjutsu": 0,
+  "character_gold": 999999999,
+  "character_hair": "17_0",
+  "character_hair_color": [],
+  "character_hash": "",
+  "character_id": "1",
+  "character_inv_hair": "",
+  "character_inv_slots": {
+   "item": 40,
+   "weapon": 200,
+   "body_set": 200,
+   "back": 200,
+   "accessory": 200,
+   "essence": 200,
+   "material": 200,
+   "pet": 99
+  },
+  "character_item": "1,2,3",
+  "character_level": "1",
+  "character_lightning": 0,
+  "character_magatama": "",
+  "character_material": "",
+  "character_mission": "",
+  "character_name": "Shen",
+  "character_ninja_essence": "",
+  "character_npc": "",
+  "character_pre_hash": "44a41252dc8724cca867264e169ceeba96b93e6b",
+  "character_rank": "",
+  "character_skill": "",
+  "character_skin_color": 15,
+  "character_summon": 0,
+  "character_taijutsu": 0,
+  "character_trade_item": "",
+  "character_water": 0,
+  "character_weapon": "",
+  "character_wind": 1,
+  "character_xp": "40",
+  "daily": {},
+  "expiry_data": {
+   "remove_inv_arr": [],
+   "add_inv_arr": [],
+   "equip_arr": [],
+   "remove_equip_arr": [],
+   "current_expiry_arr": [],
+   "expiry_pet_data": [],
+   "expiry_hash": "a0277539cac6c47ec693d705e366d4b397f26cd3"
+  },
+  "stateInventory": {},
+  "senjutsu": [],
+  "senjutsu_spirit": "",
+  "stateInv": {}
+ }
+}
+
+======================================
+AMF -> CharacterDAO.getExtraData   (responseURI=/4, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "4b47c1369b9288578b08922d4f79e4a8971aab0c",
+ null
+]
+   -> handler ADA
+   hash extra data: input="0,0,0,0,0,,,,0,0"
+                    hash =76e0e6f45c1c7dfb1d10f2f860befc560cdfb048
+   tipe rekaman karakter: semua benar (72 field)
+   character_skills = []
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "DailyReward": {
+   "allow_to_claim": 0,
+   "claimed_times": 0,
+   "items": [
+    {
+     "item_type": "GOLD",
+     "amount": 100
+    },
+    {
+     "item_type": "GOLD",
+     "amount": 150
+    },
+    {
+     "item_type": "GOLD",
+     "amount": 200
+    },
+    {
+     "item_type": "XP",
+     "amount": 100
+    },
+    {
+     "item_type": "GOLD",
+     "amount": 250
+    },
+    {
+     "item_type": "XP",
+     "amount": 150
+    },
+    {
+     "item_type": "GOLD",
+     "amount": 300
+    }
+   ]
+  },
+  "GodSnapCountDown": null,
+  "UnstoppableRageCountDown": null,
+  "achievement": [],
+  "achievement_point": 0,
+  "adsArr": [],
+  "all_event_login_data": {},
+  "anni5th_tutorial_need_display": null,
+  "anni8thDoubleExpGold_times": null,
+  "anni_mission_id": null,
+  "arena_version": "",
+  "bloodline": [],
+  "bp_mission_id": null,
+  "canClaimFK": null,
+  "char_statistic": {
+   "12": 250
+  },
+  "character_create_date": "2026-07-29 23:07:23",
+  "christmas_2014_special_reward": null,
+  "christmas_coin": null,
+  "claim_remain": null,
+  "clan_chain": "",
+  "clan_id": 0,
+  "clan_version": "",
+  "combine_boost_time": null,
+  "combine_boost_time_in_period": null,
+  "combine_boost_time_period_end_left": null,
+  "combine_boost_time_period_start_left": null,
+  "consecutive_days": "",
+  "daily_login": {},
+  "daily_login_data": [],
+  "daily_stamp_available": null,
+  "dailygift_gift_list": [],
+  "dailygift_request_limit": null,
+  "date": null,
+  "double_exp": null,
+  "dragon_pet_christmas": null,
+  "event_170m_like": null,
+  "event_daily_login": {},
+  "event_gift_bag": null,
+  "extra_data_hash": "76e0e6f45c1c7dfb1d10f2f860befc560cdfb048",
+  "file_1": [],
+  "file_2": [],
+  "file_3": [],
+  "football_2018_claim": null,
+  "free_roulette_times": null,
+  "friend_accept_reward": null,
+  "friendship_kunai": null,
+  "gacha": {},
+  "get_hunting_passport": null,
+  "get_learning_status": [],
+  "handoff_nonce": "",
+  "handoff_token": "",
+  "invite_accepted": null,
+  "isGraphic": null,
+  "is_fan": null,
+  "is_founder": null,
+  "is_hard_mode_locked": null,
+  "is_valentine": null,
+  "kojima_event": null,
+  "layout": null,
+  "level_80_exam_reward_list_read": null,
+  "lny_2012_cake": null,
+  "lny_2012_cake_added": null,
+  "lucky_draw_case": [],
+  "lucky_spin_consecutive_day": null,
+  "lucky_spin_multiplier": null,
+  "lucky_spin_remaining_spin": null,
+  "lucky_spin_show_wheel": null,
+  "map_key": "00",
+  "minik_xmas_gift": "",
+  "new_account_reward": null,
+  "new_clan_promote": {},
+  "new_mail": false,
+  "new_year_2015_clothes": null,
+  "newsArr": [],
+  "newsId": null,
+  "newsfeed_easter_2014_posted": null,
+  "newsfeed_material_posted": null,
+  "noticeText": null,
+  "once_gift": [],
+  "option_data": {
+   "music_index": 0,
+   "music_volume": 1,
+   "sound_on": 1
+  },
+  "player_pet": [],
+  "popup_arr": [],
+  "premium_claim_level": null,
+  "premium_claim_skill_set": null,
+  "premium_daily_token": null,
+  "prestige": 0,
+  "proc": null,
+  "promo_expired": null,
+  "promotion": null,
+  "pve_version": "",
+  "pvpSchedule": [],
+  "pvp_invite": [],
+  "pvp_record": {
+   "play": 0,
+   "win": 0,
+   "lose": 0,
+   "disconnect": 0,
+   "avg_level_diff": 0,
+   "pvp_currency": 0
+  },
+  "reaming_pet": null,
+  "recent_achievement": [],
+  "remaining_skill": null,
+  "request_list_length": null,
+  "requests": [],
+  "roulette_allowed": false,
+  "sakura_event": null,
+  "se_day_count_open": null,
+  "se_end_date": null,
+  "se_end_date_notice": null,
+  "seasonNumber": 0,
+  "seasonNumber_crew": 0,
+  "senjutsu": [],
+  "senjutsu_system": null,
+  "showFanPage": null,
+  "showNotice": null,
+  "sje_end_date": 0,
+  "sje_end_date_notice": 0,
+  "statistic_battle": {},
+  "sum_1": [],
+  "sum_2": [],
+  "sum_3": [],
+  "total_friend_accepted": null,
+  "trainingFdSkill": {
+   "trainingTime": 0
+  },
+  "training_skill": null,
+  "tutorial_expiry_item": null,
+  "valentine_event": null,
+  "veteran_return_fk_accepted": null,
+  "xmas2014_tutorial_need_display": null,
+  "skills": [],
+  "socket": null,
+  "coreData": {},
+  "requestData": [],
+  "databaseCharacter": {
+   "account_id": 1,
+   "add_inv_arr": [],
+   "bloodline": [],
+   "character_armor": 0,
+   "character_bloodline": "",
+   "character_body_parts": {},
+   "character_body_set": "set1",
+   "character_chakra": 9999,
+   "character_control": 0,
+   "character_cp": 100,
+   "character_earth": 0,
+   "character_equipped_back_item": "",
+   "character_equipped_trade_back_item": "",
+   "character_equipped_trade_body_set": "",
+   "character_equipped_trade_weapon": "",
+   "character_equipped_weapon": "",
+   "character_eye_color": 0,
+   "character_face": "01_0",
+   "character_fire": 0,
+   "character_gender": 0,
+   "character_genjutsu": 0,
+   "character_gold": 999999999,
+   "character_hair": "17_0",
+   "character_hair_color": [],
+   "character_hash": null,
+   "character_hp": 100,
+   "character_id": "1",
+   "character_intelligence": 9999,
+   "character_inventory": {},
+   "character_level": 1,
+   "character_lightning": 0,
+   "character_max_cp": 100,
+   "character_max_hp": 100,
+   "character_max_sp": 0,
+   "character_name": "Shen",
+   "character_pet_cp": 0,
+   "character_pet_ep": 0,
+   "character_pet_max_cp": 0,
+   "character_pet_max_ep": 0,
+   "character_rank": 0,
+   "character_senjutsu": [],
+   "character_senjutsu_ss": "",
+   "character_skill_resistance": [],
+   "character_skill_resistance_unallocated": 0,
+   "character_skill_talent": [],
+   "character_skill_unallocated": 0,
+   "character_skills": [],
+   "character_skin_color": 15,
+   "character_sp": 0,
+   "character_speed": 9999,
+   "character_stamina": 9999,
+   "character_strength": 9999,
+   "character_summon": 0,
+   "character_taijutsu": 0,
+   "character_trade_item": "",
+   "character_water": 0,
+   "character_wind": 1,
+   "character_xp": 40,
+   "current_expiry_arr": [],
+   "damage_cp": 0,
+   "damage_hp": 0,
+   "damage_sp": 0,
+   "equip_arr": [],
+   "expired_pet_arr": [],
+   "inv_slots_obj": {},
+   "remove_equip_arr": [],
+   "remove_inv_arr": [],
+   "restore_cp": 0,
+   "restore_hp": 0,
+   "restore_sp": 0,
+   "senjutsu": [],
+   "session_playtime": 0
+  },
+  "server_time": 1785422374,
+  "current_date": 1785422374,
+  "pvp_server_status": 0
+ }
+}
+
+======================================
+AMF -> FacebookService.getFriendList   (responseURI=/5, amf3=false)
+   argumen: [
+ null
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "friend_list": []
+}
+
+======================================
+AMF -> NewDailyRewardStamp2017.getStatus   (responseURI=/6, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "loginDay": [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+  "24",
+  "25",
+  "26",
+  "27",
+  "28",
+  "29",
+  "30",
+  "31"
+ ],
+ "rewardDay": [
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "item_list": [
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ]
+ ],
+ "claimReward": [
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "txt": {
+  "desc1": "",
+  "desc2": "",
+  "desc3": ""
+ },
+ "now_time": 1785422376,
+ "part2": false
+}
+
+======================================
+AMF -> FacebookService.getInviteRecord   (responseURI=/7, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "friendship_kunai": 0,
+ "reward_list": [
+  {
+   "rewardId": "item1",
+   "type": "gold",
+   "amount": 1,
+   "price": 1,
+   "priority": 1
+  }
+ ]
+}
+
+
+### Server jalan di http://127.0.0.1:8080 — 30/07/2026, 21.46.18
+### folder aset : C:\NinjaSaga\web
+### ninja_saga.swf : ADA
+### signature login = 401dfceb24aac074a62bf9b2fa6c10da4da3a728
+### ninja emblem = AKTIF (premium)
+
+======================================
+AMF -> SystemService.snsLogin   (responseURI=/1, amf3=false)
+   argumen: [
+ null,
+ "facebook",
+ "latest",
+ "",
+ "a4ce5790c3339a33e2f0ace8115d91468a96729a",
+ null,
+ null,
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  1,
+  2,
+  0,
+  "localdevsession0001"
+ ],
+ "signature": "401dfceb24aac074a62bf9b2fa6c10da4da3a728",
+ "country_area": "ID",
+ "isNewAccount": 0,
+ "promote_id": 0,
+ "isTrialEmblem": 0,
+ "isExpired": 0,
+ "account_lock": null,
+ "swf_versions": [
+  {
+   "type": "data",
+   "version": "latest"
+  },
+  {
+   "type": "library",
+   "version": "latest"
+  },
+  {
+   "type": "language",
+   "version": "latest"
+  },
+  {
+   "type": "panels",
+   "version": "latest"
+  },
+  {
+   "type": "items",
+   "version": "latest"
+  },
+  {
+   "type": "actions",
+   "version": "latest"
+  },
+  {
+   "type": "sns",
+   "version": "latest"
+  },
+  {
+   "type": "skills",
+   "version": "latest"
+  },
+  {
+   "type": "npc",
+   "version": "latest"
+  },
+  {
+   "type": "enemies",
+   "version": "latest"
+  },
+  {
+   "type": "mission",
+   "version": "latest"
+  },
+  {
+   "type": "pets",
+   "version": "latest"
+  },
+  {
+   "type": "icons",
+   "version": "latest"
+  },
+  {
+   "type": "sound",
+   "version": "latest"
+  }
+ ],
+ "lang": "en",
+ "serverTime": 1785422784
+}
+
+======================================
+AMF -> CharacterDAO.getCharactersList   (responseURI=/2, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   jumlah karakter: 1  ->  Shen lv1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [
+  [
+   "1",
+   "Shen",
+   "1",
+   0
+  ]
+ ]
+}
+
+======================================
+AMF -> CharacterDAO.getCharacterById   (responseURI=/3, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ 1
+]
+   -> handler ADA
+   karakter dipilih: Shen lv1
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "bloodline": [],
+  "character_accessory": "",
+  "character_armor": 0,
+  "character_back_item": "",
+  "character_bloodline": 0,
+  "character_body_set": "set1",
+  "character_common_currency": "",
+  "character_control": 0,
+  "character_earth": 0,
+  "character_equipped_accessory": "",
+  "character_equipped_back_item": "",
+  "character_equipped_body_set": [],
+  "character_equipped_skills": "",
+  "character_equipped_trade_back_item": "",
+  "character_equipped_trade_body_set": "",
+  "character_equipped_trade_weapon": "",
+  "character_equipped_weapon": "",
+  "character_face": "01_0",
+  "character_fire": 0,
+  "character_gender": 0,
+  "character_genjutsu": 0,
+  "character_gold": 999999999,
+  "character_hair": "17_0",
+  "character_hair_color": [],
+  "character_hash": "",
+  "character_id": "1",
+  "character_inv_hair": "",
+  "character_inv_slots": {
+   "item": 40,
+   "weapon": 200,
+   "body_set": 200,
+   "back": 200,
+   "accessory": 200,
+   "essence": 200,
+   "material": 200,
+   "pet": 99
+  },
+  "character_item": "1,2,3",
+  "character_level": "1",
+  "character_lightning": 0,
+  "character_magatama": "",
+  "character_material": "",
+  "character_mission": "",
+  "character_name": "Shen",
+  "character_ninja_essence": "",
+  "character_npc": "",
+  "character_pre_hash": "44a41252dc8724cca867264e169ceeba96b93e6b",
+  "character_rank": "",
+  "character_skill": "",
+  "character_skin_color": 15,
+  "character_summon": 0,
+  "character_taijutsu": 0,
+  "character_trade_item": "",
+  "character_water": 0,
+  "character_weapon": "",
+  "character_wind": 1,
+  "character_xp": "40",
+  "daily": {},
+  "expiry_data": {
+   "remove_inv_arr": [],
+   "add_inv_arr": [],
+   "equip_arr": [],
+   "remove_equip_arr": [],
+   "current_expiry_arr": [],
+   "expiry_pet_data": [],
+   "expiry_hash": "a0277539cac6c47ec693d705e366d4b397f26cd3"
+  },
+  "stateInventory": {},
+  "senjutsu": [],
+  "senjutsu_spirit": "",
+  "stateInv": {}
+ }
+}
+
+======================================
+AMF -> CharacterDAO.getExtraData   (responseURI=/4, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "4b47c1369b9288578b08922d4f79e4a8971aab0c",
+ null
+]
+   -> handler ADA
+   hash extra data: input="0,0,0,0,0,,,,0,0"
+                    hash =76e0e6f45c1c7dfb1d10f2f860befc560cdfb048
+   tipe rekaman karakter: semua benar (72 field)
+   character_skills = []
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": {
+  "DailyReward": {
+   "allow_to_claim": 0,
+   "claimed_times": 0,
+   "items": [
+    {
+     "item_type": "GOLD",
+     "amount": 100
+    },
+    {
+     "item_type": "GOLD",
+     "amount": 150
+    },
+    {
+     "item_type": "GOLD",
+     "amount": 200
+    },
+    {
+     "item_type": "XP",
+     "amount": 100
+    },
+    {
+     "item_type": "GOLD",
+     "amount": 250
+    },
+    {
+     "item_type": "XP",
+     "amount": 150
+    },
+    {
+     "item_type": "GOLD",
+     "amount": 300
+    }
+   ]
+  },
+  "GodSnapCountDown": null,
+  "UnstoppableRageCountDown": null,
+  "achievement": [],
+  "achievement_point": 0,
+  "adsArr": [],
+  "all_event_login_data": {},
+  "anni5th_tutorial_need_display": null,
+  "anni8thDoubleExpGold_times": null,
+  "anni_mission_id": null,
+  "arena_version": "",
+  "bloodline": [],
+  "bp_mission_id": null,
+  "canClaimFK": null,
+  "char_statistic": {
+   "12": 250
+  },
+  "character_create_date": "2026-07-29 23:07:23",
+  "christmas_2014_special_reward": null,
+  "christmas_coin": null,
+  "claim_remain": null,
+  "clan_chain": "",
+  "clan_id": 0,
+  "clan_version": "",
+  "combine_boost_time": null,
+  "combine_boost_time_in_period": null,
+  "combine_boost_time_period_end_left": null,
+  "combine_boost_time_period_start_left": null,
+  "consecutive_days": "",
+  "daily_login": {},
+  "daily_login_data": [],
+  "daily_stamp_available": null,
+  "dailygift_gift_list": [],
+  "dailygift_request_limit": null,
+  "date": null,
+  "double_exp": null,
+  "dragon_pet_christmas": null,
+  "event_170m_like": null,
+  "event_daily_login": {},
+  "event_gift_bag": null,
+  "extra_data_hash": "76e0e6f45c1c7dfb1d10f2f860befc560cdfb048",
+  "file_1": [],
+  "file_2": [],
+  "file_3": [],
+  "football_2018_claim": null,
+  "free_roulette_times": null,
+  "friend_accept_reward": null,
+  "friendship_kunai": null,
+  "gacha": {},
+  "get_hunting_passport": null,
+  "get_learning_status": [],
+  "handoff_nonce": "",
+  "handoff_token": "",
+  "invite_accepted": null,
+  "isGraphic": null,
+  "is_fan": null,
+  "is_founder": null,
+  "is_hard_mode_locked": null,
+  "is_valentine": null,
+  "kojima_event": null,
+  "layout": null,
+  "level_80_exam_reward_list_read": null,
+  "lny_2012_cake": null,
+  "lny_2012_cake_added": null,
+  "lucky_draw_case": [],
+  "lucky_spin_consecutive_day": null,
+  "lucky_spin_multiplier": null,
+  "lucky_spin_remaining_spin": null,
+  "lucky_spin_show_wheel": null,
+  "map_key": "00",
+  "minik_xmas_gift": "",
+  "new_account_reward": null,
+  "new_clan_promote": {},
+  "new_mail": false,
+  "new_year_2015_clothes": null,
+  "newsArr": [],
+  "newsId": null,
+  "newsfeed_easter_2014_posted": null,
+  "newsfeed_material_posted": null,
+  "noticeText": null,
+  "once_gift": [],
+  "option_data": {
+   "music_index": 0,
+   "music_volume": 1,
+   "sound_on": 1
+  },
+  "player_pet": [],
+  "popup_arr": [],
+  "premium_claim_level": null,
+  "premium_claim_skill_set": null,
+  "premium_daily_token": null,
+  "prestige": 0,
+  "proc": null,
+  "promo_expired": null,
+  "promotion": null,
+  "pve_version": "",
+  "pvpSchedule": [],
+  "pvp_invite": [],
+  "pvp_record": {
+   "play": 0,
+   "win": 0,
+   "lose": 0,
+   "disconnect": 0,
+   "avg_level_diff": 0,
+   "pvp_currency": 0
+  },
+  "reaming_pet": null,
+  "recent_achievement": [],
+  "remaining_skill": null,
+  "request_list_length": null,
+  "requests": [],
+  "roulette_allowed": false,
+  "sakura_event": null,
+  "se_day_count_open": null,
+  "se_end_date": null,
+  "se_end_date_notice": null,
+  "seasonNumber": 0,
+  "seasonNumber_crew": 0,
+  "senjutsu": [],
+  "senjutsu_system": null,
+  "showFanPage": null,
+  "showNotice": null,
+  "sje_end_date": 0,
+  "sje_end_date_notice": 0,
+  "statistic_battle": {},
+  "sum_1": [],
+  "sum_2": [],
+  "sum_3": [],
+  "total_friend_accepted": null,
+  "trainingFdSkill": {
+   "trainingTime": 0
+  },
+  "training_skill": null,
+  "tutorial_expiry_item": null,
+  "valentine_event": null,
+  "veteran_return_fk_accepted": null,
+  "xmas2014_tutorial_need_display": null,
+  "skills": [],
+  "socket": null,
+  "coreData": {},
+  "requestData": [],
+  "databaseCharacter": {
+   "account_id": 1,
+   "add_inv_arr": [],
+   "bloodline": [],
+   "character_armor": 0,
+   "character_bloodline": "",
+   "character_body_parts": {},
+   "character_body_set": "set1",
+   "character_chakra": 9999,
+   "character_control": 0,
+   "character_cp": 100,
+   "character_earth": 0,
+   "character_equipped_back_item": "",
+   "character_equipped_trade_back_item": "",
+   "character_equipped_trade_body_set": "",
+   "character_equipped_trade_weapon": "",
+   "character_equipped_weapon": "",
+   "character_eye_color": 0,
+   "character_face": "01_0",
+   "character_fire": 0,
+   "character_gender": 0,
+   "character_genjutsu": 0,
+   "character_gold": 999999999,
+   "character_hair": "17_0",
+   "character_hair_color": [],
+   "character_hash": null,
+   "character_hp": 100,
+   "character_id": "1",
+   "character_intelligence": 9999,
+   "character_inventory": {},
+   "character_level": 1,
+   "character_lightning": 0,
+   "character_max_cp": 100,
+   "character_max_hp": 100,
+   "character_max_sp": 0,
+   "character_name": "Shen",
+   "character_pet_cp": 0,
+   "character_pet_ep": 0,
+   "character_pet_max_cp": 0,
+   "character_pet_max_ep": 0,
+   "character_rank": 0,
+   "character_senjutsu": [],
+   "character_senjutsu_ss": "",
+   "character_skill_resistance": [],
+   "character_skill_resistance_unallocated": 0,
+   "character_skill_talent": [],
+   "character_skill_unallocated": 0,
+   "character_skills": [],
+   "character_skin_color": 15,
+   "character_sp": 0,
+   "character_speed": 9999,
+   "character_stamina": 9999,
+   "character_strength": 9999,
+   "character_summon": 0,
+   "character_taijutsu": 0,
+   "character_trade_item": "",
+   "character_water": 0,
+   "character_wind": 1,
+   "character_xp": 40,
+   "current_expiry_arr": [],
+   "damage_cp": 0,
+   "damage_hp": 0,
+   "damage_sp": 0,
+   "equip_arr": [],
+   "expired_pet_arr": [],
+   "inv_slots_obj": {},
+   "remove_equip_arr": [],
+   "remove_inv_arr": [],
+   "restore_cp": 0,
+   "restore_hp": 0,
+   "restore_sp": 0,
+   "senjutsu": [],
+   "session_playtime": 0
+  },
+  "server_time": 1785422786,
+  "current_date": 1785422786,
+  "pvp_server_status": 0
+ }
+}
+
+======================================
+AMF -> FacebookService.getFriendList   (responseURI=/5, amf3=false)
+   argumen: [
+ null
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "friend_list": []
+}
+
+======================================
+AMF -> NewDailyRewardStamp2017.getStatus   (responseURI=/6, amf3=false)
+   argumen: [
+ "localdevsession0001",
+ "en"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "loginDay": [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+  "24",
+  "25",
+  "26",
+  "27",
+  "28",
+  "29",
+  "30",
+  "31"
+ ],
+ "rewardDay": [
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "item_list": [
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ],
+  [
+   "item1_1"
+  ]
+ ],
+ "claimReward": [
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "txt": {
+  "desc1": "",
+  "desc2": "",
+  "desc3": ""
+ },
+ "now_time": 1785422788,
+ "part2": false
+}
+
+======================================
+AMF -> FacebookService.getInviteRecord   (responseURI=/7, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler ADA
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "friendship_kunai": 0,
+ "reward_list": [
+  {
+   "rewardId": "item1",
+   "type": "gold",
+   "amount": 1,
+   "price": 1,
+   "priority": 1,
+   "active": 1
+  }
+ ]
+}
+
+======================================
+AMF -> CharacterManagement.getInvHair   (responseURI=/8, amf3=false)
+   argumen: [
+ "localdevsession0001"
+]
+   -> handler BELUM ADA, balas status=1 kosong
+   balasan: {
+ "status": 1,
+ "error": null,
+ "result": [],
+ "data": {}
+}
