@@ -1,10 +1,6 @@
-Popup_IronManPackage_2019_Menu
-fox_1
-pet_131
-pet_141
-pet_146
-snake_0
-tail_4_3
-tail_5
-tail_6
-tail_7
+hair_88_0
+set_1017_0
+set_1141_0
+set_1229_0
+set_1375_0
+set_758_0

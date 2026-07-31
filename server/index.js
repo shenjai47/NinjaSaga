@@ -370,7 +370,27 @@ const handlers = {
   // defaultPost = method_tokenBuy[length-1] = 9 seperti semula.
   'Anni5th.getTailPet': () => ({
     status: 1, error: null, result: [],
-    active_tail_number: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    // Nilai TERAKHIR-nya yang menentukan, karena:
+    //     defaultPost = method_tokenBuy[method_tokenBuy.length - 1];
+    // dan defaultPost dipakai sebagai `nowPost`, yaitu INDEKS ke
+    // tailPetCanShowArr — bukan nomor tail. Rantainya:
+    //     getTailDetail( tailPetCanShowArr[nowPost] )
+    //         -> PET_DATA.find("pet" + tailPetArr[tailNum])
+    //
+    // tailPetCanShowArr = [1, 2]  (hanya dua indeks sah: 0 dan 1)
+    // tailPetArr[1] = 141  -> PET_DATA.find("pet141")  KETEMU
+    // tailPetArr[9] = 0    -> PET_DATA.find("pet0")    null -> #1009
+    //
+    // Dengan [1,2,3,...,9] nilai terakhirnya 9, dan itu menembak slot kosong
+    // tailPetArr[9] = 0 — persis yang dicetak panel sendiri di log:
+    //     Jane..............this.tailPetArr[tailNum] = 0
+    //     Jane..............petObj = null
+    //
+    // Jadi: 1 dan 2 di depan supaya kedua tail dianggap masih aktif
+    // (method_tokenBuy.indexOf(tailPetCanShowArr[i]) >= 0), lalu 0 di akhir
+    // supaya defaultPost menunjuk indeks 0 -> tail 141, yang terbukti
+    // ditemukan PET_DATA di log Anda.
+    active_tail_number: [1, 2, 0],
     owned_tail_number: [],
   }),
 
