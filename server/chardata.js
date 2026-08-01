@@ -164,6 +164,13 @@ function createCharacter(args) {
     // Poin elemen [api, air, angin, tanah, petir]. Klien mengirim TOTAL
     // absolutnya lewat CharacterDAO.updateAP, bukan selisih.
     elements: [0, 0, 0, 0, 0],
+    // Skill yang sudah dipelajari. Disimpan sebagai id numerik telanjang.
+    // CharacterBase.getSkillListArr() memeriksa tiap entri:
+    //     if (arr[i] == null)  -> daftar dianggap rusak
+    //     if (arr[i] < 0 || arr[i] > 5)  -> jalur "skill talent"
+    //     if (SKILL_DATA[arr[i]] == null) -> dianggap id skill, dipakai
+    // Jadi angka > 5 yang ada di SKILL_DATA diperlakukan sebagai skill biasa.
+    skills: [],
     // Daftar id item numerik. parseRawCharacter memecah character_item dengan
     // "," lalu MENAMBAHKAN awalan "item" ke tiap potongan — jadi yang disimpan
     // angkanya saja ("1,2,3"), bukan "item1,item2,item3".
@@ -417,8 +424,23 @@ function setElements(arr) {
   return c;
 }
 
+/* CharacterDAO.trainSkill -> [sessionKey, skillId, sequence]
+ * skillId datang sebagai "skill123" atau angka; disimpan sebagai angka. */
+function addSkill(skillId) {
+  const all = load();
+  const key = Object.keys(all)[0];
+  if (!key) return null;
+  const c = all[key];
+  if (!Array.isArray(c.skills)) c.skills = [];
+  const id = String(skillId).replace(/^skill/, '');
+  if (!c.skills.includes(id)) c.skills.push(id);
+  all[key] = c;
+  save(all);
+  return c;
+}
+
 /* CharacterDAO.buyItem -> [sessionKey, "item1", jumlah] */
-function addItem(itemId, jumlah) {
+function addItem(itemId, jumlah, hargaGold, hargaToken) {
   const all = load();
   const key = Object.keys(all)[0];
   if (!key) return null;
@@ -427,6 +449,14 @@ function addItem(itemId, jumlah) {
   const id = String(itemId).replace(/^item/, '');
   const n = Math.max(1, Number(jumlah) || 1);
   for (let i = 0; i < n; i++) c.items.push(id);
+
+  // Potong biaya kalau harganya diketahui. Tidak pernah sampai minus:
+  // klien sudah mencegah pembelian saat saldo kurang, jadi kalau di sini
+  // negatif berarti ada yang tidak sinkron — lebih baik berhenti di 0
+  // daripada menyimpan saldo minus.
+  if (hargaGold)  c.gold  = Math.max(0, (c.gold  || 0) - hargaGold  * n);
+  if (hargaToken) c.token = Math.max(0, (c.token || 0) - hargaToken * n);
+
   all[key] = c;
   save(all);
   return c;
@@ -466,6 +496,11 @@ function databaseCharacter(c) {
   r.character_wind      = Number(el[2]) || 0;
   r.character_earth     = Number(el[3]) || 0;
   r.character_lightning = Number(el[4]) || 0;
+
+  // Skill tersimpan. Di jalur databaseCharacter field-nya character_skills
+  // (jamak) dan berupa Array angka — DBCharacter.parseDBCharacter meneruskannya
+  // apa adanya, lalu CharacterBase.getSkillListArr() membacanya per entri.
+  r.character_skills = (Array.isArray(c.skills) ? c.skills : []).map(Number);
 
   return r;
 }
@@ -753,6 +788,10 @@ function rawCharacter(c, sessionKey) {
   // Inventaris tersimpan. Klien menambahkan awalan "item" sendiri.
   r.character_item = (Array.isArray(c.items) ? c.items : []).join(',');
 
+  // Skill tersimpan. Di jalur rawCharacter field-nya bernama character_skill
+  // (tunggal) dan berupa string dipisah koma.
+  r.character_skill = (Array.isArray(c.skills) ? c.skills : []).join(',');
+
   // Gerbang terakhir parseRawCharacter (offset 7831..7982):
   //
   //   slot60 = String(character_level)  + "," + String(character_xp)
@@ -1011,6 +1050,6 @@ module.exports = {
   validate, DB_TYPES, extraDataHash, rawCharacter,
   getLvByXp, xpForLevel, addProgress, mergeStats,
   createCharacter, firstCharacter, listCharacters,
-  setElements, addItem,
+  setElements, addItem, addSkill,
   databaseCharacter, buildExtraData,
 };

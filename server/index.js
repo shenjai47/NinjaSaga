@@ -16,6 +16,7 @@ const { decodePacket, encodePacket } = require('./amf');
 const { buildStub } = require('./stub');
 const chars = require('./chardata');
 const { cloneFrom } = require('./assetclone');
+const HARGA = require('./harga');   // id -> [gold, crystal]
 
 const PORT = 8080;
 const LOG = path.join(__dirname, 'amf-log.txt');
@@ -451,13 +452,23 @@ const handlers = {
   // args: [sessionKey, itemId, jumlah, ...]
   'CharacterDAO.buyItem': (args) => {
     // args: [sessionKey, "item1", jumlah]
-    const c = chars.addItem(args && args[1], args && args[2]);
+    const id = args && args[1];
+    const n  = Math.max(1, Number(args && args[2]) || 1);
+    const h  = HARGA[String(id)];            // [gold, crystal] atau undefined
+
+    const c = chars.addItem(id, n, h ? h[0] : 0, h ? h[1] : 0);
     if (!c) return { status: 1, error: null, result: 1 };
-    log('   beli ' + args[1] + ' x' + (args[2] || 1) +
-        '  -> inventaris: [' + c.items.join(',') + ']');
-    // CATATAN: gold tidak dipotong. Harga item ada di ITEM_DATA milik klien,
-    // server tidak punya tabelnya. Kalau nanti mau berbayar, tabel harga
-    // perlu ditambahkan di sini dan c.gold dikurangi sebelum dikirim balik.
+
+    if (h) {
+      log('   beli ' + id + ' x' + n + '  -' + (h[0] * n) + ' gold' +
+          (h[1] ? '  -' + (h[1] * n) + ' token' : '') +
+          '  -> gold=' + c.gold + '  inventaris: [' + c.items.join(',') + ']');
+    } else {
+      log('   beli ' + id + ' x' + n + '  (harga TIDAK DIKENAL, tidak dipotong)' +
+          '  -> inventaris: [' + c.items.join(',') + ']');
+    }
+
+    // update_inventory bernilai ABSOLUT — total baru, bukan selisih.
     return {
       status: 1,
       error: null,
@@ -533,9 +544,24 @@ const handlers = {
   // tidak berlaku di sini.
   //   result <  0  -> trainSkillFailure()
   //   result >= 0  -> sukses, klien memotong gold sendiri
-  'CharacterDAO.trainSkill': () => ({
-    status: 1, error: null, recall: 1, result: 0,
-  }),
+  // args: [sessionKey, skillId, sequence]
+  //
+  // AcademyPanelUpgradeSkill.onAmfTrainSkillResult():
+  //     hideAmfLoading();                       // instruksi pertama, aman
+  //     if (String(status) == STATUS_ERROR) { onError(error); return; }
+  //     var r:int = int(response.result);
+  //     if (r < 0)  { trainSkillFailure(); return; }
+  //     if (r == 0) { trainSkillSuccess(); ... }
+  //
+  // trainSkillSuccess() memotong gold/token di sisi KLIEN saja dan tidak
+  // menambahkan skill ke dbChar.character_skills — daftar itu hanya diisi
+  // ulang dari respons server saat login. Karena itu skill harus disimpan
+  // di sini, atau hilang tiap kali keluar-masuk game.
+  'CharacterDAO.trainSkill': (args) => {
+    const c = chars.addSkill(args && args[1]);
+    if (c) log('   pelajari skill: ' + args[1] + '  -> [' + c.skills.join(',') + ']');
+    return { status: 1, error: null, recall: 1, result: 0 };
+  },
 
   // Melepas skill yang sedang dilatih (UIModule_TrainTimer.amfUnlearnSkill).
   // status HARUS persis 1. onAmfUnlearnSkillResult begini:
