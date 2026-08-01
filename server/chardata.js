@@ -171,6 +171,11 @@ function createCharacter(args) {
     //     if (SKILL_DATA[arr[i]] == null) -> dianggap id skill, dipakai
     // Jadi angka > 5 yang ada di SKILL_DATA diperlakukan sebagai skill biasa.
     skills: [],
+    // Perlengkapan terpasang. Diisi CharacterDAO.equipCharacter, dibaca ulang
+    // saat login lewat character_weapon/character_equipped_weapon dst.
+    // Bentuk args[2..6] belum sepenuhnya terverifikasi bytecode (lihat
+    // komentar di handler index.js) -- disimpan apa adanya sebagai string.
+    equip: { weapon: '', bodySet: '', backItem: '', accessory: '' },
     // Daftar id item numerik. parseRawCharacter memecah character_item dengan
     // "," lalu MENAMBAHKAN awalan "item" ke tiap potongan — jadi yang disimpan
     // angkanya saja ("1,2,3"), bukan "item1,item2,item3".
@@ -198,6 +203,44 @@ function createCharacter(args) {
  * dimasuki. Rumus getLvByXp() di bawah sudah identik dengan milik klien
  * (Formula.getLvByXp), jadi cukup pastikan record-nya tidak melenceng.
  */
+/* Pembersihan inventaris warisan.
+ *
+ * Versi addItem() yang lama memasukkan SEMUA pembelian ke `items`, dengan
+ * awalannya masih menempel — jadi senjata tersimpan sebagai "wpn2" di dalam
+ * daftar barang habis pakai, bukan sebagai "2" di dalam `weapons`.
+ * Akibatnya character_weapon dikirim kosong dan inventaris senjata di klien
+ * ikut kosong (log klien: "test charInvArr = ").
+ *
+ * Fungsi ini memindahkan entri semacam itu ke kantong yang benar, sekali
+ * jalan saat karakter dimuat. Entri yang sudah berupa angka dibiarkan.
+ */
+function migrasiInventaris(c) {
+  if (!c || !Array.isArray(c.items)) return c;
+
+  const sisa = [];
+  let pindah = 0;
+  for (const e of c.items) {
+    const k = kantongDari(String(e));
+    if (k && k.bag !== 'items') {
+      if (!Array.isArray(c[k.bag])) c[k.bag] = [];
+      if (!c[k.bag].includes(k.num)) c[k.bag].push(k.num);
+      pindah++;
+    } else {
+      sisa.push(String(e).replace(/^item/, ''));
+    }
+  }
+
+  if (pindah) {
+    c.items = sisa;
+    console.log('### inventaris dibersihkan: ' + pindah +
+                ' entri dipindah ke kantong yang benar');
+    const all = load();
+    const key = Object.keys(all)[0];
+    if (key) { all[key] = c; save(all); }
+  }
+  return c;
+}
+
 function normalizeLevel(c) {
   if (!c) return c;
   const benar = getLvByXp(Number(c.xp) || 0);
@@ -216,7 +259,7 @@ function normalizeLevel(c) {
 function firstCharacter() {
   const all = load();
   const keys = Object.keys(all);
-  return keys.length ? normalizeLevel(all[keys[0]]) : null;
+  return keys.length ? migrasiInventaris(normalizeLevel(all[keys[0]])) : null;
 }
 
 function listCharacters() {
@@ -439,16 +482,70 @@ function addSkill(skillId) {
   return c;
 }
 
+/* CharacterDAO.equipCharacter ->
+ * [sessionKey, characterId, tradingBodySet, tradingWeapon, ?, tradingBackItem, accessory]
+ * Bentuk tiap nilai (string tunggal vs array) belum dipastikan dari bytecode;
+ * disimpan sebagai String(...) apa adanya. */
+function setEquip(weapon, bodySet, backItem, accessory) {
+  const all = load();
+  const key = Object.keys(all)[0];
+  if (!key) return null;
+  const c = all[key];
+  c.equip = {
+    weapon:    weapon    != null ? String(weapon)    : '',
+    bodySet:   bodySet   != null ? String(bodySet)   : '',
+    backItem:  backItem  != null ? String(backItem)  : '',
+    accessory: accessory != null ? String(accessory) : '',
+  };
+  all[key] = c;
+  save(all);
+  return c;
+}
+
 /* CharacterDAO.buyItem -> [sessionKey, "item1", jumlah] */
+/* Awalan id -> kantong penyimpanan.
+ *
+ * parseRawCharacter memecah tiap field dengan "," lalu MENAMBAHKAN awalannya
+ * sendiri. Dipetakan dari pasangan (field, prefix) di bytecode-nya:
+ *
+ *   character_item      + "item"    character_weapon    + "wpn"
+ *   character_inv_hair  + "hair"    character_back_item + "back"
+ *   character_accessory + "acsy"    character_body_set  + "set"
+ *
+ * Karena itu id harus dipisah per kantong: menaruh "wpn1" di character_item
+ * menghasilkan "itemwpn1" di sisi klien — nama yang tidak ada.
+ */
+const KANTONG = {
+  item: 'items', wpn: 'weapons', set: 'bodysets',
+  hair: 'hairs', back: 'backitems', acsy: 'accessories',
+};
+
+function kantongDari(id) {
+  const m = String(id).match(/^(item|wpn|set|hair|back|acsy)(\d+)$/);
+  return m ? { bag: KANTONG[m[1]], num: m[2] } : null;
+}
+
 function addItem(itemId, jumlah, hargaGold, hargaToken) {
   const all = load();
   const key = Object.keys(all)[0];
   if (!key) return null;
   const c = all[key];
-  if (!Array.isArray(c.items)) c.items = [];
-  const id = String(itemId).replace(/^item/, '');
   const n = Math.max(1, Number(jumlah) || 1);
-  for (let i = 0; i < n; i++) c.items.push(id);
+
+  const k = kantongDari(itemId);
+  if (k) {
+    if (!Array.isArray(c[k.bag])) c[k.bag] = [];
+    if (k.bag === 'items') {
+      // barang habis pakai: boleh menumpuk
+      for (let i = 0; i < n; i++) c[k.bag].push(k.num);
+    } else if (!c[k.bag].includes(k.num)) {
+      // perlengkapan: cukup satu
+      c[k.bag].push(k.num);
+    }
+  } else {
+    if (!Array.isArray(c.items)) c.items = [];
+    for (let i = 0; i < n; i++) c.items.push(String(itemId).replace(/^item/, ''));
+  }
 
   // Potong biaya kalau harganya diketahui. Tidak pernah sampai minus:
   // klien sudah mencegah pembelian saat saldo kurang, jadi kalau di sini
@@ -501,6 +598,15 @@ function databaseCharacter(c) {
   // (jamak) dan berupa Array angka — DBCharacter.parseDBCharacter meneruskannya
   // apa adanya, lalu CharacterBase.getSkillListArr() membacanya per entri.
   r.character_skills = (Array.isArray(c.skills) ? c.skills : []).map(Number);
+
+  {
+    const eq = c.equip || {};
+    const polos = v => String(v || '').replace(/^(wpn|set|back|acsy)/, '');
+    r.character_equipped_weapon    = polos(eq.weapon);
+    r.character_equipped_back_item = polos(eq.backItem);
+    r.character_equipped_accessory = polos(eq.accessory);
+    if (eq.bodySet) r.character_equipped_body_set = polos(eq.bodySet);
+  }
 
   return r;
 }
@@ -776,7 +882,6 @@ function rawCharacter(c, sessionKey) {
   r.character_face   = String(c.face);
   r.character_hair   = String(c.hair);
   r.character_skin_color = Number(c.skin_color);
-  r.character_body_set   = 'set1';
 
   const el = Array.isArray(c.elements) ? c.elements : [0, 0, 0, 0, 0];
   r.character_fire      = Number(el[0]) || 0;
@@ -785,12 +890,39 @@ function rawCharacter(c, sessionKey) {
   r.character_earth     = Number(el[3]) || 0;
   r.character_lightning = Number(el[4]) || 0;
 
-  // Inventaris tersimpan. Klien menambahkan awalan "item" sendiri.
-  r.character_item = (Array.isArray(c.items) ? c.items : []).join(',');
+  // Inventaris tersimpan, dipisah per kantong. Klien menambahkan awalannya
+  // sendiri, jadi yang dikirim hanya angkanya.
+  const bag = k => (Array.isArray(c[k]) ? c[k] : []).join(',');
+  r.character_item       = bag('items');
+  r.character_weapon     = bag('weapons');
+  r.character_body_set   = bag('bodysets') || 'set1';
+  r.character_inv_hair   = bag('hairs');
+  r.character_back_item  = bag('backitems');
+  r.character_accessory  = bag('accessories');
 
   // Skill tersimpan. Di jalur rawCharacter field-nya bernama character_skill
   // (tunggal) dan berupa string dipisah koma.
   r.character_skill = (Array.isArray(c.skills) ? c.skills : []).join(',');
+
+  // Perlengkapan TERPASANG — terpisah dari daftar kepemilikan di atas, dan
+  // TANPA awalan, karena parseRawCharacter menambahkannya sendiri:
+  //
+  //   @1341  BODY_PARTS.weapon = "wpn" + character_equipped_weapon
+  //   @2202  BODY_SET          = "set" + character_equipped_body_set
+  //
+  // Jadi mengirim "wpn2" menghasilkan "wpnwpn2" dan senjatanya tidak
+  // ditemukan — tampak seperti kembali ke bawaan.
+  //
+  // character_body_set BUKAN yang dipakai melainkan yang DIMILIKI (@2271,
+  // di-split "," lalu diberi awalan "set"), jadi jangan ditimpa di sini.
+  {
+    const eq = c.equip || {};
+    const polos = v => String(v || '').replace(/^(wpn|set|back|acsy)/, '');
+    r.character_equipped_weapon     = polos(eq.weapon);
+    r.character_equipped_body_set   = polos(eq.bodySet);
+    r.character_equipped_back_item  = polos(eq.backItem);
+    r.character_equipped_accessory  = polos(eq.accessory);
+  }
 
   // Gerbang terakhir parseRawCharacter (offset 7831..7982):
   //
@@ -1050,6 +1182,6 @@ module.exports = {
   validate, DB_TYPES, extraDataHash, rawCharacter,
   getLvByXp, xpForLevel, addProgress, mergeStats,
   createCharacter, firstCharacter, listCharacters,
-  setElements, addItem, addSkill,
+  setElements, addItem, addSkill, setEquip, kantongDari,
   databaseCharacter, buildExtraData,
 };

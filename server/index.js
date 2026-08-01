@@ -395,6 +395,24 @@ const handlers = {
     owned_tail_number: [],
   }),
 
+  // args: [sessionKey, characterId, tradingBodySet, tradingWeapon, ?, tradingBackItem, accessory]
+  //
+  // KETIDAKPASTIAN: saya sudah menelusuri pemanggilnya (Character.equipCharacter)
+  // sampai ke titik ini, tapi belum memverifikasi apakah tiap argumen berupa
+  // string tunggal atau array (mis. getTradingWeapon() bisa saja mengembalikan
+  // Array kalau senjata dua tangan). Untuk sekarang disimpan sebagai string
+  // apa adanya lewat setEquip(). Kalau nanti equip masih tidak sinkron
+  // sesudah dipasang, kirim flashlog saat mengganti perlengkapan -- errornya
+  // (kalau ada) akan menunjukkan bentuk yang benar.
+  //
+  // Callback klien (Main.onAmfResult) generik -- tidak menuntut field selain
+  // status, jadi balasan minimal ini aman.
+  'CharacterDAO.equipCharacter': (args) => {
+    const c = chars.setEquip(args && args[3], args && args[2], args && args[5], args && args[6]);
+    if (c) log('   equip -> ' + JSON.stringify(c.equip));
+    return { status: 1, error: null };
+  },
+
   'EudemonGarden.getHuntingStatus': () => ({
     status: 1, error: null,
     result: { room: [] },
@@ -468,13 +486,23 @@ const handlers = {
           '  -> inventaris: [' + c.items.join(',') + ']');
     }
 
-    // update_inventory bernilai ABSOLUT — total baru, bukan selisih.
-    return {
-      status: 1,
-      error: null,
-      result: 1,
-      update_inventory: { xp: c.xp, gold: c.gold, token: c.token || 0 },
-    };
+    // update_inventory SENGAJA dikirim kosong.
+    //
+    // Emas dipotong DUA KALI kalau kita mengirim `gold`:
+    //   ShopPanel.buyItemResponse() -> validateAmfResponse(response)
+    //        -> if (update_inventory.gold !== undefined) setGold(gold)   // ABSOLUT
+    //   lalu di offset 1832 method yang sama:
+    //        getMainChar().updateGold(0 - selectedItem.gold * amount)    // SELISIH
+    //
+    // Jadi klien selalu mengurangi sendiri dari saldonya. Dengan mengirim
+    // saldo yang SUDAH kita potong, pengurangan itu terjadi lagi dan angka
+    // di layar melenceng dua kali lipat harga.
+    //
+    // Objek kosong tetap truthy, jadi validateAmfResponse masuk ke blok
+    // update_inventory lalu melewati semua field karena semuanya undefined.
+    // Item juga tidak perlu dikirim: buyItemResponse memanggil
+    // addInventory() sendiri untuk tiap kategori.
+    return { status: 1, error: null, result: 1, update_inventory: {} };
   },
 
   // Dikirim klien setelah misi selesai, membawa statistik pencapaian.
