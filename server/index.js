@@ -407,8 +407,48 @@ const handlers = {
   //
   // Callback klien (Main.onAmfResult) generik -- tidak menuntut field selain
   // status, jadi balasan minimal ini aman.
+  // args: [sessionKey, characterId, "wpn2", jumlah]
+  //
+  // ShopPanel.sellItemResponse() menghapus barang dari inventaris KLIEN sendiri
+  // (removeInventory) sesudah balasan valid, tapi tidak pernah memberi tahu
+  // server apa yang terjual. Tanpa handler ini, catch-all menjawab tanpa
+  // menyentuh characters.json, jadi barangnya muncul lagi saat login.
+  //
+  // update_inventory bernilai ABSOLUT. Harga jual di Ninja Saga adalah
+  // separuh harga beli untuk barang ber-gold; barang ber-token tidak
+  // menghasilkan token kembali.
+  'CharacterDAO.sellItem': (args) => {
+    // KOREKSI: susunannya BUKAN [sessionKey, characterId, id, jumlah].
+    // Dari log nyata:
+    //   [ "localdevsession0001", "wpn2", "<hash 40 hex>", 1 ]
+    // Jadi id ada di args[1] dan jumlah di args[3]; args[2] hash verifikasi.
+    // Versi sebelumnya mengambil args[2], sehingga removeItem() mencari
+    // "b1e984fb..." di inventaris, tidak menemukan apa pun, dan barangnya
+    // tetap ada saat login berikutnya.
+    const id = args && args[1];
+    const n  = Math.max(1, Number(args && args[3]) || 1);
+    const h  = HARGA[String(id)];
+    const kembali = h ? Math.floor(h[0] / 2) * n : 0;
+
+    const c = chars.removeItem(id, n, kembali);
+    if (!c) return { status: 1, error: null, result: 1 };
+
+    log('   jual ' + id + ' x' + n + '  +' + kembali + ' gold' +
+        '  -> gold=' + c.gold);
+    return {
+      status: 1, error: null, result: 1,
+      update_inventory: { xp: c.xp, gold: c.gold, token: c.token || 0 },
+    };
+  },
+
   'CharacterDAO.equipCharacter': (args) => {
-    const c = chars.setEquip(args && args[3], args && args[2], args && args[5], args && args[6]);
+    // args: [sessionKey, characterId, bodySet, weapon, jutsuArr, backItem, accessory]
+    // args[4] adalah daftar jutsu yang DIPASANG di slot bertarung, mis.
+    // ["skill13","skill16"]. Klien membacanya kembali dari
+    // character_equipped_skills (@722, di-split ","), dan tanpa disimpan
+    // slot jutsu selalu kosong lagi setiap login.
+    const c = chars.setEquip(args && args[3], args && args[2],
+                             args && args[5], args && args[6], args && args[4]);
     if (c) log('   equip -> ' + JSON.stringify(c.equip));
     return { status: 1, error: null };
   },

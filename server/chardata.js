@@ -214,6 +214,51 @@ function createCharacter(args) {
  * Fungsi ini memindahkan entri semacam itu ke kantong yang benar, sekali
  * jalan saat karakter dimuat. Entri yang sudah berupa angka dibiarkan.
  */
+/* Pengaman + diagnostik inventaris.
+ *
+ * Kategori perlengkapan (senjata, baju, back item, aksesori, rambut) tidak
+ * pernah bertumpuk di Ninja Saga: satu id = satu keping. Kalau entri ganda
+ * sempat masuk — dari pembelian yang terkirim dua kali, migrasi lama, atau
+ * penyuntingan manual — jumlah di panel gear ikut tampil ganda, karena klien
+ * menghitung kuantitas dari BANYAKNYA entri di dalam character_weapon dsb.
+ *
+ * Barang habis pakai (`items`) sengaja TIDAK di-dedupe: menumpuk memang wajar.
+ *
+ * Baris ringkasan di bawah dicetak tiap kali karakter dimuat, supaya kalau
+ * angka di layar masih tidak cocok, log server langsung menunjukkan apakah
+ * penyebabnya ada di sini atau di sisi klien.
+ */
+const KATEGORI_UNIK = ['weapons', 'bodysets', 'backitems', 'accessories', 'hairs'];
+
+function rapikanInventaris(c) {
+  if (!c) return c;
+  let dibuang = 0;
+
+  for (const nama of KATEGORI_UNIK) {
+    if (!Array.isArray(c[nama])) continue;
+    const unik = [];
+    for (const e of c[nama]) {
+      const v = String(e);
+      if (unik.includes(v)) dibuang++;
+      else unik.push(v);
+    }
+    c[nama] = unik;
+  }
+
+  if (dibuang) {
+    console.log('### inventaris: ' + dibuang + ' entri ganda dibuang');
+    const all = load();
+    const key = Object.keys(all)[0];
+    if (key) { all[key] = c; save(all); }
+  }
+
+  const ring = ['items', ...KATEGORI_UNIK]
+    .map(n => n + '=' + (Array.isArray(c[n]) ? c[n].length : 0))
+    .join('  ');
+  console.log('### inventaris: ' + ring);
+  return c;
+}
+
 function migrasiInventaris(c) {
   if (!c || !Array.isArray(c.items)) return c;
 
@@ -259,7 +304,7 @@ function normalizeLevel(c) {
 function firstCharacter() {
   const all = load();
   const keys = Object.keys(all);
-  return keys.length ? migrasiInventaris(normalizeLevel(all[keys[0]])) : null;
+  return keys.length ? rapikanInventaris(migrasiInventaris(normalizeLevel(all[keys[0]]))) : null;
 }
 
 function listCharacters() {
@@ -482,11 +527,47 @@ function addSkill(skillId) {
   return c;
 }
 
+/* CharacterDAO.sellItem -> [sessionKey, characterId, "wpn2", jumlah]
+ * Kebalikan addItem: buang dari kantong yang sesuai, tambahkan uangnya. */
+function removeItem(itemId, jumlah, kembaliGold) {
+  const all = load();
+  const key = Object.keys(all)[0];
+  if (!key) return null;
+  const c = all[key];
+
+  const k = kantongDari(String(itemId));
+  const bag = k ? k.bag : 'items';
+  const num = k ? k.num : String(itemId).replace(/^item/, '');
+  const n = Math.max(1, Number(jumlah) || 1);
+
+  if (Array.isArray(c[bag])) {
+    for (let i = 0; i < n; i++) {
+      const at = c[bag].indexOf(num);
+      if (at === -1) break;
+      c[bag].splice(at, 1);
+    }
+  }
+
+  // Kalau yang dijual sedang dipakai, lepaskan — supaya tidak mengirim
+  // perlengkapan terpasang yang sudah tidak dimiliki.
+  const eq = c.equip || {};
+  for (const slot of ['weapon', 'bodySet', 'backItem', 'accessory']) {
+    if (eq[slot] && String(eq[slot]) === String(itemId)) eq[slot] = '';
+  }
+  c.equip = eq;
+
+  if (kembaliGold) c.gold = (c.gold || 0) + kembaliGold;
+
+  all[key] = c;
+  save(all);
+  return c;
+}
+
 /* CharacterDAO.equipCharacter ->
  * [sessionKey, characterId, tradingBodySet, tradingWeapon, ?, tradingBackItem, accessory]
  * Bentuk tiap nilai (string tunggal vs array) belum dipastikan dari bytecode;
  * disimpan sebagai String(...) apa adanya. */
-function setEquip(weapon, bodySet, backItem, accessory) {
+function setEquip(weapon, bodySet, backItem, accessory, jutsu) {
   const all = load();
   const key = Object.keys(all)[0];
   if (!key) return null;
@@ -496,6 +577,12 @@ function setEquip(weapon, bodySet, backItem, accessory) {
     bodySet:   bodySet   != null ? String(bodySet)   : '',
     backItem:  backItem  != null ? String(backItem)  : '',
     accessory: accessory != null ? String(accessory) : '',
+    // Jutsu terpasang, disimpan sebagai id telanjang. Klien mengirim
+    // ["skill13","skill16"] dan membacanya kembali lewat
+    // character_equipped_skills yang di-split "," lalu di-int().
+    jutsu: Array.isArray(jutsu)
+      ? jutsu.map(x => String(x).replace(/^skill/, '')).filter(Boolean)
+      : ((c.equip && c.equip.jutsu) || []),
   };
   all[key] = c;
   save(all);
@@ -603,6 +690,7 @@ function databaseCharacter(c) {
     const eq = c.equip || {};
     const polos = v => String(v || '').replace(/^(wpn|set|back|acsy)/, '');
     r.character_equipped_weapon    = polos(eq.weapon);
+    r.character_equipped_skills    = (eq.jutsu || []).join(',');
     r.character_equipped_back_item = polos(eq.backItem);
     r.character_equipped_accessory = polos(eq.accessory);
     if (eq.bodySet) r.character_equipped_body_set = polos(eq.bodySet);
@@ -920,6 +1008,7 @@ function rawCharacter(c, sessionKey) {
     const polos = v => String(v || '').replace(/^(wpn|set|back|acsy)/, '');
     r.character_equipped_weapon     = polos(eq.weapon);
     r.character_equipped_body_set   = polos(eq.bodySet);
+    r.character_equipped_skills     = (eq.jutsu || []).join(',');
     r.character_equipped_back_item  = polos(eq.backItem);
     r.character_equipped_accessory  = polos(eq.accessory);
   }
@@ -1182,6 +1271,6 @@ module.exports = {
   validate, DB_TYPES, extraDataHash, rawCharacter,
   getLvByXp, xpForLevel, addProgress, mergeStats,
   createCharacter, firstCharacter, listCharacters,
-  setElements, addItem, addSkill, setEquip, kantongDari,
+  setElements, addItem, removeItem, addSkill, setEquip, kantongDari,
   databaseCharacter, buildExtraData,
 };
