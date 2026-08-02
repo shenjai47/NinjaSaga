@@ -8,69 +8,39 @@
     "skin_color": 15,
     "hair": "17_0",
     "face": "01_0",
-    "level": 2,
-    "xp": 304,
-    "gold": 999982504,
-    "token": 999998294,
-    "crystal": 999999999,
-    "premium": 1,
+    "level": 5,
+    "xp": 1649,
+    "rank": 1,
+    "gold": 515,
+    "token": 0,
+    "crystal": 0,
+    "premium": 0,
     "hp": 100,
     "cp": 100,
-    "str": 9999,
-    "agi": 9999,
-    "sta": 9999,
-    "chakra": 9999,
-    "intel": 9999,
-    "ap": 99,
+    "str": 1,
+    "agi": 1,
+    "sta": 1,
+    "chakra": 1,
+    "intel": 1,
+    "ap": 0,
     "elements": [
       0,
       0,
-      2,
+      5,
       0,
       0
     ],
-    "items": [
-      "1",
-      "2",
-      "3",
-      "509",
-      "505",
-      "2"
-    ],
-    "created": 1785341243,
-    "stats": {
-      "12": 15315,
-      "17": 1
-    },
-    "skills": [
-      "13",
-      "16",
-      "10",
-      "20",
-      "12",
-      "34"
-    ],
-    "weapons": [
-      "1"
-    ],
+    "skills": [],
     "equip": {
-      "weapon": "wpn2",
-      "bodySet": "set934",
+      "weapon": "",
+      "bodySet": "",
       "backItem": "",
-      "accessory": "",
-      "jutsu": [
-        "16",
-        "13"
-      ]
+      "accessory": ""
     },
-    "bodysets": [
-      "962",
-      "960",
-      "1620",
-      "1618",
-      "1616",
-      "934"
-    ],
-    "backitems": []
+    "items": [],
+    "created": 1785686371,
+    "stats": {
+      "12": 250
+    }
   }
 }

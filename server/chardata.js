@@ -153,6 +153,12 @@ function createCharacter(args) {
 
     level: 1,
     xp: 0,
+    // RankData.GENIN = 1. Bangunan pet shop dan bloodline (talent) muncul
+    // di peta hanya kalau level >= 20 ATAU rank >= GENIN — lihat komentar
+    // panjang di dekat pemakaiannya di rawCharacter/databaseCharacter.
+    // Genin sudah cukup untuk membuka keduanya sejak awal, tanpa menunggu
+    // level 20.
+    rank: 1,
     gold: 500,
     token: 0,
     crystal: 0,
@@ -461,7 +467,7 @@ function emptyRecord() {
     character_pet_ep:                          0,  // uint
     character_pet_max_cp:                      0,  // uint
     character_pet_max_ep:                      0,  // uint
-    character_rank:                            0,  // uint
+    character_rank:                            0,  // uint -- ditimpa dari c.rank di databaseCharacter()
     character_senjutsu:                        [],  // Array
     character_senjutsu_ss:                     '',  // String
     character_skill_resistance:                [],  // Array
@@ -655,6 +661,17 @@ function databaseCharacter(c) {
   r.character_level   = c.level;
   r.character_xp      = c.xp;
   r.character_gold    = c.gold;
+
+  // MapBase.initBuildings (map_1.swf) menentukan tampil-tidaknya bangunan:
+  //     huntingHouseBtn.visible = level >= DISPLAY_LEVEL_LIMIT_BUILDING_HUNTING_HOUSE (5)
+  //     petShopBtn.visible      = level >= 20  ATAU  rank >= RankData.GENIN (1)
+  //     btnBloodlineShop.visible= level >= 20  ATAU  rank >= RankData.GENIN (1)
+  //         (btnBloodlineShop dibuka lewat gotoBloodlineShop -> panel
+  //          bloodline_shop.swf; ini yang di klien disebut "talent")
+  // Ketiga flag fitur terkait (FEATURE_BLOODLINE, FEATURE_TALENT,
+  // FEATURE_LEVEL_CONTROL) sudah TRUE tanpa syarat di code_library.swf,
+  // jadi bukan itu penghalangnya -- murni level dan rank.
+  r.character_rank    = c.rank != null ? c.rank : 1;
 
   r.character_hp      = c.hp;
   r.character_max_hp  = c.hp;
@@ -911,7 +928,7 @@ function rawCharacter(c, sessionKey) {
     character_ninja_essence:               '',
     character_npc:                         '',
     character_pre_hash:                    '',
-    character_rank:                        '',
+    character_rank:                        '',  // ditimpa dari c.rank di bawah
     character_skill:                       '',
     character_skin_color:                  0,    // indeks getSkinColorArr(), createCharacter kirim angka
     character_summon:                      0,
@@ -970,6 +987,10 @@ function rawCharacter(c, sessionKey) {
   r.character_face   = String(c.face);
   r.character_hair   = String(c.hair);
   r.character_skin_color = Number(c.skin_color);
+
+  // Lihat komentar panjang di databaseCharacter() -- rank ini yang membuka
+  // bangunan pet shop dan bloodline (talent) di peta tanpa menunggu level 20.
+  r.character_rank = c.rank != null ? c.rank : 1;
 
   const el = Array.isArray(c.elements) ? c.elements : [0, 0, 0, 0, 0];
   r.character_fire      = Number(el[0]) || 0;
