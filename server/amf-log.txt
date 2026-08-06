@@ -47819,3 +47819,17 @@ AMF -> CharacterDAO.recruitNpc   (responseURI=/15, amf3=false)
  "result": [],
  "data": {}
 }
+
+
+### Server jalan di http://127.0.0.1:8080 — 06/08/2026, 20.31.36
+### folder aset : C:\NinjaSaga\web
+### ninja_saga.swf : ADA
+### signature login = 401dfceb24aac074a62bf9b2fa6c10da4da3a728
+### ninja emblem = AKTIF (premium)
+
+
+### Server jalan di http://127.0.0.1:8080 — 06/08/2026, 20.33.00
+### folder aset : C:\NinjaSaga\web
+### ninja_saga.swf : ADA
+### signature login = 401dfceb24aac074a62bf9b2fa6c10da4da3a728
+### ninja emblem = AKTIF (premium)

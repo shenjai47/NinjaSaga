@@ -177,6 +177,41 @@ const handlers = {
     return { status: 1, error: null, result: chars.rawCharacter(c, args && args[0]) };
   },
 
+  // Merekrut NPC jadi anggota party (dipanggil dari panel Recruit Friends).
+  // args: [sessionKey, npcId, saldoTokenSaatIni]
+  //
+  // Main.setNpcParty() memverifikasi:
+  //     response.signature == Main.getHash( response.status + response.npc_id
+  //                                         + Account.getAccountBalance() )
+  // dan Main.getHash(x) = SHA1(x + SALT + sessionKey).
+  //
+  // PENTING: penjumlahannya NUMERIK, bukan penggabungan string — ketiganya
+  // angka, jadi hasilnya 1 + 3 + 999999999 = 1000000003, lalu String()-nya
+  // yang di-hash. Ini terbukti dari log klien: saat npc_id tidak dikirim,
+  // 1 + undefined + saldo menghasilkan "AC Full: NaN" dan hash yang dihitung
+  // klien sama persis dengan SHA1("NaN" + SALT + sessionKey).
+  //
+  // Tanpa npc_id + signature yang benar, klien memanggil Main.onError('120')
+  // dan panel rekrut mentok.
+  //
+  // old_recruit=true membuat klien melewati perhitungan potongan token dan
+  // langsung memuat SWF NPC-nya — sesuai untuk server pribadi tanpa ekonomi token.
+  'CharacterDAO.recruitNpc': (args) => {
+    const status = 1;
+    const npcId  = Number(args && args[1] != null ? args[1] : 0) || 0;
+    const saldo  = Number(args && args[2] != null ? args[2] : ACCOUNT.balance) || 0;
+    const input  = String(status + npcId + saldo);
+    const signature = sha1(input + SALT + ACCOUNT.sessionKey);
+    log('   rekrut NPC: id=' + npcId + ' saldo=' + saldo +
+        '  input=' + input + '  signature=' + signature);
+    return {
+      status, error: null,
+      npc_id: npcId,
+      old_recruit: true,
+      signature,
+    };
+  },
+
   // Dipakai saat misi memakai "salinan diri" sebagai lawan (dan pada tantangan
   // teman). Mission.gotCharacterProfile() menyuapkan response.result langsung ke
   // dataParser.parseRawCharacter(), jadi bentuknya WAJIB sama persis dengan
