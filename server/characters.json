@@ -8,17 +8,17 @@
     "skin_color": 15,
     "hair": "17_0",
     "face": "01_0",
-    "level": 20,
-    "xp": 72498,
-    "rank": 1,
-    "gold": 515,
-    "token": 0,
-    "crystal": 0,
+    "level": 40,
+    "xp": 996891,
+    "rank": 2,
+    "gold": 999999838,
+    "token": 999999999,
+    "crystal": 999999999,
     "premium": 0,
-    "hp": 860,
-    "cp": 860,
+    "hp": 1660,
+    "cp": 1660,
     "str": 1,
-    "agi": 20,
+    "agi": 40,
     "sta": 1,
     "chakra": 1,
     "intel": 1,
@@ -26,7 +26,7 @@
     "elements": [
       0,
       0,
-      5,
+      40,
       0,
       0
     ],
@@ -37,10 +37,59 @@
       "backItem": "",
       "accessory": ""
     },
-    "items": [],
-    "created": 1785686371,
+    "items": [
+      "1",
+      "2"
+    ],
+    "created": 1785943126,
     "stats": {
-      "12": 250
-    }
+      "12": 250,
+      "14": 1
+    },
+    "missions": {
+      "55": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "56": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "57": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "58": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "59": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "132": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "133": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "134": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      }
+    },
+    "weapons": [
+      "2"
+    ]
   }
 }

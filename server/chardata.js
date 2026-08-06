@@ -294,17 +294,78 @@ function migrasiInventaris(c) {
 
 function normalizeLevel(c) {
   if (!c) return c;
+  let berubah = false;
+
   const benar = getLvByXp(Number(c.xp) || 0);
   if (Number(c.level) !== benar) {
     console.log('### level tidak konsisten: tersimpan ' + c.level +
                 ', dari xp=' + (c.xp || 0) + ' seharusnya ' + benar +
                 ' -> diperbaiki');
     c.level = benar;
+    berubah = true;
+  }
+
+  // Susulkan rank untuk karakter yang sudah menuntaskan ujian SEBELUM
+  // perhitungan rank ada, atau kalau datanya pernah tersimpan tanpa rank.
+  const rankBenar = hitungRank(c);
+  if (Number(c.rank != null ? c.rank : 1) !== rankBenar) {
+    console.log('### rank disesuaikan dari riwayat ujian: ' +
+                (c.rank != null ? c.rank : 1) + ' -> ' + rankBenar);
+    c.rank = rankBenar;
+    berubah = true;
+  }
+
+  if (berubah) {
     const all = load();
-    const key = Object.keys(all)[0];
-    if (key) { all[key].level = benar; save(all); }
+    // tulis ke karakter yang BENAR: cocokkan lewat character_id, bukan
+    // asal karakter pertama (yang salah sasaran begitu ada karakter kedua)
+    const key = Object.prototype.hasOwnProperty.call(all, String(c.character_id))
+      ? String(c.character_id)
+      : Object.keys(all)[0];
+    if (key) {
+      all[key].level = c.level;
+      all[key].rank  = c.rank;
+      save(all);
+    }
   }
   return c;
+}
+
+/* ---- karakter aktif ----------------------------------------------------
+ * Server ini semula selalu memakai karakter PERTAMA (Object.keys(all)[0])
+ * untuk semua penyimpanan progres. Begitu ada karakter kedua, semua progres
+ * (xp, gold, misi, statistik) tetap tertulis ke karakter pertama, sehingga
+ * karakter yang sedang dimainkan seolah tidak pernah menyimpan apa pun.
+ *
+ * `activeId` diisi saat klien memanggil CharacterDAO.getCharacterById
+ * (argumen ke-2 = id karakter yang dipilih di layar Select Character),
+ * lalu dipakai semua fungsi penyimpanan di bawah.
+ */
+let activeId = null;
+
+function setActiveCharacter(id) {
+  const all = load();
+  const key = String(id);
+  if (Object.prototype.hasOwnProperty.call(all, key)) {
+    activeId = key;
+    return key;
+  }
+  return null;
+}
+
+function getActiveId() { return activeId; }
+
+/* Kunci karakter yang harus ditulis: yang sedang aktif, atau karakter
+ * pertama kalau klien belum sempat memilih (mis. tepat setelah createCharacter). */
+function activeKey(all) {
+  if (activeId != null && Object.prototype.hasOwnProperty.call(all, activeId)) return activeId;
+  return Object.keys(all)[0];
+}
+
+function characterById(id) {
+  const all = load();
+  const c = all[String(id)];
+  return c ? rapikanInventaris(migrasiInventaris(normalizeLevel(c))) : null;
 }
 
 function firstCharacter() {
@@ -746,9 +807,87 @@ function xpForLevel(lv) {
 }
 
 /* Menambahkan hasil misi ke karakter dan menyimpannya. */
+/* Mengubah peta misi tersimpan menjadi string yang dimengerti klien.
+ * Bentuk simpanan: { "55": {success:1, fail:0, time:0}, ... }
+ * Bentuk kirim   : "55:1:0:0,56:2:0:0"
+ */
+function serializeMissions(m) {
+  if (!m || typeof m !== 'object') return '';
+  return Object.keys(m).map(no => {
+    const e = m[no] || {};
+    return [
+      no,
+      Number(e.success) || 0,
+      Number(e.fail) || 0,
+      Number(e.time) || 0,
+    ].join(':');
+  }).join(',');
+}
+
+/* Mencatat satu misi selesai. `missionId` datang dari klien apa adanya
+ * ("msn55"); yang disimpan hanya angkanya supaya cocok dengan format kirim.
+ * sukses=false menambah penghitung `fail`, bukan `success`.
+ */
+/* ---- kenaikan rank dari ujian ------------------------------------------
+ * Nilai rank dibaca klien dari character_rank (ninjasaga.data::RankData):
+ *   0 STUDENT  1 GENIN  2 CHUNIN  3 CHUNIN_TALENTED  4 JOUNIN
+ *   5 JOUNIN_TALENTED  6 SPECIAL_JOUNIN  ...
+ *
+ * Rangkaian misi tiap ujian diambil dari ninjasaga.data::Data:
+ *   EXAM_CHUNIN_ARR = msn55..msn59
+ *   EXAM_JOUNIN_ARR = msn132..msn136
+ *
+ * Klien TIDAK pernah menaikkan rank sendiri — panel ujian hanya menjalankan
+ * misinya. Kenaikan rank memang tugas server, jadi tanpa perhitungan ini
+ * karakter selamanya bertahan di Genin walau seluruh ujian sudah tuntas.
+ */
+const EXAM_CHUNIN = ['55', '56', '57', '58', '59'];
+const EXAM_JOUNIN = ['132', '133', '134', '135', '136'];
+
+function semuaTuntas(missions, daftar) {
+  if (!missions) return false;
+  return daftar.every(no => Number((missions[no] || {}).success) > 0);
+}
+
+/* Rank yang seharusnya dimiliki karakter berdasarkan riwayat misinya.
+ * Tidak pernah menurunkan rank yang sudah tercatat. */
+function hitungRank(c) {
+  const sekarang = Number(c && c.rank != null ? c.rank : 1) || 1;
+  const m = c && c.missions;
+  let seharusnya = 1;                        // GENIN
+  if (semuaTuntas(m, EXAM_CHUNIN)) seharusnya = 2;   // CHUNIN
+  if (semuaTuntas(m, EXAM_JOUNIN)) seharusnya = 4;   // JOUNIN
+  return Math.max(sekarang, seharusnya);
+}
+
+function recordMission(missionId, sukses = true) {
+  const no = String(missionId == null ? '' : missionId).replace(/^msn/i, '').trim();
+  if (!/^\d+$/.test(no)) return null;
+
+  const all = load();
+  const key = activeKey(all);
+  if (!key) return null;
+  const c = all[key];
+
+  if (!c.missions || typeof c.missions !== 'object') c.missions = {};
+  const e = c.missions[no] || { success: 0, fail: 0, time: 0 };
+  if (sukses) e.success = (Number(e.success) || 0) + 1;
+  else        e.fail    = (Number(e.fail)    || 0) + 1;
+  c.missions[no] = e;
+
+  const rankLama = Number(c.rank != null ? c.rank : 1) || 1;
+  c.rank = hitungRank(c);
+  const naikRank = c.rank !== rankLama;
+
+  all[key] = c;
+  save(all);
+  return { no, entry: e, total: Object.keys(c.missions).length,
+           rank: c.rank, rankLama, naikRank };
+}
+
 function addProgress(xpGain, goldGain) {
   const all = load();
-  const key = Object.keys(all)[0];
+  const key = activeKey(all);
   if (!key) return null;
   const c = all[key];
 
@@ -775,7 +914,7 @@ function addProgress(xpGain, goldGain) {
 /* Menggabungkan statistik pencapaian dari Achievement.flushCharStat. */
 function mergeStats(stat) {
   const all = load();
-  const key = Object.keys(all)[0];
+  const key = activeKey(all);
   if (!key) return null;
   const c = all[key];
   c.stats = c.stats || {};
@@ -987,6 +1126,14 @@ function rawCharacter(c, sessionKey) {
   r.character_face   = String(c.face);
   r.character_hair   = String(c.hair);
   r.character_skin_color = Number(c.skin_color);
+
+  // Riwayat misi yang sudah diselesaikan. Format dibaca DataParser.parseRawCharacter:
+  //   antar-misi dipisah ','  dan tiap entri 4 bagian dipisah ':' ->
+  //   "<nomor>:<success>:<fail>:<time>"  mis. "55:1:0:0,56:2:0:0"
+  // Klien menyimpannya sebagai mission['msn' + nomor] = {success, fail, time}.
+  // Kalau dikirim string kosong, klien menganggap belum ada misi yang selesai
+  // dan rantai misi berjenjang (mis. ujian Chuunin) mengulang dari tahap awal.
+  r.character_mission = serializeMissions(c.missions);
 
   // Lihat komentar panjang di databaseCharacter() -- rank ini yang membuka
   // bangunan pet shop dan bloodline (talent) di peta tanpa menunggu level 20.
@@ -1219,8 +1366,15 @@ function buildExtraData(c) {
     se_day_count_open: null,
     se_end_date: null,
     se_end_date_notice: null,
-    seasonNumber:                            0,
-    seasonNumber_crew:                       0,
+    // WAJIB string 2 digit, bukan angka. MapBase.initBuildings() merender digit
+    // "Season" di gedung Clan/Crew dengan gotoAndStop("d" + charAt(i)) dan loop-nya
+    // SELALU 2 iterasi tanpa cek panjang string. Kalau nilainya angka (mis. 0) lalu
+    // ke-coerce jadi string 1 karakter ("0"), charAt(1) mengembalikan "" sehingga
+    // jadi gotoAndStop("d") -> ArgumentError #2109 "Frame label d not found" ->
+    // initBuildings() berhenti di tengah dan gedung/tombol lain ikut gagal dirender
+    // (gejala "klip klip" di peta).
+    seasonNumber:                            '00',
+    seasonNumber_crew:                       '00',
     senjutsu:                                [],
     senjutsu_system: null,
     showFanPage: null,
@@ -1291,6 +1445,8 @@ function buildExtraData(c) {
 module.exports = {
   validate, DB_TYPES, extraDataHash, rawCharacter,
   getLvByXp, xpForLevel, addProgress, mergeStats,
+  recordMission, serializeMissions,
+  setActiveCharacter, getActiveId, characterById, hitungRank,
   createCharacter, firstCharacter, listCharacters,
   setElements, addItem, removeItem, addSkill, setEquip, kantongDari,
   databaseCharacter, buildExtraData,

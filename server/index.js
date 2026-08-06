@@ -160,16 +160,46 @@ const handlers = {
   // format MENTAH (baris database) — bukan format databaseCharacter().
   // Lihat rawCharacter() di chardata.js.
   'CharacterDAO.getCharacterById': (args) => {
-    const c = chars.firstCharacter();
+    // args[1] = id karakter yang dipilih pemain di layar Select Character.
+    // Ini WAJIB dipakai: sebelumnya server selalu mengembalikan karakter
+    // pertama, sehingga setelah membuat karakter kedua semua progres
+    // (xp, gold, misi) tetap tertulis ke karakter lama dan karakter yang
+    // sedang dimainkan seolah tidak pernah tersimpan.
+    const idDiminta = args && args[1];
+    const dipakai = chars.setActiveCharacter(idDiminta);
+    const c = dipakai ? chars.characterById(dipakai) : chars.firstCharacter();
     if (!c) return { status: 1, error: null, result: null };
-    log('   karakter dipilih: ' + c.name + ' lv' + c.level);
+    if (!dipakai && idDiminta != null) {
+      log('   !! id karakter ' + idDiminta + ' tidak ada, memakai karakter pertama');
+    }
+    log('   karakter dipilih: ' + c.name + ' lv' + c.level +
+        ' (id=' + (chars.getActiveId() || '?') + ')');
     return { status: 1, error: null, result: chars.rawCharacter(c, args && args[0]) };
+  },
+
+  // Dipakai saat misi memakai "salinan diri" sebagai lawan (dan pada tantangan
+  // teman). Mission.gotCharacterProfile() menyuapkan response.result langsung ke
+  // dataParser.parseRawCharacter(), jadi bentuknya WAJIB sama persis dengan
+  // CharacterDAO.getCharacterById — bukan objek kosong. Tanpa handler ini
+  // parser gagal ("Character Data Error 2") lalu gotCharacterProfile() meledak
+  // dengan TypeError #1009 dan peta ikut error beruntun di checkGameStatus().
+  'CharacterDAO.getCharacterProfileById': (args) => {
+    const id = args && args[1];
+    const c = (id != null && chars.characterById(id)) || chars.firstCharacter();
+    if (!c) return { status: 1, error: null, result: null };
+    log('   profil karakter diminta: ' + c.name + ' lv' + c.level + ' (id=' + id + ')');
+    return {
+      status: 1, error: null,
+      result: chars.rawCharacter(c, args && args[0]),
+      pet_data: {},   // dibaca sebagai Object; {} aman kalau lawan bukan pet
+    };
   },
 
   // Mengirim seluruh rekaman karakter. parseCharacterData membaca 200+ field;
   // yang diakses berantai wajib berupa objek/array (lihat chardata.js).
   'CharacterDAO.getExtraData': () => {
-    const c = chars.firstCharacter();
+    const aktif = chars.getActiveId();
+    const c = (aktif && chars.characterById(aktif)) || chars.firstCharacter();
     if (!c) {
       log('   !! getExtraData dipanggil tapi belum ada karakter tersimpan');
       return { status: 1, error: null, result: null };
@@ -595,16 +625,36 @@ const handlers = {
   // MissionResult.popFeedResponse, dan keduanya memanggil hideAmfLoading()
   // TANPA syarat — jadi balasan apa pun sudah cukup membuka layar.
   //
-  // status dipilih -1, bukan 0 atau 1:
-  //   '0' = AMFData.STATUS_ERROR -> validateAmfResponse memunculkan dialog error
-  //   1   -> lolos ke pemeriksaan hash_str, lalu ke Central.sns.publishFeedById()
-  //          (posting Facebook — tidak tersedia di server pribadi)
-  //   -1  -> String(-1) != '0' sehingga validateAmfResponse lolos, tapi
-  //          int(-1) > 0 bernilai false sehingga klien berhenti dengan tenang.
-  'FriendReward.getFriendReward': () => ({
-    status: -1, error: null,
-    reward_type: 0, reward_amount: 0, reward_id: 0, wallfeed_id: 0,
-  }),
+  // status HARUS 1. Catatan lama (-1 dianggap "lolos diam-diam") ternyata salah:
+  // Main.validateAmfResponse hanya meneruskan kalau String(status) == "1"
+  // (AMFData.STATUS_SUCCESS). Untuk nilai lain -- termasuk -1 -- ia jatuh ke
+  // cabang onError(String(response.error)) lalu meledak dengan TypeError #1009
+  // di Main.hideAmfLoading().
+  //
+  // hash_str WAJIB ikut dikirim. Popup.onMissionComplete menghitung:
+  //     Main.getHash( String(status) + String(reward_type) +
+  //                   String(reward_amount) + String(reward_id) +
+  //                   String(wallfeed_id) )
+  // dan Main.getHash(x) = clientLib.getHash(sessionKey, x)
+  //                     = SHA1(x + SALT + sessionKey)   (pola sama seperti
+  //                       yang sudah dipakai SystemService.checkAmf).
+  // Kalau hasilnya tidak sama dengan reward.hash_str, klien memanggil
+  // Main.onError('120') -> dialog error + #1009 di Main.initButton.
+  //
+  // Dengan semua nilai reward 0, reward_id 0 jatuh ke cabang default switch
+  // reward_id, dan cabang itu aman (lanjut normal, tanpa publishShareFeed).
+  'FriendReward.getFriendReward': () => {
+    const r = {
+      status: 1, error: null,
+      reward_type: 0, reward_amount: 0, reward_id: 0, wallfeed_id: 0,
+    };
+    const input = String(r.status) + String(r.reward_type) +
+                  String(r.reward_amount) + String(r.reward_id) +
+                  String(r.wallfeed_id);
+    r.hash_str = sha1(input + SALT + ACCOUNT.sessionKey);
+    log('   hash_str reward: input=' + input + ' hash=' + r.hash_str);
+    return r;
+  },
 
   // AMAN apa adanya. AcademyPanel.onAmfTrainSkillResult memanggil
   // hideAmfLoading() di instruksi PERTAMA, sebelum pemeriksaan apa pun, dan
@@ -682,6 +732,27 @@ const handlers = {
   'CharacterService.updateCharacter': (args) => {
     const xpGain   = Number(args && args[3]) || 0;
     const goldGain = Number(args && args[4]) || 0;
+
+    // args[8] berisi id misi yang barusan diselesaikan, mis. "msn55".
+    // Tanpa ini progres misi hanya hidup di memori klien: begitu relogin
+    // server mengirim character_mission kosong dan rantai misi berjenjang
+    // (mis. ujian Chuunin) mengulang dari tahap pertama.
+    const missionId = args && args[8];
+    if (missionId) {
+      const m = chars.recordMission(missionId);
+      if (m) {
+        log('   misi selesai: msn' + m.no +
+            '  success=' + m.entry.success +
+            '  (total misi tercatat: ' + m.total + ')');
+        if (m.naikRank) {
+          const nama = { 0:'Student', 1:'Genin', 2:'Chunin', 3:'Chunin Talented',
+                         4:'Jounin', 5:'Jounin Talented', 6:'Special Jounin' };
+          log('   *** NAIK RANK: ' + (nama[m.rankLama] || m.rankLama) +
+              ' -> ' + (nama[m.rank] || m.rank) + ' ***');
+        }
+      }
+      else   log('   !! id misi tidak dikenali: ' + missionId);
+    }
 
     const hasil = chars.addProgress(xpGain, goldGain);
     if (!hasil) {

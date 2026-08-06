@@ -123,7 +123,13 @@ function cloneFrom(raw, newName) {
 
   const all = symbolNames(sc.data);
   if (!all.length) throw new Error('donor tanpa simbol');
-  const syms = all.filter(s => s.id !== 0).length ? all.filter(s => s.id !== 0) : all;
+  // id=0 di SymbolClass = main/document class SWF (yang dicari client lewat
+  // getDefinition(nama)). Donor bisa punya beberapa entri lain (id != 0) untuk
+  // aset internal (mis. MovieClip ikon) -- itu BUKAN yang mau kita ganti nama.
+  // Kalau ada entri id=0, pakai itu; kalau donor gak punya id=0 sama sekali,
+  // baru fallback ke simbol pertama yang ada.
+  const zero = all.find(s => s.id === 0);
+  const syms = zero ? [zero] : all;
   const oldName = syms[0].name;
 
   const abcOld = oldName.split('.').pop();
