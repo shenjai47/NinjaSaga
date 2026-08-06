@@ -109,7 +109,7 @@ function u32(v) { const b = Buffer.alloc(4); b.writeUInt32LE(v >>> 0); return b;
 /* Menghasilkan Buffer SWF baru dari donor, dengan kelas bernama newName.
  * Melempar Error kalau donor tidak cocok.
  */
-function cloneFrom(raw, newName) {
+function cloneFrom(raw, newName, donorBase) {
   const sig = raw.slice(0, 3).toString();
   const version = raw[3];
   let body;
@@ -123,24 +123,58 @@ function cloneFrom(raw, newName) {
 
   const all = symbolNames(sc.data);
   if (!all.length) throw new Error('donor tanpa simbol');
-  // id=0 di SymbolClass = main/document class SWF (yang dicari client lewat
-  // getDefinition(nama)). Donor bisa punya beberapa entri lain (id != 0) untuk
-  // aset internal (mis. MovieClip ikon) -- itu BUKAN yang mau kita ganti nama.
-  // Kalau ada entri id=0, pakai itu; kalau donor gak punya id=0 sama sekali,
-  // baru fallback ke simbol pertama yang ada.
-  const zero = all.find(s => s.id === 0);
-  const syms = zero ? [zero] : all;
-  const oldName = syms[0].name;
+
+  // Memilih simbol mana yang diganti namanya.
+  //
+  // Aturan lama ("ambil yang id != 0", lalu sempat dibalik jadi "utamakan
+  // id == 0") sama-sama meleset untuk berkas aset seperti npc_2.swf, yang
+  // SymbolClass-nya begini:
+  //     id=96 StaticFullBody
+  //     id=95 Npc_2                    <- ini yang dicari getAsset()
+  //     id=93 npc_2_fla.wood_ani_22    <- kelas bantu hasil kompilasi Flash
+  // Tidak ada id=0 sama sekali, sehingga yang terpilih malah simbol pertama
+  // (StaticFullBody) dan kelas Npc_2 tidak pernah tersentuh -> klien tetap
+  // melempar "Variable Npc_5 is not defined".
+  //
+  // Yang benar: cocokkan dengan nama berkas donor. Kelas utama sebuah aset
+  // selalu senama dengan berkasnya (npc_2.swf -> Npc_2), hanya beda huruf
+  // besar/kecil. Kelas *_fla.* diabaikan karena itu bikinan compiler.
+  const bukanFla = all.filter(s => !s.name.includes('_fla.'));
+  const kandidat = bukanFla.length ? bukanFla : all;
+
+  let pilih = null;
+  if (donorBase) {
+    const base = String(donorBase).toLowerCase();
+    pilih = kandidat.find(s => s.name.toLowerCase() === base) ||
+            kandidat.find(s => s.name.toLowerCase().endsWith(base));
+  }
+  if (!pilih) pilih = kandidat.find(s => s.id === 0);
+  if (!pilih) pilih = kandidat[0];
+
+  const oldName = pilih.name;
+
+  // Samakan pola huruf besar/kecil dengan simbol donor: kalau donor memakai
+  // "Npc_2" (N besar) sedangkan nama yang diminta "npc_5" (dari nama berkas),
+  // hasilnya harus "Npc_5" -- itu yang dicari getAsset(), bukan "npc_5".
+  let namaBaru = newName;
+  const awalDonorKapital = /^[A-Z]/.test(oldName);
+  const awalBaruKapital  = /^[A-Z]/.test(namaBaru);
+  if (awalDonorKapital && !awalBaruKapital) {
+    namaBaru = namaBaru.charAt(0).toUpperCase() + namaBaru.slice(1);
+  } else if (!awalDonorKapital && awalBaruKapital && /^[a-z0-9_]+$/i.test(oldName)) {
+    namaBaru = namaBaru.charAt(0).toLowerCase() + namaBaru.slice(1);
+  }
 
   const abcOld = oldName.split('.').pop();
-  const abcNew = newName.split('.').pop();
+  const abcNew = namaBaru.split('.').pop();
 
   let sc1 = 0, abc1 = 0;
   for (const t of tags) {
-    if (t.code === 76) { const r = renameSymbol(t.data, oldName, newName); t.data = r.data; sc1 += r.changed; }
+    if (t.code === 76) { const r = renameSymbol(t.data, oldName, namaBaru); t.data = r.data; sc1 += r.changed; }
     else if (t.code === 82) { const r = renameInAbc(t.data, abcOld, abcNew); t.data = r.data; abc1 += r.changed; }
   }
-  if (!sc1 || !abc1) throw new Error('gagal mengganti nama (SymbolClass ' + sc1 + 'x, ABC ' + abc1 + 'x)');
+  if (!sc1 || !abc1) throw new Error('gagal mengganti nama ' + oldName + ' -> ' + namaBaru +
+                                     ' (SymbolClass ' + sc1 + 'x, ABC ' + abc1 + 'x)');
 
   const nb = writeTags(head, tags);
   return sig === 'CWS'

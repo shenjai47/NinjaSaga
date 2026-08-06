@@ -177,6 +177,26 @@ const handlers = {
     return { status: 1, error: null, result: chars.rawCharacter(c, args && args[0]) };
   },
 
+  // Pemilihan kelas Special Jounin. args: [sessionKey, nomorKelas]
+  //
+  // ExamPanel.onAmfSPClassResult() hanya butuh status=1; setelah itu klien
+  // sendiri yang menulis kelasnya ke DBCharacterData.CONTROL, memberi skill
+  // kelas dari CLASS_SKILL_ARR[spClass-1], plus set1090/set1091 dan skill345.
+  // Tapi semua itu hanya di memori — server WAJIB menyimpannya dan
+  // mengirimkannya balik lewat character_control (lihat rawCharacter),
+  // kalau tidak kelasnya hilang setiap relogin.
+  'CharacterDAO.SJClassSelect': (args) => {
+    const kelas = args && args[1];
+    const hasil = chars.simpanKelasSJ(kelas);
+    if (hasil) {
+      log('   kelas Special Jounin dipilih: ' + hasil.kelas +
+          (hasil.berubah ? ' (sebelumnya ' + hasil.lama + ')' : ' (tidak berubah)'));
+    } else {
+      log('   !! nomor kelas tidak dikenali: ' + kelas);
+    }
+    return { status: 1, error: null };
+  },
+
   // Merekrut NPC jadi anggota party (dipanggil dari panel Recruit Friends).
   // args: [sessionKey, npcId, saldoTokenSaatIni]
   //
@@ -781,7 +801,8 @@ const handlers = {
             '  (total misi tercatat: ' + m.total + ')');
         if (m.naikRank) {
           const nama = { 0:'Student', 1:'Genin', 2:'Chunin', 3:'Chunin Talented',
-                         4:'Jounin', 5:'Jounin Talented', 6:'Special Jounin' };
+                         4:'Jounin', 5:'Jounin Talented', 6:'Special Jounin',
+                         7:'Special Jounin Talented', 8:'Tutor', 9:'Tutor Senior' };
           log('   *** NAIK RANK: ' + (nama[m.rankLama] || m.rankLama) +
               ' -> ' + (nama[m.rank] || m.rank) + ' ***');
         }
@@ -1008,7 +1029,7 @@ function findDonor(dir) {
     for (const { p } of terukur.slice(0, MAKS_COBA)) {
       try {
         if (!isSwf(p)) continue;
-        cloneFrom(fs.readFileSync(p), 'uji_donor_x');
+        cloneFrom(fs.readFileSync(p), 'uji_donor_x', path.basename(p, '.swf'));
         hasil = p;
         break;
       } catch { /* donor ini tidak cocok, coba berikutnya */ }
@@ -1027,7 +1048,10 @@ function cloneOrStub(dir, name) {
   const donor = findDonor(dir);
   if (donor) {
     try {
-      const swf = cloneFrom(fs.readFileSync(donor), name);
+      // nama berkas donor ikut dikirim supaya cloneFrom bisa memilih simbol
+      // yang benar (kelas utama aset senama dengan berkasnya) dan menyamakan
+      // pola huruf besar/kecilnya
+      const swf = cloneFrom(fs.readFileSync(donor), name, path.basename(donor, '.swf'));
       log('   [klon] ' + name + '  <- ' + path.basename(donor));
       return swf;
     } catch (e) {

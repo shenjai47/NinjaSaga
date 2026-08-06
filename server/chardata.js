@@ -830,19 +830,35 @@ function serializeMissions(m) {
  */
 /* ---- kenaikan rank dari ujian ------------------------------------------
  * Nilai rank dibaca klien dari character_rank (ninjasaga.data::RankData):
- *   0 STUDENT  1 GENIN  2 CHUNIN  3 CHUNIN_TALENTED  4 JOUNIN
- *   5 JOUNIN_TALENTED  6 SPECIAL_JOUNIN  ...
+ *   0 STUDENT   1 GENIN    2 CHUNIN   3 CHUNIN_TALENTED
+ *   4 JOUNIN    5 JOUNIN_TALENTED     6 SPECIAL_JOUNIN
+ *   7 SPECIAL_JOUNIN_TALENTED         8 TUTOR   9 TUTOR_SENIOR
  *
- * Rangkaian misi tiap ujian diambil dari ninjasaga.data::Data:
- *   EXAM_CHUNIN_ARR = msn55..msn59
- *   EXAM_JOUNIN_ARR = msn132..msn136
+ * Rangkaian misi tiap ujian disalin apa adanya dari ninjasaga.data::Data:
+ *   EXAM_CHUNIN_ARR              msn55..msn59
+ *   EXAM_JOUNIN_ARR              msn132..msn136
+ *   EXAM_SPECIAL_JOUNIN_ARR      msn200..msn212
+ *   EXAM_SPECIAL_JOUNIN_ARR_EASY msn226..msn238
+ *   EXAM_SENNIN_ARR              msn259..msn270
+ *   EXAM_SENNIN_ARR_EASY         msn247..msn256
+ *
+ * Ada dua varian (normal & EASY) untuk ujian Special Jounin dan Sennin;
+ * menuntaskan SALAH SATU sudah cukup untuk naik rank.
  *
  * Klien TIDAK pernah menaikkan rank sendiri — panel ujian hanya menjalankan
  * misinya. Kenaikan rank memang tugas server, jadi tanpa perhitungan ini
- * karakter selamanya bertahan di Genin walau seluruh ujian sudah tuntas.
+ * karakter bertahan di rank lama walau seluruh ujian sudah tuntas.
  */
 const EXAM_CHUNIN = ['55', '56', '57', '58', '59'];
 const EXAM_JOUNIN = ['132', '133', '134', '135', '136'];
+const EXAM_SPECIAL_JOUNIN = ['200', '201', '202', '203', '204', '205', '206',
+                             '207', '208', '209', '210', '211', '212'];
+const EXAM_SPECIAL_JOUNIN_EASY = ['226', '227', '228', '229', '230', '231', '232',
+                                  '233', '234', '235', '236', '237', '238'];
+const EXAM_SENNIN = ['259', '260', '261', '262', '263', '264',
+                     '265', '266', '267', '268', '269', '270'];
+const EXAM_SENNIN_EASY = ['247', '248', '249', '250', '251',
+                          '252', '253', '254', '255', '256'];
 
 function semuaTuntas(missions, daftar) {
   if (!missions) return false;
@@ -854,10 +870,33 @@ function semuaTuntas(missions, daftar) {
 function hitungRank(c) {
   const sekarang = Number(c && c.rank != null ? c.rank : 1) || 1;
   const m = c && c.missions;
-  let seharusnya = 1;                        // GENIN
-  if (semuaTuntas(m, EXAM_CHUNIN)) seharusnya = 2;   // CHUNIN
-  if (semuaTuntas(m, EXAM_JOUNIN)) seharusnya = 4;   // JOUNIN
+  let seharusnya = 1;                                   // GENIN
+  if (semuaTuntas(m, EXAM_CHUNIN)) seharusnya = 2;      // CHUNIN
+  if (semuaTuntas(m, EXAM_JOUNIN)) seharusnya = 4;      // JOUNIN
+  if (semuaTuntas(m, EXAM_SPECIAL_JOUNIN) ||
+      semuaTuntas(m, EXAM_SPECIAL_JOUNIN_EASY)) seharusnya = 6;   // SPECIAL_JOUNIN
+  if (semuaTuntas(m, EXAM_SENNIN) ||
+      semuaTuntas(m, EXAM_SENNIN_EASY)) seharusnya = 8;           // TUTOR (Sennin)
   return Math.max(sekarang, seharusnya);
+}
+
+/* Menyimpan kelas Special Jounin yang dipilih pemain.
+ * Dipanggil dari handler CharacterDAO.SJClassSelect (argumen ke-2 = nomor kelas).
+ * Nilainya dikirim balik lewat character_control, lihat rawCharacter(). */
+function simpanKelasSJ(kelas) {
+  const n = Number(kelas);
+  if (!Number.isFinite(n) || n <= 0) return null;
+
+  const all = load();
+  const key = activeKey(all);
+  if (!key) return null;
+  const c = all[key];
+
+  const lama = Number(c.sjClass) || 0;
+  c.sjClass = n;
+  all[key] = c;
+  save(all);
+  return { kelas: n, lama, berubah: lama !== n };
 }
 
 function recordMission(missionId, sukses = true) {
@@ -1134,6 +1173,14 @@ function rawCharacter(c, sessionKey) {
   // Kalau dikirim string kosong, klien menganggap belum ada misi yang selesai
   // dan rantai misi berjenjang (mis. ujian Chuunin) mengulang dari tahap awal.
   r.character_mission = serializeMissions(c.missions);
+
+  // Kelas Special Jounin. Klien menyimpannya di DBCharacterData.CONTROL
+  // (= field character_control), lihat ExamPanel.onAmfSPClassResult:
+  //     mainChar.updateData(DBCharacterData.CONTROL, spClass)
+  //     mainChar.setClassSkillListArr(CLASS_SKILL_ARR[spClass - 1])
+  // Nilainya 1..n sesuai kelas yang dipilih; 0 berarti belum memilih.
+  // Tanpa dikirim balik, kelas (beserta skill kelasnya) hilang tiap relogin.
+  r.character_control = Number(c.sjClass) || 0;
 
   // Lihat komentar panjang di databaseCharacter() -- rank ini yang membuka
   // bangunan pet shop dan bloodline (talent) di peta tanpa menunggu level 20.
@@ -1445,7 +1492,7 @@ function buildExtraData(c) {
 module.exports = {
   validate, DB_TYPES, extraDataHash, rawCharacter,
   getLvByXp, xpForLevel, addProgress, mergeStats,
-  recordMission, serializeMissions,
+  recordMission, serializeMissions, simpanKelasSJ,
   setActiveCharacter, getActiveId, characterById, hitungRank,
   createCharacter, firstCharacter, listCharacters,
   setElements, addItem, removeItem, addSkill, setEquip, kantongDari,

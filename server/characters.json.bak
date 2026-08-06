@@ -8,17 +8,17 @@
     "skin_color": 15,
     "hair": "17_0",
     "face": "01_0",
-    "level": 40,
-    "xp": 996891,
-    "rank": 2,
-    "gold": 999999838,
+    "level": 80,
+    "xp": 55735935,
+    "rank": 6,
+    "gold": 1000006644,
     "token": 999999999,
     "crystal": 999999999,
     "premium": 0,
-    "hp": 1660,
-    "cp": 1660,
+    "hp": 3260,
+    "cp": 3260,
     "str": 1,
-    "agi": 40,
+    "agi": 80,
     "sta": 1,
     "chakra": 1,
     "intel": 1,
@@ -26,16 +26,52 @@
     "elements": [
       0,
       0,
-      40,
+      80,
       0,
       0
     ],
-    "skills": [],
+    "skills": [
+      "13",
+      "16",
+      "6",
+      "17",
+      "29",
+      "30",
+      "45",
+      "46",
+      "52",
+      "69",
+      "67",
+      "74",
+      "82",
+      "92",
+      "97",
+      "140",
+      "102",
+      "146",
+      "123",
+      "112",
+      "118",
+      "156",
+      "203",
+      "171",
+      "126",
+      "166",
+      "178"
+    ],
     "equip": {
-      "weapon": "",
-      "bodySet": "",
+      "weapon": "wpn1",
+      "bodySet": "set1",
       "backItem": "",
-      "accessory": ""
+      "accessory": "",
+      "jutsu": [
+        "178",
+        "166",
+        "126",
+        "171",
+        "203",
+        "156"
+      ]
     },
     "items": [
       "1",
@@ -43,7 +79,7 @@
     ],
     "created": 1785943126,
     "stats": {
-      "12": 250,
+      "12": 7000,
       "14": 1
     },
     "missions": {
@@ -86,10 +122,94 @@
         "success": 1,
         "fail": 0,
         "time": 0
+      },
+      "135": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "136": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "182": {
+        "success": 0,
+        "fail": 0,
+        "time": 0
+      },
+      "226": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "227": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "228": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "229": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "230": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "231": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "232": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "233": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "234": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "235": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "236": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "237": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "238": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "266": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
       }
     },
-    "weapons": [
-      "2"
-    ]
+    "weapons": [],
+    "sjClass": 3
   }
 }
