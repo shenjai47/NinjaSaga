@@ -197,32 +197,103 @@ const handlers = {
     return { status: 1, error: null };
   },
 
-  // Graduasi Sennin / Lv80 exam. args: [sessionKey]
+  // Pembelian pet dari Pet Centre.
+  // Argumen (dari PetShop.amfBuyItem @73):
+  //     [sessionKey, petId, namaPet, bahasa]     mis. ["...", "2", "Chiko", "en"]
   //
-  // Dipanggil SenninExamPanel.amfClaimReward(). Callback-nya
-  // confirmClaimReward() membaca satu field:
+  // PetShop.onAmfBuyItemResult TIDAK lewat Main.validateAmfResponse -- yang
+  // dibaca cuma response.result, dan hanya kalau result.equipped bernilai
+  // true. Lihat komentar di chardata.petBuyResult() untuk rinciannya.
   //
-  //     rewardStatus = int(response.character_reward);
-  //     ... rewardList[rewardStatus - 1].length ...     <- #1010 kalau 0
-  //
-  // Jadi character_reward WAJIB 1, 2, atau 3 -- JANGAN 0/null/undefined.
-  // Kalau memang mau menolak klaim, balas status 0 + error terisi; klien
-  // berhenti di validateAmfResponse sebelum menyentuh rewardList.
-  //
-  // Tier ditentukan dari riwayat misi: EXAM_SENNIN (hard) -> 3 (rank 9),
-  // EXAM_SENNIN_EASY -> 2 (rank 8), selain itu 1.
-  'CharacterDAO.NTClassSelect': () => {
-    const hasil = chars.graduasiSennin();
-    if (hasil) {
-      log('   graduasi Sennin: tier=' + hasil.tier +
-          ' rank=' + hasil.rankLama + '->' + hasil.rank +
-          ' gender=' + hasil.gender +
-          ' barang=' + hasil.barang.join(','));
-      return { status: 1, error: null, character_reward: hasil.tier };
+  // Klien selalu MENGAKTIFKAN pet yang baru dibeli (deactivatePet lalu
+  // initPet), jadi server mencatat hal yang sama supaya keduanya sepakat
+  // setelah muat ulang.
+  'CharacterDAO.buyPet': (args) => {
+    const id   = String((args && args[1]) != null ? args[1] : '');
+    const nama = String((args && args[2]) != null ? args[2] : '');
+    if (!id) {
+      log('   !! buyPet tanpa id: ' + JSON.stringify(args));
+      return { status: 1, error: null, result: null };
     }
-    // Karakter tidak ketemu: tetap kirim tier valid supaya panel tidak crash.
-    log('   !! graduasi Sennin: karakter aktif tidak ditemukan, kirim tier 1');
-    return { status: 1, error: null, character_reward: 1 };
+
+    // swfName/clsName dari PET_DATA (petdata.js) -- sumber yang sama dengan
+    // yang dipakai klien, jadi grafis dan hash-nya pasti cocok.
+    const a = chars.petAsset(id);
+    const pet = chars.addPet({
+      id, name: nama || a.name, level: 1, xp: 0, skills: [],
+      equipped: true,                 // pet baru selalu jadi pet aktif
+    });
+
+    const bayar = chars.bayarPet(id);
+    const hasil = chars.petBuyResult(pet, ACCOUNT.sessionKey);
+
+    log('   pet dibeli: id=' + id + ' "' + pet.name + '" swf=' + a.swfName +
+        ' cls=' + a.clsName + ' (dipasang sebagai pet aktif)' +
+        '  total=' + chars.listPets().length);
+    if (bayar) {
+      log('   harga: ' + bayar.gold + ' gold + ' + bayar.token + ' token  ->  ' +
+          'sisa ' + bayar.sisaGold + ' gold, ' + bayar.sisaToken + ' token');
+    }
+    log('   hash pet: ' + [hasil.id, hasil.swfName, hasil.clsName,
+                           hasil.level, hasil.xp].join(',') + '  -> ' + hasil.hash);
+
+    return { status: 1, error: null, result: hasil };
+  },
+
+  // Status misi latihan Sennin, dipanggil MissionPanel_2.getSagaMissionStatus
+  // setiap kali panel misi dibuka. args: [sessionKey]
+  //
+  // Balasan generik {result: []} membuat sageMissionResponse melempar #1010
+  // SEBELUM hideAmfLoading(), sehingga layar loading tidak pernah ditutup dan
+  // panel misi tampak blank. result WAJIB objek dengan status + array mission
+  // -- lihat komentar di chardata.statusMisiSennin().
+  'SSTraining.getMissionStatus': () => {
+    const aktif = chars.getActiveId();
+    const c = (aktif && chars.characterById(aktif)) || chars.firstCharacter();
+    const hasil = chars.statusMisiSennin(c || {});
+    log('   misi Sennin: status=' + hasil.status +
+        (hasil.status === 0 ? ' (terbuka)' : ' (terkunci, rank <= 7)') +
+        '  misi=' + hasil.mission.map(m => m.id).join(','));
+    return { status: 1, error: null, result: hasil };
+  },
+
+  // Mengaktifkan pet dari panel Pets. args: [sessionKey, petId]
+  // Klien sudah menukar pet aktifnya sendiri; ini yang membuat pilihannya
+  // bertahan setelah muat ulang.
+  'CharacterDAO.activatePet': (args) => {
+    const id = (args && args[1]) != null ? String(args[1]) : null;
+    const hasil = chars.setPetEquipped(id);
+    if (hasil && hasil.ketemu) log('   pet aktif -> id=' + hasil.id);
+    else log('   pet dilepas (tidak ada yang aktif), id diminta=' + id);
+    return { status: 1, error: null, result: 0 };
+  },
+
+  // Menonaktifkan pet aktif. args: [sessionKey]
+  'CharacterDAO.deactivatePet': () => {
+    chars.setPetEquipped(null);
+    log('   semua pet dinonaktifkan');
+    return { status: 1, error: null, result: 0 };
+  },
+
+  // Melatih skill pet. Disimpan ke daftar skills pet yang bersangkutan.
+  'CharacterDAO.trainPetSkill': (args) => {
+    log('   trainPetSkill args = ' + JSON.stringify(args));
+    const daftar = chars.listPets();
+    const aktif = daftar.find(p => p.equipped) || daftar[0];
+    if (!aktif) {
+      log('   !! belum ada pet yang dimiliki');
+      return { status: 1, error: null, result: 0 };
+    }
+    const skill = (args || []).slice(1)
+      .find(v => v != null && /^(petskill)?\d+$/i.test(String(v)));
+    if (skill != null) {
+      const id = String(skill).replace(/^petskill/i, '');
+      const skills = Array.isArray(aktif.skills) ? aktif.skills.slice() : [];
+      if (!skills.includes(id)) skills.push(id);
+      chars.addPet(Object.assign({}, aktif, { skills }));
+      log('   skill pet ditambah: ' + id + ' -> [' + skills.join(',') + ']');
+    }
+    return { status: 1, error: null, result: 0 };
   },
 
   // Merekrut NPC jadi anggota party (dipanggil dari panel Recruit Friends).
@@ -287,7 +358,7 @@ const handlers = {
       log('   !! getExtraData dipanggil tapi belum ada karakter tersimpan');
       return { status: 1, error: null, result: null };
     }
-    const data = chars.buildExtraData(c);
+    const data = chars.buildExtraData(c, ACCOUNT.sessionKey);
 
     // Klien memverifikasi hash ini; kalau salah, parseCharacterData
     // memanggil onError() dan mengembalikan false tanpa exception.
@@ -305,6 +376,10 @@ const handlers = {
       log('   tipe rekaman karakter: semua benar (72 field)');
     }
     log('   character_skills = ' + JSON.stringify(data.databaseCharacter.character_skills));
+    const pets = data.player_pet || [];
+    log('   player_pet = ' + pets.length + ' pet' +
+        (pets.length ? ' (aktif: ' +
+          (pets.filter(p => p.equipped).map(p => p.name).join(',') || 'tidak ada') + ')' : ''));
 
     return { status: 1, error: null, result: data };
   },

@@ -713,6 +713,304 @@ function addItem(itemId, jumlah, hargaGold, hargaToken) {
   return c;
 }
 
+/* ===================== PET ==========================================
+ *
+ * Klien membangun daftar pet dari field `player_pet` di respons
+ * CharacterDAO.getExtraData. DataParser.parseCharacterData @2916:
+ *
+ *     arr = data.player_pet as Array;
+ *     for (i...) {
+ *       if (arr[i].equipped) {
+ *         db = parsePetData(arr[i]);
+ *         mainChar.initPet(db, arr[i].swfName, arr[i].clsName);   // pet AKTIF
+ *       } else {
+ *         db = parsePetData(arr[i]);
+ *         mainChar.initStandbyPet(db, swfName, clsName);          // pet CADANGAN
+ *       }
+ *     }
+ *
+ * initPet mengisi Character._pet (satu-satunya pet yang ikut bertarung),
+ * initStandbyPet mendorong ke Character._standbyPet (koleksi/library).
+ * Karena _pet ditimpa, HANYA SATU entri yang boleh equipped:true.
+ *
+ * Field yang dibaca DataParser.parsePetData (method 512):
+ *     id, name, level, xp, skills   -> DBCharacterData ID/NAME/LEVEL/XP/SKILLS
+ *     swfName, clsName, hash        -> untuk memuat grafis + verifikasi
+ *
+ * hash = Main.getHash(id + "," + swfName + "," + clsName + "," + level + "," + xp)
+ * Pada jalur getExtraData parsePetData dipanggil dengan SATU argumen, jadi
+ * pemeriksaan hash dilewati. Tetap dikirim supaya jalur lain (addOpponent,
+ * DisplayDataAddInventory) tidak menolak datanya.
+ *
+ * GRAFIS: Main.preloadData memuat "swf/pets/" + swfName + ".swf".
+ * Dari amf-log, satu-satunya file pet yang benar-benar ADA di
+ * C:\NinjaSaga\web adalah pet_184.swf -- nama lain (toad_1, snake_1, pig_1,
+ * bird_1, cat_1, dog_1, bat_1, bunny_1, snake_2, pig_2) dilayani
+ * assetclone.js sebagai kloningan dari pet_184.swf. Jadi pet akan MUNCUL,
+ * tapi memakai grafis pet_184 sampai file aslinya kamu punya.
+ */
+
+/* Data pet: nama, swfName, clsName -- diekstrak dari data_library_en.swf
+ * (SystemDataEN method 19, object literal PET, 170 entri) ke petdata.js.
+ *
+ * Klien memakai tabel yang sama, Item.getDisplayData @1462:
+ *     Main.PET_DATA.find("pet" + id).swfName
+ * lalu memuat "swf/pets/" + swfName + ".swf". Kalau server mengirim swfName
+ * yang berbeda, grafisnya meleset -- karena itu nilainya diambil dari sumber
+ * yang sama, bukan ditebak.
+ *
+ * clsName TIDAK bisa dihitung dari swfName: sebagian besar memang kapitalisasi
+ * biasa (bird_1 -> Bird_1), tapi id 9 (bunny_easter_free -> BunnyEasterFree)
+ * dan id 98 (fox_2 -> Fox_02) menyimpang. Selalu pakai tabel.
+ */
+const { PET_DATA, petById } = require('./petdata');
+
+// Satu-satunya berkas pet yang benar-benar ada di C:\NinjaSaga\web; nama lain
+// dilayani assetclone.js sebagai kloningannya. Dipakai kalau id tak dikenal.
+const PET_SWF_CADANGAN = 'pet_184';
+
+/* {swfName, clsName, name} untuk sebuah id pet. */
+function petAsset(id) {
+  const d = petById(id);
+  if (d) return { swfName: d.swfName, clsName: d.clsName, name: d.name };
+  console.log('   !! pet id ' + id + ' tidak ada di PET_DATA -- memakai ' +
+              PET_SWF_CADANGAN);
+  return { swfName: PET_SWF_CADANGAN, clsName: PET_SWF_CADANGAN, name: 'Pet ' + id };
+}
+
+function petHash(p, sessionKey) {
+  const crypto = require('crypto');
+  const SALT = 'Vmn34aAciYK00Hen26nT01';
+  const input = [p.id, p.swfName, p.clsName, p.level, p.xp].join(',');
+  return crypto.createHash('sha1')
+    .update(input + SALT + String(sessionKey == null ? '' : sessionKey), 'binary')
+    .digest('hex');
+}
+
+/* Satu entri player_pet, lengkap dengan hash-nya. */
+function petEntry(p, sessionKey) {
+  const a = petAsset(p.id);
+  const swfName = String(p.swfName || a.swfName);
+  const e = {
+    id:       String(p.id == null ? '0' : p.id),
+    name:     String(p.name || a.name),
+    level:    Number(p.level) || 1,
+    xp:       Number(p.xp)    || 0,
+    // parsePetData: `if (petObj.skills)` -> array kosong pun jatuh ke [0].
+    skills:   Array.isArray(p.skills) ? p.skills.map(String) : [],
+    swfName,
+    // clsName = nama class di dalam swf. Untuk aset yang dikloning
+    // assetclone.js, class-nya dinamai sama dengan nama file.
+    clsName:  String(p.clsName || a.clsName),
+    equipped: !!p.equipped,
+  };
+  e.hash = petHash(e, sessionKey);
+  return e;
+}
+
+/* Daftar player_pet untuk buildExtraData.
+ * Menjamin paling banyak SATU pet equipped -- kalau tersimpan lebih dari
+ * satu (mis. hasil edit manual characters.json), yang pertama menang dan
+ * sisanya diturunkan jadi cadangan, supaya _pet tidak saling menimpa. */
+function daftarPet(c, sessionKey) {
+  const raw = Array.isArray(c && c.pets) ? c.pets : [];
+  let sudahAda = false;
+  return raw.map(p => {
+    const e = petEntry(p, sessionKey);
+    if (e.equipped) {
+      if (sudahAda) e.equipped = false;
+      else sudahAda = true;
+    }
+    return e;
+  });
+}
+
+/* Tambahkan pet ke koleksi karakter aktif.
+ *   addPet({ id, name, level, xp, skills, swfName, clsName, equipped })
+ * id yang sama tidak digandakan -- datanya diperbarui. */
+function addPet(pet) {
+  if (!pet || pet.id == null) return null;
+  const all = load();
+  const key = activeKey(all);
+  if (!key) return null;
+  const c = all[key];
+
+  if (!Array.isArray(c.pets)) c.pets = [];
+  const id = String(pet.id);
+  const a = petAsset(id);
+  const swfName = String(pet.swfName || a.swfName);
+  const baru = {
+    id,
+    name:     String(pet.name || a.name),
+    level:    Number(pet.level) || 1,
+    xp:       Number(pet.xp)    || 0,
+    skills:   Array.isArray(pet.skills) ? pet.skills.map(String) : [],
+    swfName,
+    clsName:  String(pet.clsName || a.clsName),
+    equipped: !!pet.equipped,
+  };
+
+  const i = c.pets.findIndex(p => String(p.id) === id);
+  if (i >= 0) c.pets[i] = Object.assign({}, c.pets[i], baru);
+  else        c.pets.push(baru);
+
+  if (baru.equipped) c.pets.forEach(p => { p.equipped = String(p.id) === id; });
+
+  all[key] = c;
+  save(all);
+  return baru;
+}
+
+/* Pasang satu pet sebagai pet aktif. id null/'' = lepas semuanya. */
+function setPetEquipped(id) {
+  const all = load();
+  const key = activeKey(all);
+  if (!key) return null;
+  const c = all[key];
+  if (!Array.isArray(c.pets)) c.pets = [];
+
+  const target = id == null ? '' : String(id);
+  let ketemu = false;
+  c.pets.forEach(p => {
+    p.equipped = String(p.id) === target;
+    if (p.equipped) ketemu = true;
+  });
+  all[key] = c;
+  save(all);
+  return { id: target, ketemu, total: c.pets.length };
+}
+
+function removePet(id) {
+  const all = load();
+  const key = activeKey(all);
+  if (!key) return null;
+  const c = all[key];
+  if (!Array.isArray(c.pets)) c.pets = [];
+  const sebelum = c.pets.length;
+  c.pets = c.pets.filter(p => String(p.id) !== String(id));
+  all[key] = c;
+  save(all);
+  return { dihapus: sebelum - c.pets.length, sisa: c.pets.length };
+}
+
+/* Potong harga pet dari saldo karakter, sesuai PET_DATA.
+ *
+ * Klien SUDAH mengurangi tampilan saldonya sendiri saat pembelian, jadi tanpa
+ * ini angkanya kelihatan benar sampai halaman dimuat ulang -- lalu emasnya
+ * kembali utuh karena server tidak pernah mencatat potongan itu.
+ *
+ * Tidak pernah sampai minus: klien mencegah pembelian saat saldo kurang, jadi
+ * kalau di sini negatif berarti ada yang tidak sinkron -- lebih baik berhenti
+ * di 0 daripada menyimpan saldo minus (sama seperti addItem).
+ */
+function bayarPet(id) {
+  const d = petById(id);
+  const all = load();
+  const key = activeKey(all);
+  if (!key) return null;
+  const c = all[key];
+
+  const gold  = Number(d && d.gold)  || 0;
+  const token = Number(d && d.token) || 0;
+  if (gold)  c.gold  = Math.max(0, (Number(c.gold)  || 0) - gold);
+  if (token) c.token = Math.max(0, (Number(c.token) || 0) - token);
+
+  all[key] = c;
+  save(all);
+  return { gold, token, sisaGold: c.gold, sisaToken: c.token };
+}
+
+/* Objek pet untuk balasan CharacterDAO.buyPet.
+ *
+ * PetShop.onAmfBuyItemResult (pet_shop.swf, method 307) TIDAK melewati
+ * Main.validateAmfResponse, jadi update_inventory/add_pet_data diabaikan
+ * total. Yang dibaca hanya response.result:
+ *
+ *      pet = response.result as Object;                        @98
+ *      if (pet && pet.equipped) {                              @112,@120
+ *          db = dataParser.parsePetData(pet, true);            @142
+ *          mainChar.deactivatePet();                           @158
+ *          mainChar.initPet(db, pet.swfName, pet.clsName);     @189
+ *          loadSwf("swf/pets/" + mainChar.pet.swfName + ".swf")
+ *      }
+ *
+ * Tiga syarat yang gampang terlewat:
+ *
+ *  1. result harus OBJEK, bukan angka. `result: 0` bernilai falsy sehingga
+ *     seluruh blok dilompati dan pet tidak pernah ditambahkan.
+ *  2. equipped WAJIB true. Kalau false, blok yang sama dilompati -- pet baru
+ *     tidak muncul sampai halaman dimuat ulang. Klien memang selalu
+ *     mengaktifkan pet yang baru dibeli (deactivatePet lalu initPet), jadi
+ *     server harus mencatat hal yang sama.
+ *  3. parsePetData dipanggil dengan DUA argumen, jadi hash-nya DIPERIKSA:
+ *         Main.getHash(id + "," + swfName + "," + clsName + "," + level + "," + xp)
+ *     harus sama dengan pet.hash, kalau tidak Main.onError() dipanggil dan
+ *     parsePetData mengembalikan null -- initPet(null, ...) lalu meledak.
+ *
+ * Emas/token dipotong klien sendiri dari selectedItem (PET_DATA) di @296 dan
+ * @316, jadi jangan dikirim lagi di sini; cukup dicatat di server lewat
+ * bayarPet() supaya tidak pulih saat muat ulang.
+ */
+function petBuyResult(pet, sessionKey) {
+  const e = petEntry(Object.assign({}, pet, { equipped: true }), sessionKey);
+  return e;
+}
+
+/* ---- Misi Latihan Sennin (SS Mission / 仙人修行任務) -------------------
+ *
+ * MissionPanel_2.sageMissionResponse (mission_2.swf, method 660):
+ *
+ *     this.SsMission = [];
+ *     if (Main.validateAmfResponse(res)) {
+ *         this.SsMissionStatus = res.result.status;          // @27-33
+ *         if (this.SsMissionStatus == 0) {                   // @40
+ *             for (i = 0; i < res.result.mission.length; i++)   // @106
+ *                 if (res.result.mission[i].status == 0)
+ *                     this.SsMission.push(res.result.mission[i].id);
+ *         }
+ *         Main.hideAmfLoading();                             // @118
+ *     }
+ *
+ * SsMissionStatus bertipe int, jadi `undefined` DIPAKSA jadi 0 -- cabang
+ * `== 0` tetap masuk, lalu res.result.mission yang tidak ada dibaca .length
+ * -> #1010. Karena hideAmfLoading() berada SETELAH loop, layar loading tidak
+ * pernah ditutup: itulah panel misi yang blank.
+ *
+ * Jadi result WAJIB objek berisi `status` dan ARRAY `mission`.
+ *   status 0  -> tab Grade 6 (Sennin) terbuka
+ *   status !=0 -> tab terkunci; klien menawarkan beli dengan 5x item825
+ * Tiap entri mission: { id, status }, status 0 = misi terbuka.
+ *
+ * onGradeList @672 juga menuntut RANK > 7, dan gotoMissionList @2668 hanya
+ * menampilkan misi yang `level <= level karakter` DAN id-nya ada di SsMission.
+ *
+ * Daftar di bawah diambil dari MISSION_DATA di data_library_en.swf
+ * (MissionDetail.getData): msn279..283, level 80, tanpa grade/event/daily --
+ * lima misi latihan Sennin.
+ */
+const SS_MISSION = ['msn279', 'msn280', 'msn281', 'msn282', 'msn283'];
+
+/* Status misi Sennin untuk SSTraining.getMissionStatus.
+ * Misi yang sudah pernah dituntaskan tetap dikirim status 0 supaya bisa
+ * diulang -- klien tidak menyembunyikannya. */
+function statusMisiSennin(c) {
+  const rank = Number(c && c.rank != null ? c.rank : 1) || 1;
+  return {
+    // Terbuka hanya kalau rank sudah melewati Special Jounin, sama dengan
+    // syarat RANK > 7 di onGradeList; kalau belum, klien menampilkan
+    // tab terkunci alih-alih daftar kosong yang membingungkan.
+    status: rank > 7 ? 0 : 1,
+    mission: SS_MISSION.map(id => ({ id, status: 0 })),
+  };
+}
+
+function listPets() {
+  const all = load();
+  const key = activeKey(all);
+  if (!key) return [];
+  return Array.isArray(all[key].pets) ? all[key].pets : [];
+}
+
 function databaseCharacter(c) {
   const r = emptyRecord();
 
@@ -875,10 +1173,8 @@ function hitungRank(c) {
   if (semuaTuntas(m, EXAM_JOUNIN)) seharusnya = 4;      // JOUNIN
   if (semuaTuntas(m, EXAM_SPECIAL_JOUNIN) ||
       semuaTuntas(m, EXAM_SPECIAL_JOUNIN_EASY)) seharusnya = 6;   // SPECIAL_JOUNIN
-  if (semuaTuntas(m, EXAM_SENNIN_EASY)) seharusnya = 8;           // TUTOR (Sennin)
-  // Jalur hard mode memberi rank 9 -- nilai yang sama dengan yang ditulis
-  // klien di SenninExamPanel.confirmClaimReward saat character_reward == 3.
-  if (semuaTuntas(m, EXAM_SENNIN)) seharusnya = 9;               // SENNIN penuh
+  if (semuaTuntas(m, EXAM_SENNIN) ||
+      semuaTuntas(m, EXAM_SENNIN_EASY)) seharusnya = 8;           // TUTOR (Sennin)
   return Math.max(sekarang, seharusnya);
 }
 
@@ -899,83 +1195,6 @@ function simpanKelasSJ(kelas) {
   all[key] = c;
   save(all);
   return { kelas: n, lama, berubah: lama !== n };
-}
-
-/* Graduasi Sennin (Lv80 exam) -- dipakai handler CharacterDAO.NTClassSelect.
- *
- * SenninExamPanel.confirmClaimReward() membaca SATU field saja:
- *
- *     rewardStatus = int(response.character_reward);
- *     ... rewardList[rewardStatus - 1].length ...
- *
- * Kalau field itu tidak ada -> int(undefined) = 0 -> rewardList[-1] = undefined
- * -> TypeError #1010 dan panel mentok. Jadi nilainya WAJIB 1, 2, atau 3.
- *
- * rewardList disusun di constructor panel (Panel_lv80exam_battle.swf):
- *   1 -> back430, skill3500                                rank 8
- *   2 -> back430, skill3500, wpn988, bodyset easy          rank 8
- *   3 -> back430, skill3500, wpn988, bodyset hard          rank 9
- * Semua tier juga menambah senjutsu skill_id 3000 level 1.
- *
- * rewardBodyset[gender] = [easy, hard]:
- *   gender 0 -> ['set1786', 'set1788']
- *   gender 1 -> ['set1787', 'set1789']
- *
- * Klien menambahkan semua itu HANYA di memori (DisplayDataAddInventory /
- * addNewSenjutsu / updateData(RANK)), jadi server yang harus menyimpannya.
- */
-const REWARD_BODYSET = {
-  0: { 2: 'set1786', 3: 'set1788' },
-  1: { 2: 'set1787', 3: 'set1789' },
-};
-
-function tierSennin(c) {
-  const m = c && c.missions;
-  if (semuaTuntas(m, EXAM_SENNIN))      return 3;   // hard mode tuntas
-  if (semuaTuntas(m, EXAM_SENNIN_EASY)) return 2;   // easy mode tuntas
-  return 1;                                         // klaim dasar
-}
-
-function graduasiSennin(paksaTier) {
-  const all = load();
-  const key = activeKey(all);
-  if (!key) return null;
-  const c = all[key];
-
-  let tier = Number(paksaTier);
-  if (![1, 2, 3].includes(tier)) tier = tierSennin(c);
-
-  const rank = tier === 3 ? 9 : 8;
-  const gender = Number(c.gender) === 1 ? 1 : 0;
-
-  // barang
-  const barang = ['back430'];
-  if (tier >= 2) {
-    barang.push('wpn988');
-    const set = REWARD_BODYSET[gender][tier];
-    if (set) barang.push(set);
-  }
-  for (const id of barang) {
-    const k = kantongDari(id);
-    if (!k) continue;
-    if (!Array.isArray(c[k.bag])) c[k.bag] = [];
-    if (!c[k.bag].includes(k.num)) c[k.bag].push(k.num);
-  }
-
-  // senjutsu: 3500 dari rewardList + 3000 yang selalu diberikan
-  if (!Array.isArray(c.senjutsu)) c.senjutsu = [];
-  for (const sid of ['3500', '3000']) {
-    if (!c.senjutsu.some(x => String(x && x.skill_id ? x.skill_id : x) === sid)) {
-      c.senjutsu.push({ senjutsu_id: '1', level: '1', skill_id: sid });
-    }
-  }
-
-  const rankLama = Number(c.rank != null ? c.rank : 1) || 1;
-  c.rank = Math.max(rankLama, rank);
-
-  all[key] = c;
-  save(all);
-  return { tier, rank: c.rank, rankLama, gender, barang };
 }
 
 function recordMission(missionId, sukses = true) {
@@ -1277,13 +1496,7 @@ function rawCharacter(c, sessionKey) {
   const bag = k => (Array.isArray(c[k]) ? c[k] : []).join(',');
   r.character_item       = bag('items');
   r.character_weapon     = bag('weapons');
-  // Klien menambahkan awalan "set" sendiri (parseRawCharacter @2271:
-  // character_body_set di-split "," lalu tiap entri diberi awalan "set").
-  // Fallback 'set1' di sini menghasilkan "setset1" dan memicu
-  //     parseCharacterData :: bodySetId >> setset1 not exist.
-  // lalu set itu DIHAPUS dari inventaris oleh removeInventory().
-  // Yang benar hanya angkanya.
-  r.character_body_set   = bag('bodysets') || '1';
+  r.character_body_set   = bag('bodysets') || 'set1';
   r.character_inv_hair   = bag('hairs');
   r.character_back_item  = bag('backitems');
   r.character_accessory  = bag('accessories');
@@ -1352,7 +1565,7 @@ function rawCharacter(c, sessionKey) {
  * Mengirim field yang tidak dipakai tidak berbahaya; yang berbahaya
  * adalah field yang dipakai tapi tidak dikirim, atau salah tipe.
  */
-function buildExtraData(c) {
+function buildExtraData(c, sessionKey) {
   const now = Math.floor(Date.now() / 1000);
   const d = {
     // Dipakai Roulette2 di daily_login.swf (Roulette2.onRun):
@@ -1464,7 +1677,9 @@ function buildExtraData(c) {
     noticeText: null,
     once_gift:                               [],
     option_data:                             { music_index: 0, music_volume: 1, sound_on: 1 },
-    player_pet:                              [],
+    // Diisi dari c.pets -- lihat daftarPet(). Entri equipped:true masuk
+    // Character._pet (ikut bertarung), sisanya ke _standbyPet (koleksi).
+    player_pet:                              daftarPet(c, sessionKey),
     popup_arr: null,
     premium_claim_level: null,
     premium_claim_skill_set: null,
@@ -1578,9 +1793,11 @@ module.exports = {
   validate, DB_TYPES, extraDataHash, rawCharacter,
   getLvByXp, xpForLevel, addProgress, mergeStats,
   recordMission, serializeMissions, simpanKelasSJ,
-  graduasiSennin, tierSennin,
   setActiveCharacter, getActiveId, characterById, hitungRank,
   createCharacter, firstCharacter, listCharacters,
   setElements, addItem, removeItem, addSkill, setEquip, kantongDari,
+  addPet, removePet, setPetEquipped, listPets, daftarPet,
+  petBuyResult, bayarPet, petAsset, petById, PET_DATA,
+  statusMisiSennin, SS_MISSION,
   databaseCharacter, buildExtraData,
 };

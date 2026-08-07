@@ -57,7 +57,8 @@
       "171",
       "126",
       "166",
-      "178"
+      "178",
+      "3"
     ],
     "equip": {
       "weapon": "wpn1",
@@ -295,6 +296,28 @@
       }
     },
     "weapons": [],
-    "sjClass": 3
+    "sjClass": 3,
+    "pets": [
+      {
+        "id": "13",
+        "name": "Inokuchi",
+        "level": 1,
+        "xp": 0,
+        "skills": [],
+        "swfName": "pig_2",
+        "clsName": "Pig_2",
+        "equipped": true
+      },
+      {
+        "id": "2",
+        "name": "Chiko",
+        "level": 1,
+        "xp": 0,
+        "skills": [],
+        "swfName": "bird_1",
+        "clsName": "Bird_1",
+        "equipped": false
+      }
+    ]
   }
 }
