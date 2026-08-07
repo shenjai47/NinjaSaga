@@ -1,1 +1,2 @@
-Panel_lv80exam_battle
+bloodline_profile
+skill_icon_181-190

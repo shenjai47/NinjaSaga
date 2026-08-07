@@ -197,6 +197,34 @@ const handlers = {
     return { status: 1, error: null };
   },
 
+  // Graduasi Sennin / Lv80 exam. args: [sessionKey]
+  //
+  // Dipanggil SenninExamPanel.amfClaimReward(). Callback-nya
+  // confirmClaimReward() membaca satu field:
+  //
+  //     rewardStatus = int(response.character_reward);
+  //     ... rewardList[rewardStatus - 1].length ...     <- #1010 kalau 0
+  //
+  // Jadi character_reward WAJIB 1, 2, atau 3 -- JANGAN 0/null/undefined.
+  // Kalau memang mau menolak klaim, balas status 0 + error terisi; klien
+  // berhenti di validateAmfResponse sebelum menyentuh rewardList.
+  //
+  // Tier ditentukan dari riwayat misi: EXAM_SENNIN (hard) -> 3 (rank 9),
+  // EXAM_SENNIN_EASY -> 2 (rank 8), selain itu 1.
+  'CharacterDAO.NTClassSelect': () => {
+    const hasil = chars.graduasiSennin();
+    if (hasil) {
+      log('   graduasi Sennin: tier=' + hasil.tier +
+          ' rank=' + hasil.rankLama + '->' + hasil.rank +
+          ' gender=' + hasil.gender +
+          ' barang=' + hasil.barang.join(','));
+      return { status: 1, error: null, character_reward: hasil.tier };
+    }
+    // Karakter tidak ketemu: tetap kirim tier valid supaya panel tidak crash.
+    log('   !! graduasi Sennin: karakter aktif tidak ditemukan, kirim tier 1');
+    return { status: 1, error: null, character_reward: 1 };
+  },
+
   // Merekrut NPC jadi anggota party (dipanggil dari panel Recruit Friends).
   // args: [sessionKey, npcId, saldoTokenSaatIni]
   //

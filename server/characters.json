@@ -10,7 +10,7 @@
     "face": "01_0",
     "level": 80,
     "xp": 55735935,
-    "rank": 6,
+    "rank": 9,
     "gold": 1000006644,
     "token": 999999999,
     "crystal": 999999999,
@@ -57,7 +57,8 @@
       "171",
       "126",
       "166",
-      "178"
+      "178",
+      "3"
     ],
     "equip": {
       "weapon": "wpn1",
@@ -199,6 +200,41 @@
         "time": 0
       },
       "238": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "259": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "260": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "261": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "262": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "263": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "264": {
+        "success": 1,
+        "fail": 0,
+        "time": 0
+      },
+      "265": {
         "success": 1,
         "fail": 0,
         "time": 0

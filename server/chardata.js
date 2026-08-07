@@ -875,8 +875,10 @@ function hitungRank(c) {
   if (semuaTuntas(m, EXAM_JOUNIN)) seharusnya = 4;      // JOUNIN
   if (semuaTuntas(m, EXAM_SPECIAL_JOUNIN) ||
       semuaTuntas(m, EXAM_SPECIAL_JOUNIN_EASY)) seharusnya = 6;   // SPECIAL_JOUNIN
-  if (semuaTuntas(m, EXAM_SENNIN) ||
-      semuaTuntas(m, EXAM_SENNIN_EASY)) seharusnya = 8;           // TUTOR (Sennin)
+  if (semuaTuntas(m, EXAM_SENNIN_EASY)) seharusnya = 8;           // TUTOR (Sennin)
+  // Jalur hard mode memberi rank 9 -- nilai yang sama dengan yang ditulis
+  // klien di SenninExamPanel.confirmClaimReward saat character_reward == 3.
+  if (semuaTuntas(m, EXAM_SENNIN)) seharusnya = 9;               // SENNIN penuh
   return Math.max(sekarang, seharusnya);
 }
 
@@ -897,6 +899,83 @@ function simpanKelasSJ(kelas) {
   all[key] = c;
   save(all);
   return { kelas: n, lama, berubah: lama !== n };
+}
+
+/* Graduasi Sennin (Lv80 exam) -- dipakai handler CharacterDAO.NTClassSelect.
+ *
+ * SenninExamPanel.confirmClaimReward() membaca SATU field saja:
+ *
+ *     rewardStatus = int(response.character_reward);
+ *     ... rewardList[rewardStatus - 1].length ...
+ *
+ * Kalau field itu tidak ada -> int(undefined) = 0 -> rewardList[-1] = undefined
+ * -> TypeError #1010 dan panel mentok. Jadi nilainya WAJIB 1, 2, atau 3.
+ *
+ * rewardList disusun di constructor panel (Panel_lv80exam_battle.swf):
+ *   1 -> back430, skill3500                                rank 8
+ *   2 -> back430, skill3500, wpn988, bodyset easy          rank 8
+ *   3 -> back430, skill3500, wpn988, bodyset hard          rank 9
+ * Semua tier juga menambah senjutsu skill_id 3000 level 1.
+ *
+ * rewardBodyset[gender] = [easy, hard]:
+ *   gender 0 -> ['set1786', 'set1788']
+ *   gender 1 -> ['set1787', 'set1789']
+ *
+ * Klien menambahkan semua itu HANYA di memori (DisplayDataAddInventory /
+ * addNewSenjutsu / updateData(RANK)), jadi server yang harus menyimpannya.
+ */
+const REWARD_BODYSET = {
+  0: { 2: 'set1786', 3: 'set1788' },
+  1: { 2: 'set1787', 3: 'set1789' },
+};
+
+function tierSennin(c) {
+  const m = c && c.missions;
+  if (semuaTuntas(m, EXAM_SENNIN))      return 3;   // hard mode tuntas
+  if (semuaTuntas(m, EXAM_SENNIN_EASY)) return 2;   // easy mode tuntas
+  return 1;                                         // klaim dasar
+}
+
+function graduasiSennin(paksaTier) {
+  const all = load();
+  const key = activeKey(all);
+  if (!key) return null;
+  const c = all[key];
+
+  let tier = Number(paksaTier);
+  if (![1, 2, 3].includes(tier)) tier = tierSennin(c);
+
+  const rank = tier === 3 ? 9 : 8;
+  const gender = Number(c.gender) === 1 ? 1 : 0;
+
+  // barang
+  const barang = ['back430'];
+  if (tier >= 2) {
+    barang.push('wpn988');
+    const set = REWARD_BODYSET[gender][tier];
+    if (set) barang.push(set);
+  }
+  for (const id of barang) {
+    const k = kantongDari(id);
+    if (!k) continue;
+    if (!Array.isArray(c[k.bag])) c[k.bag] = [];
+    if (!c[k.bag].includes(k.num)) c[k.bag].push(k.num);
+  }
+
+  // senjutsu: 3500 dari rewardList + 3000 yang selalu diberikan
+  if (!Array.isArray(c.senjutsu)) c.senjutsu = [];
+  for (const sid of ['3500', '3000']) {
+    if (!c.senjutsu.some(x => String(x && x.skill_id ? x.skill_id : x) === sid)) {
+      c.senjutsu.push({ senjutsu_id: '1', level: '1', skill_id: sid });
+    }
+  }
+
+  const rankLama = Number(c.rank != null ? c.rank : 1) || 1;
+  c.rank = Math.max(rankLama, rank);
+
+  all[key] = c;
+  save(all);
+  return { tier, rank: c.rank, rankLama, gender, barang };
 }
 
 function recordMission(missionId, sukses = true) {
@@ -1198,7 +1277,13 @@ function rawCharacter(c, sessionKey) {
   const bag = k => (Array.isArray(c[k]) ? c[k] : []).join(',');
   r.character_item       = bag('items');
   r.character_weapon     = bag('weapons');
-  r.character_body_set   = bag('bodysets') || 'set1';
+  // Klien menambahkan awalan "set" sendiri (parseRawCharacter @2271:
+  // character_body_set di-split "," lalu tiap entri diberi awalan "set").
+  // Fallback 'set1' di sini menghasilkan "setset1" dan memicu
+  //     parseCharacterData :: bodySetId >> setset1 not exist.
+  // lalu set itu DIHAPUS dari inventaris oleh removeInventory().
+  // Yang benar hanya angkanya.
+  r.character_body_set   = bag('bodysets') || '1';
   r.character_inv_hair   = bag('hairs');
   r.character_back_item  = bag('backitems');
   r.character_accessory  = bag('accessories');
@@ -1493,6 +1578,7 @@ module.exports = {
   validate, DB_TYPES, extraDataHash, rawCharacter,
   getLvByXp, xpForLevel, addProgress, mergeStats,
   recordMission, serializeMissions, simpanKelasSJ,
+  graduasiSennin, tierSennin,
   setActiveCharacter, getActiveId, characterById, hitungRank,
   createCharacter, firstCharacter, listCharacters,
   setElements, addItem, removeItem, addSkill, setEquip, kantongDari,
