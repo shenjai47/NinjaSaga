@@ -11,8 +11,8 @@
     "level": 80,
     "xp": 55735935,
     "rank": 9,
-    "gold": 999906644,
-    "token": 999999999,
+    "gold": 887506564,
+    "token": 999863669,
     "crystal": 999999999,
     "premium": 0,
     "hp": 3260,
@@ -58,12 +58,171 @@
       "126",
       "166",
       "178",
-      "3"
+      "3",
+      "39",
+      "85",
+      "161",
+      "151",
+      "285",
+      "287",
+      "215",
+      "319",
+      "314",
+      "625",
+      "329",
+      "324",
+      "10",
+      "20",
+      "28",
+      "11",
+      "19",
+      "18",
+      "21",
+      "47",
+      "53",
+      "36",
+      "70",
+      "65",
+      "75",
+      "79",
+      "86",
+      "93",
+      "98",
+      "141",
+      "103",
+      "162",
+      "147",
+      "130",
+      "113",
+      "117",
+      "152",
+      "157",
+      "204",
+      "172",
+      "234",
+      "127",
+      "167",
+      "179",
+      "236",
+      "216",
+      "320",
+      "315",
+      "629",
+      "325",
+      "330",
+      "12",
+      "34",
+      "7",
+      "31",
+      "32",
+      "44",
+      "48",
+      "50",
+      "55",
+      "59",
+      "72",
+      "63",
+      "77",
+      "80",
+      "88",
+      "95",
+      "99",
+      "143",
+      "105",
+      "164",
+      "149",
+      "120",
+      "115",
+      "132",
+      "154",
+      "159",
+      "206",
+      "174",
+      "251",
+      "128",
+      "169",
+      "181",
+      "253",
+      "218",
+      "322",
+      "327",
+      "637",
+      "317",
+      "332",
+      "43",
+      "68",
+      "62",
+      "61",
+      "107",
+      "90",
+      "139",
+      "108",
+      "137",
+      "189",
+      "191",
+      "186",
+      "190",
+      "194",
+      "188",
+      "192",
+      "193",
+      "187",
+      "195",
+      "392",
+      "4",
+      "57",
+      "184",
+      "271",
+      "272",
+      "273",
+      "274",
+      "275",
+      "276",
+      "277",
+      "278",
+      "279",
+      "280",
+      "281",
+      "282",
+      "283",
+      "284",
+      "286",
+      "220",
+      "221",
+      "222",
+      "223",
+      "224",
+      "225",
+      "226",
+      "227",
+      "228",
+      "229",
+      "230",
+      "231",
+      "232",
+      "233",
+      "235",
+      "237",
+      "238",
+      "239",
+      "240",
+      "241",
+      "242",
+      "243",
+      "244",
+      "245",
+      "246",
+      "247",
+      "248",
+      "249",
+      "250",
+      "252",
+      "393"
     ],
     "equip": {
-      "weapon": "wpn1",
+      "weapon": "wpn9",
       "bodySet": "set1",
-      "backItem": "",
+      "backItem": "back81",
       "accessory": "",
       "jutsu": [
         "178",
@@ -71,7 +230,11 @@
         "126",
         "171",
         "203",
-        "156"
+        "156",
+        "3104",
+        "3108",
+        "3110",
+        "3109"
       ]
     },
     "items": [
@@ -80,7 +243,7 @@
     ],
     "created": 1785943126,
     "stats": {
-      "12": 7000,
+      "12": 71987,
       "14": 1
     },
     "missions": {
@@ -280,7 +443,7 @@
         "time": 0
       },
       "274": {
-        "success": 1,
+        "success": 5,
         "fail": 0,
         "time": 0
       },
@@ -295,7 +458,9 @@
         "time": 0
       }
     },
-    "weapons": [],
+    "weapons": [
+      "9"
+    ],
     "sjClass": 3,
     "pets": [
       {
@@ -303,10 +468,12 @@
         "name": "Inokuchi",
         "level": 1,
         "xp": 0,
-        "skills": [],
+        "skills": [
+          "13"
+        ],
         "swfName": "pig_2",
         "clsName": "Pig_2",
-        "equipped": true
+        "equipped": false
       },
       {
         "id": "2",
@@ -317,7 +484,292 @@
         "swfName": "bird_1",
         "clsName": "Bird_1",
         "equipped": false
+      },
+      {
+        "id": "6",
+        "trained": [
+          0,
+          1,
+          2
+        ],
+        "name": "Leiko",
+        "level": 1,
+        "xp": 0,
+        "skills": [],
+        "swfName": "snake_1",
+        "clsName": "Snake_1",
+        "equipped": true
+      },
+      {
+        "id": "16",
+        "trained": [
+          0
+        ],
+        "name": "Yamaru",
+        "level": 1,
+        "xp": 0,
+        "skills": [],
+        "swfName": "bat_1",
+        "clsName": "Bat_1",
+        "equipped": false
+      },
+      {
+        "id": "11",
+        "trained": [
+          0
+        ],
+        "name": "Tomaru",
+        "level": 1,
+        "xp": 0,
+        "skills": [],
+        "swfName": "snake_2",
+        "clsName": "Snake_2",
+        "equipped": false
+      },
+      {
+        "id": "1",
+        "trained": [
+          0
+        ],
+        "name": "Keiko",
+        "level": 1,
+        "xp": 0,
+        "skills": [],
+        "swfName": "toad_1",
+        "clsName": "Toad_1",
+        "equipped": false
+      },
+      {
+        "id": "10",
+        "trained": [
+          0
+        ],
+        "name": "Easa",
+        "level": 1,
+        "xp": 0,
+        "skills": [],
+        "swfName": "bunny_1",
+        "clsName": "Bunny_1",
+        "equipped": false
+      },
+      {
+        "id": "4",
+        "trained": [
+          0
+        ],
+        "name": "Eriko",
+        "level": 1,
+        "xp": 0,
+        "skills": [],
+        "swfName": "dog_1",
+        "clsName": "Dog_1",
+        "equipped": false
+      },
+      {
+        "id": "3",
+        "trained": [
+          0
+        ],
+        "name": "Suzu",
+        "level": 1,
+        "xp": 0,
+        "skills": [],
+        "swfName": "cat_1",
+        "clsName": "Cat_1",
+        "equipped": false
+      },
+      {
+        "id": "5",
+        "trained": [
+          0
+        ],
+        "name": "Suki",
+        "level": 1,
+        "xp": 0,
+        "skills": [],
+        "swfName": "pig_1",
+        "clsName": "Pig_1",
+        "equipped": false
       }
+    ],
+    "sjeNoticeWatched": true,
+    "clan": {
+      "id": 1,
+      "name": "ShadowID",
+      "master_id": 1,
+      "master_name": "Shen",
+      "member_slots": 30,
+      "member_number": 1,
+      "reputation": 0,
+      "gold": 98000000,
+      "token": 79900,
+      "announcement": "",
+      "new_request": 0,
+      "tournament": 0,
+      "character_stamina": 200,
+      "character_max_stamina": 200,
+      "clan_stamina_bonus": 30,
+      "clan_hp_bonus": 90,
+      "clan_cp_bonus": 90,
+      "clan_damage_bonus": 90,
+      "buildings": [
+        {
+          "id": 1,
+          "level": 3
+        },
+        {
+          "id": 2,
+          "level": 3
+        },
+        {
+          "id": 3,
+          "level": 3
+        },
+        {
+          "id": 4,
+          "level": 3
+        }
+      ]
+    },
+    "senjutsuSystem": 3,
+    "senjutsu": [
+      {
+        "senjutsu_id": "3",
+        "level": "1",
+        "skill_id": "3"
+      },
+      {
+        "senjutsu_id": "3",
+        "level": "5",
+        "skill_id": "3101"
+      },
+      {
+        "senjutsu_id": "3",
+        "level": "5",
+        "skill_id": "3102"
+      },
+      {
+        "senjutsu_id": "3",
+        "level": "5",
+        "skill_id": "3103"
+      },
+      {
+        "senjutsu_id": "3",
+        "level": "5",
+        "skill_id": "3104"
+      },
+      {
+        "senjutsu_id": "3",
+        "level": "5",
+        "skill_id": "3105"
+      },
+      {
+        "senjutsu_id": "3",
+        "level": "5",
+        "skill_id": "3107"
+      },
+      {
+        "senjutsu_id": "3",
+        "level": "5",
+        "skill_id": "3106"
+      },
+      {
+        "senjutsu_id": "3",
+        "level": "5",
+        "skill_id": "3108"
+      },
+      {
+        "senjutsu_id": "3",
+        "level": "5",
+        "skill_id": "3109"
+      },
+      {
+        "senjutsu_id": "3",
+        "level": "5",
+        "skill_id": "3110"
+      }
+    ],
+    "senjutsuSS": 2750,
+    "bloodline": [
+      {
+        "bloodline_id": "1",
+        "skill_id": "",
+        "level": ""
+      },
+      {
+        "bloodline_id": "6",
+        "skill_id": "",
+        "level": ""
+      },
+      {
+        "bloodline_id": "8",
+        "skill_id": "",
+        "level": ""
+      },
+      {
+        "bloodline_id": "",
+        "skill_id": "1023",
+        "level": "1"
+      },
+      {
+        "bloodline_id": "",
+        "skill_id": "1024",
+        "level": "1"
+      },
+      {
+        "bloodline_id": "",
+        "skill_id": "1019",
+        "level": "1"
+      },
+      {
+        "bloodline_id": "",
+        "skill_id": "1020",
+        "level": "1"
+      },
+      {
+        "bloodline_id": "",
+        "skill_id": "1021",
+        "level": "1"
+      },
+      {
+        "bloodline_id": "",
+        "skill_id": "1022",
+        "level": "1"
+      },
+      {
+        "bloodline_id": "",
+        "skill_id": "1033",
+        "level": "6"
+      },
+      {
+        "bloodline_id": "",
+        "skill_id": "1002",
+        "level": "6"
+      },
+      {
+        "bloodline_id": "",
+        "skill_id": "1003",
+        "level": "6"
+      },
+      {
+        "bloodline_id": "",
+        "skill_id": "1035",
+        "level": "8"
+      },
+      {
+        "bloodline_id": "",
+        "skill_id": "1000",
+        "level": "8"
+      },
+      {
+        "bloodline_id": "",
+        "skill_id": "1001",
+        "level": "8"
+      }
+    ],
+    "bloodlinePoint": 4713,
+    "backitems": [
+      "81"
     ]
   }
 }

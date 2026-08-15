@@ -126,43 +126,55 @@ function cloneFrom(raw, newName, donorBase) {
 
   // Memilih simbol mana yang diganti namanya.
   //
-  // Aturan lama ("ambil yang id != 0", lalu sempat dibalik jadi "utamakan
-  // id == 0") sama-sama meleset untuk berkas aset seperti npc_2.swf, yang
-  // SymbolClass-nya begini:
-  //     id=96 StaticFullBody
-  //     id=95 Npc_2                    <- ini yang dicari getAsset()
-  //     id=93 npc_2_fla.wood_ani_22    <- kelas bantu hasil kompilasi Flash
-  // Tidak ada id=0 sama sekali, sehingga yang terpilih malah simbol pertama
-  // (StaticFullBody) dan kelas Npc_2 tidak pernah tersentuh -> klien tetap
-  // melempar "Variable Npc_5 is not defined".
+  // SymbolClass sebuah aset skill berisi DUA simbol, dan urutannya menjebak:
+  //     id=109  icon          <- sprite ikon, kebetulan yang PERTAMA
+  //     id=100  Skill_3110    <- kelas utama, ini yang dicari getAsset()
   //
-  // Yang benar: cocokkan dengan nama berkas donor. Kelas utama sebuah aset
-  // selalu senama dengan berkasnya (npc_2.swf -> Npc_2), hanya beda huruf
-  // besar/kecil. Kelas *_fla.* diabaikan karena itu bikinan compiler.
+  // Versi lama jatuh ke kandidat[0] kalau pencocokan nama berkas meleset,
+  // sehingga yang diganti nama malah `icon`. Lebih buruk lagi: karena `icon`
+  // diawali huruf kecil, penyeragaman huruf besar tidak pernah jalan, jadi
+  // hasilnya kelas bernama `skill_3109` sementara klien meminta `Skill_3109`
+  // -> "#1065: Variable Skill_3109 is not defined", sedangkan kelas asli
+  // (Skill_3110) tetap utuh dengan nama lamanya.
+  //
+  // Kegagalan itu diam-diam: berkasnya tetap tertulis dan tercatat sebagai
+  // klon berhasil, lalu ikut terpilih jadi donor untuk klon berikutnya --
+  // kerusakannya menular. Karena itu sekarang lebih baik MELEMPAR error
+  // daripada menghasilkan berkas salah nama; findDonor akan mencoba donor lain.
+  const GENERIK = new Set(['icon', 'holder', 'model', 'loader', 'main', 'ninjasaga']);
   const bukanFla = all.filter(s => !s.name.includes('_fla.'));
-  const kandidat = bukanFla.length ? bukanFla : all;
+  const layak = bukanFla.filter(s => !GENERIK.has(s.name.toLowerCase()));
+  const kandidat = layak.length ? layak : bukanFla;
+
+  // Kelas utama sebuah aset SELALU diawali huruf besar (Skill_3110, Npc_2),
+  // jadi pencarian dibatasi ke sana lebih dulu -- bukan sekadar mencocokkan
+  // nama berkas. Ini penting: sebuah berkas rusak hasil klon lama bisa punya
+  // simbol `skill_1004` (huruf kecil, bekas `icon` yang salah diganti nama)
+  // DI SAMPING kelas asli `Skill_3110`. Mencocokkan nama berkas saja akan
+  // memilih yang huruf kecil itu dan menularkan kerusakannya ke klon baru.
+  const utama = kandidat.filter(x => /^[A-Z]/.test(x.name));
+  if (!utama.length) {
+    throw new Error('donor tanpa kelas utama berhuruf besar (simbol: ' +
+                    all.map(x => x.name).join(', ') + ')');
+  }
 
   let pilih = null;
   if (donorBase) {
     const base = String(donorBase).toLowerCase();
-    pilih = kandidat.find(s => s.name.toLowerCase() === base) ||
-            kandidat.find(s => s.name.toLowerCase().endsWith(base));
+    pilih = utama.find(x => x.name.toLowerCase() === base) ||
+            utama.find(x => x.name.toLowerCase().endsWith(base));
   }
-  if (!pilih) pilih = kandidat.find(s => s.id === 0);
-  if (!pilih) pilih = kandidat[0];
+  if (!pilih) pilih = utama.find(x => x.id === 0);
+  if (!pilih) pilih = utama[0];
 
   const oldName = pilih.name;
 
-  // Samakan pola huruf besar/kecil dengan simbol donor: kalau donor memakai
-  // "Npc_2" (N besar) sedangkan nama yang diminta "npc_5" (dari nama berkas),
-  // hasilnya harus "Npc_5" -- itu yang dicari getAsset(), bukan "npc_5".
+  // Samakan pola huruf besar/kecil dengan kelas utama donor: donor memakai
+  // "Skill_3110" sedangkan nama yang diminta datang dari nama berkas
+  // ("skill_3109"), padahal getAsset() mencari "Skill_3109".
   let namaBaru = newName;
-  const awalDonorKapital = /^[A-Z]/.test(oldName);
-  const awalBaruKapital  = /^[A-Z]/.test(namaBaru);
-  if (awalDonorKapital && !awalBaruKapital) {
+  if (/^[A-Z]/.test(oldName) && !/^[A-Z]/.test(namaBaru)) {
     namaBaru = namaBaru.charAt(0).toUpperCase() + namaBaru.slice(1);
-  } else if (!awalDonorKapital && awalBaruKapital && /^[a-z0-9_]+$/i.test(oldName)) {
-    namaBaru = namaBaru.charAt(0).toLowerCase() + namaBaru.slice(1);
   }
 
   const abcOld = oldName.split('.').pop();

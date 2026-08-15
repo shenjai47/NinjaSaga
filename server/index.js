@@ -108,6 +108,27 @@ const handlers = {
       isTrialEmblem: 0,
       isExpired: 0,
       account_lock: null,
+
+      // Status security password akun. NinjaSaga.onAmfLoginResult @705-708:
+      //     Main.accRegActiveStatus = res.account_registered_password;
+      //     Main.accRegTutStatus    = res.account_registered_tutored;
+      // Konstanta di ninjasaga::Main:
+      //     ACC_REG_ACTIVE_STATUS_NOT_REGISTERED = 0
+      //     ACC_REG_ACTIVE_STATUS_ACTIVE         = 1
+      //     ACC_REG_TUT_STATUS_NONE = 0, ACC_REG_TUT_STATUS_READ = 1
+      //
+      // ClanPanel.confirmDonateTokenPromptSecurity @7-18 membandingkannya:
+      //     if (accRegActiveStatus == ACC_REG_ACTIVE_STATUS_ACTIVE)
+      //         showSecurityPasswordConfirmation(..., confirmDonateToken, ...)
+      //     else
+      //         showSecurityPasswordSignupInvitation(...)   <-- notice signup
+      //
+      // Selama nilainya 0, donasi TOKEN tidak pernah sampai ke
+      // ClanManagement.donateToken -- klien berhenti di tawaran pendaftaran.
+      // Donasi GOLD tidak lewat jalur ini, makanya gold sudah bisa.
+      account_registered_password: 1,   // 1 = ACTIVE
+      account_registered_tutored:  1,   // 1 = READ, lewati tutorialnya
+
       swf_versions: SWF_VERSIONS,
       lang,
       serverTime: Math.floor(Date.now() / 1000),
@@ -219,13 +240,22 @@ const handlers = {
     // swfName/clsName dari PET_DATA (petdata.js) -- sumber yang sama dengan
     // yang dipakai klien, jadi grafis dan hash-nya pasti cocok.
     const a = chars.petAsset(id);
+    const bisa = chars.petBisaBertarung(id);
     const pet = chars.addPet({
-      id, name: nama || a.name, level: 1, xp: 0, skills: [],
+      id, name: nama || a.name, level: 1, xp: 0,
       equipped: true,                 // pet baru selalu jadi pet aktif
     });
+    if (!bisa) {
+      log('   !! PET_DATA tidak punya blok skill untuk pet ' + id + ' -- pet ini ' +
+          'TIDAK BISA bertarung (giliran pet akan membekukan pertarungan). ' +
+          'Disimpan sebagai cadangan saja.');
+    }
 
     const bayar = chars.bayarPet(id);
+    // equipped hanya true kalau pet-nya memang bisa bertarung; kalau tidak,
+    // klien melewati blok initPet dan pet cukup muncul setelah muat ulang.
     const hasil = chars.petBuyResult(pet, ACCOUNT.sessionKey);
+    hasil.equipped = !!pet.equipped;
 
     log('   pet dibeli: id=' + id + ' "' + pet.name + '" swf=' + a.swfName +
         ' cls=' + a.clsName + ' (dipasang sebagai pet aktif)' +
@@ -263,6 +293,10 @@ const handlers = {
   'CharacterDAO.activatePet': (args) => {
     const id = (args && args[1]) != null ? String(args[1]) : null;
     const hasil = chars.setPetEquipped(id);
+    if (hasil && hasil.ditolak) {
+      log('   !! aktivasi pet ' + id + ' ditolak: tidak ada data skill di PET_DATA');
+      return { status: 0, error: 'pet has no skill data' };
+    }
     if (hasil && hasil.ketemu) log('   pet aktif -> id=' + hasil.id);
     else log('   pet dilepas (tidak ada yang aktif), id diminta=' + id);
     return { status: 1, error: null, result: 0 };
@@ -275,25 +309,873 @@ const handlers = {
     return { status: 1, error: null, result: 0 };
   },
 
-  // Melatih skill pet. Disimpan ke daftar skills pet yang bersangkutan.
+  // Melatih skill pet dari panel Pets.
+  // args: [sessionKey, petId, indeksSkill, mataUang]   mis. ["...", 13, 0, "token"]
+  //
+  // MapMenu.trainPetSkillResult meneruskan response.result ke
+  // Pet.setupAvailableSkills -> PetBase.setupAvailableSkills, yang di @97-102
+  // membaca `skills.length`. Kalau result bukan Array, koersi `as Array`
+  // menghasilkan null -> #1009 dan panel membeku. Jadi result WAJIB berupa
+  // ARRAY indeks skill, bukan angka.
   'CharacterDAO.trainPetSkill': (args) => {
-    log('   trainPetSkill args = ' + JSON.stringify(args));
-    const daftar = chars.listPets();
-    const aktif = daftar.find(p => p.equipped) || daftar[0];
-    if (!aktif) {
-      log('   !! belum ada pet yang dimiliki');
-      return { status: 1, error: null, result: 0 };
+    const petId = (args && args[1]) != null ? String(args[1]) : '';
+    const index = (args && args[2]) != null ? Number(args[2]) : 0;
+    const mata  = (args && args[3]) != null ? String(args[3]) : 'gold';
+
+    const hasil = chars.latihSkillPet(petId, index, mata);
+    if (!hasil) {
+      log('   !! trainPetSkill: pet ' + petId + ' tidak ada di koleksi');
+      // Tetap kirim ARRAY supaya klien tidak melempar #1009.
+      return { status: 1, error: null, result: [] };
     }
-    const skill = (args || []).slice(1)
-      .find(v => v != null && /^(petskill)?\d+$/i.test(String(v)));
-    if (skill != null) {
-      const id = String(skill).replace(/^petskill/i, '');
-      const skills = Array.isArray(aktif.skills) ? aktif.skills.slice() : [];
-      if (!skills.includes(id)) skills.push(id);
-      chars.addPet(Object.assign({}, aktif, { skills }));
-      log('   skill pet ditambah: ' + id + ' -> [' + skills.join(',') + ']');
+    if (hasil.ditolak) {
+      log('   !! trainPetSkill ditolak: ' + hasil.ditolak);
+      return { status: 1, error: null, result: hasil.skills };
+    }
+
+    log('   latih skill pet ' + petId + ' indeks ' + index +
+        ' (butuh level ' + hasil.levelMin + ', bayar ' +
+        hasil.biaya.gold + ' gold + ' + hasil.biaya.token + ' token)' +
+        '  ->  skills=[' + hasil.skills.join(',') + ']' +
+        '  sisa ' + hasil.sisaGold + ' gold, ' + hasil.sisaToken + ' token');
+
+    return { status: 1, error: null, result: hasil.skills };
+  },
+
+  // Status klan, dipanggil MapMenu sebelum memuat clan_panel.swf.
+  // args: [sessionKey]. Balasan generik tidak memicu error, tapi handler ini
+  // membuat tombol Clan menampilkan keadaan yang benar.
+  // Graduasi Sennin / Lv80 exam. args: [sessionKey]
+  //
+  // Dipanggil SenninExamPanel.amfClaimReward(). Callback-nya
+  // confirmClaimReward() membaca satu field:
+  //
+  //     rewardStatus = int(response.character_reward);
+  //     ... rewardList[rewardStatus - 1].length ...     <- #1010 kalau 0
+  //
+  // Jadi character_reward WAJIB 1, 2, atau 3 -- JANGAN 0/null/undefined.
+  // Kalau memang mau menolak klaim, balas status 0 + error terisi; klien
+  // berhenti di validateAmfResponse sebelum menyentuh rewardList.
+  //
+  // Tier ditentukan dari riwayat misi: EXAM_SENNIN (hard) -> 3 (rank 9),
+  // EXAM_SENNIN_EASY -> 2 (rank 8), selain itu 1.
+  'CharacterDAO.NTClassSelect': () => {
+    const hasil = chars.graduasiSennin();
+    if (hasil) {
+      log('   graduasi Sennin: tier=' + hasil.tier +
+          ' rank=' + hasil.rankLama + '->' + hasil.rank +
+          ' gender=' + hasil.gender +
+          ' barang=' + hasil.barang.join(','));
+      return { status: 1, error: null, character_reward: hasil.tier };
+    }
+    // Karakter tidak ketemu: tetap kirim tier valid supaya panel tidak crash.
+    log('   !! graduasi Sennin: karakter aktif tidak ditemukan, kirim tier 1');
+    return { status: 1, error: null, character_reward: 1 };
+  },
+
+  // Notice ujian Special Jounin sudah dilihat. args: [sessionKey]
+  //
+  // Dikirim Main.SJENoticeOk saat tombol OK di popup ditekan.
+  // Main.onSJENoticeResult @19-26 hanya menaikkan Central.main.sje_notice di
+  // MEMORI, jadi tanpa handler ini notice-nya kembali setiap kali halaman
+  // dimuat ulang -- Main.updateMapSideBtn membacanya dari
+  // sje_end_date_notice yang dikirim server.
+  'CharacterDAO.watchSJENotice': () => {
+    const hasil = chars.tandaiSJENotice();
+    if (hasil) {
+      log(hasil.sudah
+        ? '   notice SJE: sudah ditandai sebelumnya'
+        : '   notice SJE ditandai sudah dilihat -- tidak muncul lagi setelah reload');
     }
     return { status: 1, error: null, result: 0 };
+  },
+
+  // Status klan, dipanggil MapBase.onClickClan sebelum panel dibuka.
+  // args: [sessionKey]
+  //
+  // MapBase.getClanStatus (map_1.swf, method 283):
+  //
+  //     Central.main.hideAmfLoading();
+  //     Central.main.ClanStatus = res.clan_status;        // @17  TINGKAT ATAS
+  //     if (res.result.account_locked) {                  // @24-30
+  //         Central.main.showOk(res.result.lock_message, new Function());
+  //         return;                                       // panel TIDAK dibuka
+  //     }
+  //     this.onShowClan();                                // @57 -> panel.show("clan_panel")
+  //
+  // Dua hal yang gampang salah:
+  //  1. `clan_status` dibaca di TINGKAT ATAS response, bukan di dalam result.
+  //  2. `result` harus OBJEK. Kalau berupa angka, res.result.account_locked
+  //     melempar #1069 (Number kelas tertutup, tidak punya properti itu).
+  //     Pada Object dinamis, properti tak dikenal cuma jadi undefined.
+  //
+  // account_locked falsy -> onShowClan() dipanggil dan clan_panel dibuka.
+  'ClanService.getClanStatus': () => {
+    const punya = !!chars.klanAktif();
+    log('   status klan: akun tidak dikunci, panel dibuka' +
+        (punya ? ' (sudah punya klan)' : ' (belum punya klan)'));
+    return {
+      status: 1,
+      error: null,
+      clan_status: punya ? 1 : 0,
+      result: {
+        account_locked: 0,     // truthy = akun dikunci, panel tidak dibuka
+        lock_message: '',
+      },
+    };
+  },
+
+  // Data klan untuk ClanPanel. args: [sessionKey]
+  //
+  // ClanPanel.getClanResponse (clan_panel.swf, method 1153):
+  //
+  //     if (!validateAmfResponse(res)) return;
+  //     if (res.getclan_key != null) clanGetKey = String(res.getclan_key);
+  //     Server_Time = res.server_time;
+  //     st = int(res.result as int);                       // @64-72
+  //     clanDate = res.clan_lang[ lang == ZH ? 0 : 1 ];    // @87-114  <-- #1010
+  //     switch (st) {
+  //       case 0: gotoAndPlay(NO_CLAN_TL); break;          // belum punya klan
+  //       case 1:
+  //       case 3: Clan.clanData    = res.clan_data;
+  //               Clan.buildingData = res.building_data;
+  //               gotoBase(); break;
+  //       case 2: showOk(res.message, hide); break;
+  //     }
+  //     remainingTime = res.remaining_time;
+  //     bonusBoardReputationArr = [res.today_reputation,
+  //                                res.target_reputation,
+  //                                res.extra_reputation];
+  //     showBonusBoard = res.daily_reputation_show;
+  //
+  // `clan_lang` dibaca DI LUAR switch, jadi WAJIB ada berapa pun nilai result,
+  // dan harus array dengan minimal 2 elemen (indeks 0 untuk bahasa ZH, 1 untuk
+  // selainnya). Tanpa itu res.clan_lang[1] -> #1010, callback berhenti sebelum
+  // gotoAndPlay, dan panel tidak pernah digambar -- itulah layar putihnya.
+  //
+  // result 0 = belum punya klan; panel membuka layar buat/cari klan.
+  'ClanService.getClan': () => {
+    const now = Math.floor(Date.now() / 1000);
+    const clan = chars.klanAktif();
+
+    // result: 0 = belum punya klan (panel ke layar buat/cari),
+    //         1 = punya klan (panel ke gotoBase -> updateClanStatus),
+    //         2 = tampilkan pesan.
+    // clan_data WAJIB objek berisi field ClanData saat result 1 --
+    // updateClanStatus membacanya tanpa penjagaan null.
+    const dasar = {
+      status: 1,
+      error: null,
+      getclan_key: null,
+      server_time: now,
+      clan_lang: ['', ''],          // [ZH, selain ZH] -> lbl_date
+      remaining_time: 0,
+      today_reputation: 0,
+      target_reputation: 0,
+      extra_reputation: 0,
+      daily_reputation_show: false,
+      stamina_item: 0,
+      group_id: null,
+      message: '',
+    };
+
+    if (!clan) {
+      log('   data klan: result=0 (belum punya klan)');
+      return Object.assign(dasar, { result: 0, clan_data: {}, building_data: [] });
+    }
+    log('   data klan: result=1 "' + clan.name + '" anggota ' +
+        clan.member_number + '/' + clan.member_slots);
+    // building_data null aman -- Clan.getAttackerBonus mengembalikan 0.
+    // getClanResponse @164-171: Clan.buildingData = res.building_data as Array.
+    // Entri {id, level} dipakai Clan.getBuildingBonus (code_library method
+    // 1229) untuk menghitung bonus stamina/HP/CP/damage.
+    const bangunan = chars.daftarBangunan();
+    if (bangunan.length) {
+      log('   bangunan klan: ' +
+          bangunan.map(b => chars.BUILDING_DATA[b.id].name + ' Lv' + b.level).join(', '));
+    }
+    return Object.assign(dasar, { result: 1, clan_data: clan, building_data: bangunan });
+  },
+
+  // Sinkronisasi sisa waktu musim klan. args: [sessionKey]
+  //
+  // ClanPanel.updateSeasonTimer (method 1339) @98-128 mengurangi intervalTime
+  // 15 tiap tick; begitu <= 0 ia memanggil syncRemainingTime (method 1342),
+  // yang memanggil AMF ini. Callback-nya syncRemainingTimeResponse (1343)
+  // @26-54 hanya membaca satu field:
+  //     remainingTime = res.remaining_time;
+  //     lastSyncTime  = new Date().time / 1000;
+  // Tidak ada koersi berbahaya, jadi balasan generik pun tidak crash --
+  // handler ini ada supaya nilainya konsisten dengan getClan dan log tidak
+  // penuh "handler BELUM ADA".
+  'ClanService.getRemainingTime': () => {
+    return { status: 1, error: null, remaining_time: 0 };
+  },
+
+  // Penyerahan hasil misi latihan Sennin (grade S / SS training).
+  // args: [sessionKey, idMisi, itemDipakai, gagal(0|1), hash]
+  //        mis. [..., "msn280", [], 0, ...]
+  //
+  // Mission.completeMission @3306 memasang callback ANONIM (code_library
+  // method 844) sebagai penerima balasan:
+  //
+  //      0: getlocal1                     res
+  //      1: getproperty update_inventory  <-- TANPA penjagaan
+  //      4: pushfalse
+  //      5: setproperty showPopup         <-- #1010 kalau update_inventory tidak ada
+  //     15: validateAmfResponse(res)
+  //     36: getproperty SENJUTSU_SS
+  //     64: pushbyte 30
+  //     67: updateData(SENJUTSU_SS, int(...) + 30)
+  //
+  // Beda dengan Mission.getSGradeResponse yang @6 punya
+  // `if (res.update_inventory)`, di sini baris PERTAMA langsung menulis ke
+  // properti objek yang tidak ada. Jadi update_inventory wajib berupa objek;
+  // isinya boleh apa saja, klien menyetel showPopup sendiri.
+  //
+  // args[3]: 0 dari completeMission, 1 dari failMission.
+  'SSTraining.finishSSMission': (args) => {
+    const idMisi = (args && args[1]) ? String(args[1]) : '';
+    const gagal  = Number(args && args[3]) === 1;
+
+    if (idMisi && !gagal) {
+      const m = chars.recordMission(idMisi);
+      if (m) {
+        log('   misi Sennin selesai: msn' + m.no +
+            '  (total misi tercatat: ' + m.total + ')');
+      } else {
+        log('   !! id misi Sennin tidak dikenali: ' + idMisi);
+      }
+    } else if (gagal) {
+      log('   misi Sennin GAGAL: ' + idMisi);
+    }
+
+    // Klien menambah 30 poin SENJUTSU_SS hanya di memori; simpan juga di sini
+    // supaya tidak hilang saat muat ulang.
+    if (!gagal) {
+      const p = chars.tambahSenjutsuSS(30);
+      if (p) log('   poin latihan Sennin: ' + p.lama + ' -> ' + p.baru);
+    }
+
+    const c = chars.characterById(chars.getActiveId());
+    return {
+      status: 1,
+      error: null,
+      result: 0,
+      update_inventory: {
+        showPopup: false,
+        xp:    c ? c.xp    : 0,
+        gold:  c ? c.gold  : 0,
+        token: c ? (c.token || 0) : 0,
+      },
+    };
+  },
+
+  // --- Senjutsu / Sage Mode (SenjutsuService) --------------------
+
+  // Mempelajari sistem senjutsu di Sage Shop.
+  // args (SagaShop2015.onClickLearn @95-106):
+  //     [sessionKey, skillID, sequence, hash(sessionKey + skillID)]
+  //
+  // SagaShop2015.amfClientLearnSageModeResponse (method 666):
+  //      8: if (!validateAmfResponse(res)) return;
+  //     22: Central.main.senjutsuSystem = res.senjutsu_system_id;   <-- WAJIB
+  //     50: setGold(getGold() - 2000000);   klien memotong 2 juta gold sendiri
+  //     65: if (senjutsuSystem == 2) isToad = true; else isSnake = true;
+  //    125: panel.show("Panel_2015_Sage_Profile");
+  //
+  // Tanpa senjutsu_system_id, senjutsuSystem jadi undefined: pilihan Toad
+  // selalu jatuh ke cabang Snake dan tidak ada yang tersimpan.
+  'SenjutsuService.discoverSenjutsu': (args) => {
+    const skillID = (args && args[1] != null) ? String(args[1]) : '';
+    const h = chars.pelajariSenjutsu(skillID);
+
+    if (!h || h.gagal) {
+      log('   !! pelajari senjutsu ditolak: ' + ((h && h.gagal) || 'karakter tidak ada'));
+      // Tetap kirim senjutsu_system_id yang tersimpan (kalau ada) supaya
+      // tampilan panel tidak jadi undefined.
+      return {
+        status: 1, error: null,
+        senjutsu_system_id: (h && h.sistem) || 0,
+      };
+    }
+
+    log('   senjutsu dipelajari: skillID=' + h.skillId +
+        ' sistem=' + h.sistem + ' (' + (h.sistem === 2 ? 'Toad' : 'Snake') + ')' +
+        '  biaya ' + h.biaya + ' gold, sisa ' + h.sisaGold);
+
+    return {
+      status: 1,
+      error: null,
+      senjutsu_system_id: h.sistem,
+    };
+  },
+
+  // Konversi token menjadi poin Senjutsu (SS).
+  // args (SagaProfile2015.buyConfirm @119-129):
+  //     [sessionKey, jumlahToken, sequence, hash(sessionKey+accountId+charId+jumlah)]
+  //     mis. [..., "400", ...] -> paket keempat, 400 token = 250 SS
+  //
+  // convertResponse (method 750) @31-34:
+  //     updateData(SENJUTSU_SS, res.final_sen_spirit)
+  // lalu @55 loadPanelContent() memasang nilai itu ke TextField. Kalau
+  // final_sen_spirit tidak ada, SENJUTSU_SS jadi undefined dan
+  // TextField.text menolaknya -> #2007 Parameter text must be non-null.
+  //
+  // Klien memotong tokennya sendiri di @42 (balance - currBtnNum), jadi
+  // server memotong jumlah yang sama supaya keduanya tetap sepakat.
+  'SenjutsuService.convertSS': (args) => {
+    const jumlah = (args && args[1] != null) ? args[1] : 0;
+    const h = chars.konversiSS(jumlah);
+    if (!h || h.gagal) {
+      log('   !! konversi SS ditolak: ' + ((h && h.gagal) || 'karakter tidak ada'));
+      // Tetap kirim angka supaya TextField tidak menerima null.
+      const c = chars.characterById(chars.getActiveId());
+      return { status: 1, error: null,
+               final_sen_spirit: Number(c && c.senjutsuSS) || 0 };
+    }
+    log('   konversi SS: ' + h.bayar + ' token -> +' + h.dapat + ' SS' +
+        '  (total ' + h.totalSS + ' SS, sisa ' + h.sisaToken + ' token)');
+    return { status: 1, error: null, final_sen_spirit: h.totalSS };
+  },
+
+  // Naikkan level skill senjutsu.
+  // args (onClickUpGrade @152-162): [sessionKey, skillId, sequence, hash]
+  //
+  // upgradeResponse (method 747) tidak membaca satu pun field dari balasan --
+  // level baru dan pengurangan SS dihitung klien sendiri (@99-140). Handler
+  // ini hanya menyimpan hasilnya supaya bertahan setelah muat ulang.
+  'SenjutsuService.skillUpdate': (args) => {
+    const skillId = (args && args[1] != null) ? String(args[1]) : '';
+    const h = chars.naikkanSkillSenjutsu(skillId);
+    if (!h || h.gagal) {
+      log('   !! upgrade skill senjutsu ditolak: ' + ((h && h.gagal) || 'karakter tidak ada'));
+      return { status: 1, error: null, result: 0 };
+    }
+    log('   skill senjutsu ' + h.skillId + ' -> Lv' + h.level);
+    return { status: 1, error: null, result: 0 };
+  },
+
+  // --- Bloodline / Talent (BloodlineService) ---------------------
+
+  // Membuka satu bloodline di Bloodline Shop.
+  // args (BloodlineShop.ConfirmDiscover @114-123):
+  //     [sessionKey, bloodlineId, sequence, hash(sessionKey + bloodlineId)]
+  //
+  // BloodlineShop.BloodlineDiscoverResponse (method 649) tidak membaca satu
+  // pun field balasan: @59 hanya validateAmfResponse, lalu harga dipotong dari
+  // selectObj di klien (@215-245 token, @495-548 gold) dan saveTP(20) @800.
+  // Kalau validate gagal, @1186 menampilkan "TEST cannot discover".
+  'BloodlineService.discoverBloodline': (args) => {
+    const id = (args && args[1] != null) ? String(args[1]) : '';
+    const h = chars.bukaBloodline(id);
+    if (!h || h.gagal) {
+      log('   !! buka bloodline ditolak: ' + ((h && h.gagal) || 'karakter tidak ada'));
+      // status 1 tetap, supaya klien tidak menampilkan "cannot discover"
+      // hanya karena bloodline itu sudah dimiliki.
+      return { status: 1, error: null, result: 0 };
+    }
+    log('   bloodline dibuka: id=' + h.bloodlineId + ' (total ' + h.total + ')');
+    return { status: 1, error: null, result: 0 };
+  },
+
+  // Konversi token menjadi poin bloodline (BP).
+  // args (BloodlineProfile.ConfirmConvert):
+  //     [sessionKey, idxPaket, idxPaket, jumlahToken, sequence, hash]
+  //     mis. [..., "1", "1", "400", ...]
+  //
+  // convertResponse (method 720) tidak membaca field balasan -- @55-86
+  // menambah BLOODLINE sebanyak BPPackage dan @90-108 mengurangi
+  // Account.balance sebanyak tokenPackage, keduanya nilai klien. Server
+  // memakai tabel yang sama supaya keduanya sepakat setelah muat ulang.
+  'BloodlineService.convertBP': (args) => {
+    const jumlah = (args && args[3] != null) ? args[3] : 0;
+    const h = chars.konversiBP(jumlah);
+    if (!h || h.gagal) {
+      log('   !! konversi BP ditolak: ' + ((h && h.gagal) || 'karakter tidak ada'));
+      return { status: 1, error: null, result: 0, remain_bp: chars.bloodlinePoin() };
+    }
+    log('   konversi BP: ' + h.bayar + ' token -> +' + h.dapat + ' BP' +
+        '  (total ' + h.totalBP + ' BP, sisa ' + h.sisaToken + ' token)');
+    return { status: 1, error: null, result: 0, remain_bp: h.totalBP };
+  },
+
+  // Naikkan level skill bloodline.
+  // args (BloodlineProfile.ConfirmUpgrade):
+  //     [sessionKey, tipe, levelBaru, skillId, biayaBP, sequence, hash]
+  //     mis. [..., "1", "10", "1041", "2", ...]
+  //
+  // upgradeResponse (method 723) @544-572:
+  //     updateData(BLOODLINE, int(res.remain_bp));
+  // SATU-SATUNYA field yang dibaca. Tanpa itu int(undefined) = 0 dan poin
+  // bloodline pemain jadi nol setiap kali menaikkan skill.
+  'BloodlineService.skillUpdate': (args) => {
+    const level   = (args && args[2] != null) ? args[2] : 1;
+    const skillId = (args && args[3] != null) ? String(args[3]) : '';
+    const biaya   = (args && args[4] != null) ? Number(args[4]) : 0;
+
+    const h = chars.naikkanSkillBloodline(skillId, level, biaya);
+    if (!h || h.gagal) {
+      log('   !! upgrade skill bloodline ditolak: ' + ((h && h.gagal) || 'karakter tidak ada'));
+      return { status: 1, error: null, remain_bp: chars.bloodlinePoin() };
+    }
+    log('   skill bloodline ' + h.skillId + ' -> Lv' + h.level +
+        ' (biaya ' + biaya + ' BP, sisa ' + h.sisaBP + ')');
+    return { status: 1, error: null, remain_bp: h.sisaBP };
+  },
+
+  // --- Arena / PvP (SystemData) ----------------------------------
+
+  // Inisialisasi server PvP. args: [sessionKey, bahasa]
+  //
+  // ArenaPanel2.setPvpServer (arena.swf, method 1157):
+  //     11: Out.debug("setPvpServer", "#1")
+  //     24: result.pvpstatus.status        <-- #1010 kalau pvpstatus tidak ada
+  //     48: if (result == null || status == null || status == false) {
+  //             Central.main.pvpstatus = result.pvpstatus;
+  //             Central.main.checkPVPinvite();
+  //             this.hide();                  <-- panel DITUTUP dengan rapi
+  //             return;
+  //         }
+  //     ... selain itu lanjut ke:
+  //     190: socket.stx(result.handoff_token)
+  //     207: socket.stn(result.handoff_nonce)
+  //     240: Main.pvpTimeList = result.time_list
+  //     261: result.pvpstatus.mode[0..2]  -> 1v1 / 2v2 / 3v3
+  //     568: socket.setUpServer(result.pvp_server, charId, startConnectPVPServer)
+  //     614: result.ads, 635: result.pvp_layout,
+  //     661: result.daily_first_bonus, 754: result.choose_room_message
+  //
+  // Balasan generik membuat result berupa Array kosong; result.pvpstatus
+  // undefined lalu .status melempar #1010 -- callback berhenti sebelum
+  // hideAmfLoading, jadi Arena "loading terus".
+  //
+  // KENAPA status: false
+  // Ninja Saga menjalankan Arena lewat XMLSocket, bukan AMF. Alamat servernya
+  // di-hardcode di code_library (xmlsocket://8.19.33.107:843 dan seterusnya)
+  // dan server ini hanya melayani AMF di port 8080. Kalau status diisi true,
+  // klien akan meneruskan ke socket.setUpServer() lalu menggantung di
+  // connectTimeoutTimer -- loading yang sama, hanya lebih lama.
+  //
+  // Dengan status false, Main.checkPVPinvite (code_library method 160)
+  // @57-133 mengambil pvpstatus["status_" + AppData.lang] (jatuh ke
+  // status_en kalau kosong) dan menampilkannya lewat showGeneralNotice.
+  // Jadi pemain dapat pesan yang jelas, bukan layar menggantung.
+  'SystemData.getPvpServerInit': (args) => {
+    const lang = (args && args[1]) ? String(args[1]) : 'en';
+    log('   PvP init: status=false (Arena butuh server socket, tidak tersedia)');
+    return {
+      status: 1,
+      error: null,
+      result: {
+        pvpstatus: {
+          status: false,
+          status_en: 'Arena is not available on this server.',
+          ['status_' + lang]: 'Arena is not available on this server.',
+        },
+      },
+    };
+  },
+
+  // --- Kartu gosok harian (RouletteService) ----------------------
+
+  // Data awal panel kartu gosok. args: [sessionKey]
+  //
+  // daily_login4.show (daily_login_4.swf, method 786):
+  //     Central.main.showAmfLoading();
+  //     amfClient.service("RouletteService.getScratchCardData",
+  //                       [session_key], getEventResponse);
+  //
+  // getEventResponse (method 787):
+  //      8: if (!validateAmfResponse(res)) return;      <-- kalau gagal, BERHENTI
+  //     30: remainScratchTime = res.dailyRoulette_remainTime;
+  //     37: if (res.bouns_discount) scratchTokenPrice = 3;
+  //     67: Central.main.hideAmfLoading();
+  //     77: this.gotoAndPlay(Timeline.SHOW);
+  //
+  // hideAmfLoading DAN gotoAndPlay(SHOW) dua-duanya ada DI DALAM cabang
+  // validateAmfResponse. Jadi kalau balasannya tidak lolos, layar loading
+  // tidak pernah ditutup dan panel tidak pernah pindah ke frame isinya --
+  // yang terlihat: panel putih kosong.
+  'RouletteService.getScratchCardData': () => {
+    log('   data kartu gosok dikirim');
+    return {
+      status: 1,
+      error: null,
+      // JUMLAH gosokan gratis yang tersisa -- bukan hitungan waktu.
+      // updateIdlePanel @236-258:
+      //     if (remainScratchTime != 0 || remainSpcScratchTime != 0) {
+      //         scratchType = "free";
+      //         scratch1/2/3.gotoAndStop("button");
+      //         initButton(scratchBtn, checkScratch);     <-- tombol AKTIF
+      //     }
+      // Nilai 0 membuat ketiga tombol tetap disabled dan panel tampak kosong.
+      dailyRoulette_remainTime: 3,
+      bouns_discount: false,         // true -> harga gosok jadi 3 token
+    };
+  },
+
+  // Penambahan kartu gosok acak setelah menyelesaikan misi. args: [sessionKey]
+  // Dipanggil dari Character.updateCharacterResponse @175 dengan callback
+  // ScratchAddAmfGetResult. Balasan sederhana sudah cukup.
+  'RouletteService.randomAddScatchCard': () => {
+    return { status: 1, error: null, result: 0, add_card: 0 };
+  },
+
+  // Menggosok satu kartu.
+  // args: [sessionKey, scratchType, selectScratch, ...]
+  //       scratchType "token" = beli pakai token, selain itu kartu gratis
+  //
+  // daily_login4.ScratchAmfGetResult (method 811):
+  //     157: if (!validateAmfResponse(res)) return;
+  //     173: reward_type   = res.reward_type
+  //     185: reward_amount = res.reward_amount
+  //     199: if (res.signature != Main.getHash(String(reward_type) +
+  //                                            String(reward_amount)))
+  //              onError("1216"); return;          <-- TANDA TANGAN DIPERIKSA
+  //     343: startScratch(res)
+  //
+  // startScratch @1669-1899 mencocokkan reward_type dengan daftar:
+  //     GOLD, XP%, XP, TOKEN, TP, SP, ITEM, WEAPON, BACK, SKILL,
+  //     CLOTH, EMBLEM, PET, PACKAGE
+  // Nilai di luar daftar itu jatuh ke default dan tidak menampilkan apa pun.
+  'RouletteService.scratchCardAtfer20Level': (args) => {
+    const jenis  = 'GOLD';
+    const jumlah = 5000;
+
+    // Main.getHash(x) = sha1(x + SALT + sessionKey) -- sama seperti hash lain
+    // di server ini. Kalau meleset, klien memanggil onError("1216").
+    const signature = sha1(String(jenis) + String(jumlah) + SALT + ACCOUNT.sessionKey);
+
+    const c = chars.characterById(chars.getActiveId());
+    log('   kartu gosok: ' + jenis + ' ' + jumlah +
+        ' (tipe gosok: ' + ((args && args[1]) || '-') + ')');
+
+    return {
+      status: 1,
+      error: null,
+      reward_type:   jenis,
+      reward_amount: jumlah,
+      signature,
+      update_inventory: {
+        showPopup: false,
+        xp:    c ? c.xp    : 0,
+        gold:  c ? c.gold  : 0,
+        token: c ? (c.token || 0) : 0,
+      },
+    };
+  },
+
+  // --- Misi Lv80 (SLevelMission) --------------------------------
+
+  // Penyerahan hasil misi Lv80.
+  // args: [sessionKey, idMisi, arrayItem, skor, hash]   mis. [..., "msn274", [], 0, ...]
+  //
+  // Mission.getSGradeResponse (code_library, method 846):
+  //      6: if (res.update_inventory) res.update_inventory.showPopup = false;   <- ADA penjagaan
+  //     26: if (!validateAmfResponse(res)) return;
+  //     37: if (Mission.sMissioncomplete != 1) return;
+  //     48: arr = res.update_inventory.add_item_id as Array;   <- TANPA penjagaan -> #1010
+  //     68: if (arr[0] !== "item1") {
+  //             Main.showSMissionReward  = true;
+  //             Main.sMissionRewardItem  = arr[0];
+  //             Main.sMissionRewardList  = res.reward_list;
+  //             MISSION_DATA[id].xp   = arr[1].replace("xp","").replace("_1","");
+  //             MISSION_DATA[id].gold = arr[2].replace("gold","").replace("_1","");
+  //         }
+  //
+  // Jadi update_inventory WAJIB ada dan add_item_id WAJIB array.
+  //
+  // arr[0] sengaja diisi "item1" -- itu penanda "tidak ada item hadiah
+  // khusus", dan membuat klien melompat ke akhir (@74 ifstricteq L185).
+  // Kalau diisi selain itu, klien akan membaca arr[1] dan arr[2] sebagai
+  // "xp<n>_1" / "gold<n>_1" dan MENIMPA MISSION_DATA; kalau salah satunya
+  // tidak ada, .replace() pada undefined melempar #1009. Lebih aman
+  // memberi xp/gold lewat update_inventory seperti misi biasa.
+  'SLevelMission.finishMission': (args) => {
+    const idMisi = (args && args[1]) ? String(args[1]) : '';
+    const m = idMisi ? chars.recordMission(idMisi) : null;
+    if (m) {
+      log('   misi Lv80 selesai: msn' + m.no +
+          '  success=' + m.entry.success +
+          '  (total misi tercatat: ' + m.total + ')');
+    } else if (idMisi) {
+      log('   !! id misi Lv80 tidak dikenali: ' + idMisi);
+    }
+
+    const c = chars.characterById(chars.getActiveId());
+    return {
+      status: 1,
+      error: null,
+      result: 0,
+      reward_list: [],
+      update_inventory: {
+        add_item_id: ['item1'],   // penanda "tanpa item hadiah"
+        showPopup: false,
+        xp:    c ? c.xp    : 0,
+        gold:  c ? c.gold  : 0,
+        token: c ? (c.token || 0) : 0,
+      },
+    };
+  },
+
+  // Upgrade batas stamina klan. args: [sessionKey]
+  //
+  // UpgradeStaminaResponse (method 1336) @142-150 membaca res.max_stamina dan
+  // memakainya untuk CHARACTER_STAMINA sekaligus CHARACTER_MAX_STAMINA.
+  // Tanpa field itu int(undefined) = 0 -> stamina jadi 0/0.
+  // result 9 = gagal (klien menampilkan langLib 501).
+  'ClanService.upgradeStamina': () => {
+    const h = chars.upgradeStaminaKlan();
+    if (!h || h.gagal) {
+      log('   !! upgrade stamina ditolak: ' + ((h && h.gagal) || 'karakter tidak ada'));
+      return { status: 1, error: null, result: 9 };
+    }
+    log('   stamina klan -> ' + h.maxStamina +
+        ' (biaya ' + h.biayaToken + ' token, sisa ' + h.sisaToken + ')');
+    return { status: 1, error: null, result: 0, max_stamina: h.maxStamina };
+  },
+
+  // Isi ulang stamina klan. args: [sessionKey]
+  // RestoreStaminaResponse (method 1333) @232-289 memakai konstanta klien
+  // (Restore_Sta_Amt 50, Restore_Sta_requiretoken 20); server menyamakan.
+  // show_captcha JANGAN diisi -- @60-64 akan membuka webview captcha.
+  'ClanService.restoreStamina': () => {
+    const h = chars.restoreStaminaKlan();
+    if (!h || h.gagal) {
+      log('   !! isi ulang stamina ditolak: ' + ((h && h.gagal) || 'karakter tidak ada'));
+      return { status: 1, error: null, result: 9 };
+    }
+    log('   stamina klan diisi -> ' + h.stamina + '/' + h.maks +
+        ' (sisa token ' + h.sisaToken + ')');
+    return { status: 1, error: null, result: 0 };
+  },
+
+  // Tambah slot anggota klan. args: [sessionKey]
+  //
+  // buyMemberSlotResponse (method 1212) @37-113:
+  //     slot = int(res.member_slots);
+  //     clanData[MEMBER_SLOTS] = slot;
+  //     clanData[TOKEN] -= slot * 10;      <-- token KLAN, slot BARU x 10
+  // Tanpa member_slots, slot jadi 0 dan panel menampilkan "0".
+  'ClanManagement.buyMemberSlot': () => {
+    const h = chars.tambahSlotAnggota();
+    if (!h || h.gagal) {
+      log('   !! tambah slot ditolak: ' + ((h && h.gagal) || 'karakter tidak ada'));
+      return { status: 1, error: null, result: 9 };
+    }
+    log('   slot anggota -> ' + h.memberSlots +
+        ' (biaya ' + h.biaya + ' token klan, kas ' + h.kasToken + ')');
+    return { status: 1, error: null, member_slots: h.memberSlots };
+  },
+
+  // Riwayat klan. args: [sessionKey, hash, halaman]
+  //
+  // loadClanHistoryResponse (method 1214) @51-135: int(res.result) dipakai
+  // sebagai penanda; kalau 0 klien memakai clan_history sebagai Array.
+  // Array kosong aman -- klien menyiapkan entri "tidak ada riwayat" sendiri.
+  'ClanService.getHistory': () => {
+    return { status: 1, error: null, result: 0, clan_history: [] };
+  },
+
+  // Bangun / upgrade bangunan klan.
+  // args: [sessionKey, hash, idBangunan]   mis. ["...", "b1e984fb…", 1]
+  //
+  // ClanPanel.constructBuildingResponse (method 1151):
+  //     @52-73  if (res.result) { if (int(res.result) == 9) { showOk(501); return; } }
+  //     @107    b = res.building_data as Object;          <-- WAJIB objek
+  //     @184    ... selectedBuilding.gold[ b.level - 1 ]  <-- b null -> #1009
+  //     @264+   masukkan/perbarui b di Clan.buildingData
+  //
+  // Balasan generik tidak punya building_data, jadi `as Object` menghasilkan
+  // null dan pembacaan b.level melempar #1009 -- upgrade gagal diam-diam.
+  //
+  // result 9 = gagal (klien menampilkan pesan langLib 501). result 0/falsy
+  // dilewati pemeriksaannya, jadi itu yang dipakai untuk sukses.
+  //
+  // Biaya dipotong dari KAS KLAN, bukan dari saldo pemain -- tabelnya sama
+  // dengan ClanData.BUILDING_DATA yang dipakai klien, jadi angka di panel
+  // dan di server cocok.
+  'ClanManagement.constructBuilding': (args) => {
+    const id = (args && args[2] != null) ? args[2] : null;
+    const h = chars.bangunBangunanKlan(id);
+    if (!h || h.gagal) {
+      log('   !! upgrade bangunan ditolak: ' + ((h && h.gagal) || 'karakter tidak ada'));
+      return { status: 1, error: null, result: 9 };
+    }
+    log('   ' + h.nama + ' -> Lv' + h.level +
+        '  (biaya ' + h.biayaGold + ' gold + ' + h.biayaToken + ' token)' +
+        '  kas klan: ' + h.kasGold + ' gold, ' + h.kasToken + ' token' +
+        '  bonus: ' + JSON.stringify(h.bonus));
+    return {
+      status: 1,
+      error: null,
+      result: 0,
+      building_data: { id: h.id, level: h.level },
+    };
+  },
+
+  // Donasi gold ke kas klan.
+  // args (ClanPanel.confirmDonateGold): [sessionKey, sequence, hash, jumlah]
+  //
+  // ClanPanel.donateGoldResult (method 1246) @65-146:
+  //     amt = int(res.result);
+  //     clanData[GOLD] = int(clanData[GOLD]) + amt;
+  //     getMainChar().saveGold(0 - amt);
+  //
+  // `result` adalah JUMLAH yang benar-benar disumbang, bukan kode status.
+  // Balasan generik `result: []` -> int([]) = 0, jadi klien menambah 0 ke kas
+  // dan mengurangi 0 dari gold pemain: donasi tampak berhasil tapi tidak ada
+  // yang berpindah. Karena itu kembalikan angkanya, dan kembalikan 0 kalau
+  // ditolak supaya klien tidak mengurangi apa pun.
+  'ClanManagement.donateGold': (args) => {
+    const jumlah = Number((args && args[3]) || 0);
+    const h = chars.donasiKlan('gold', jumlah);
+    if (!h || h.tidakPunyaKlan || h.jumlahTidakSah) {
+      log('   !! donasi gold ditolak: ' +
+          (h && h.tidakPunyaKlan ? 'belum punya klan' : 'jumlah tidak sah'));
+      return { status: 1, error: null, result: 0 };
+    }
+    log('   donasi gold ' + h.diberikan +
+        (h.diberikan !== h.diminta ? ' (diminta ' + h.diminta + ', dibatasi saldo)' : '') +
+        '  -> kas klan ' + h.kasKlan + ', sisa gold ' + h.sisa);
+    return { status: 1, error: null, result: h.diberikan };
+  },
+
+  // Donasi token ke kas klan.
+  // args (ClanPanel.confirmDonateToken): [sessionKey, password, sequence,
+  //                                       hash(tokenToDonate), jumlah, ...]
+  //
+  // ClanPanel.donateTokenResult (method 1254) @215-310 memakai pola yang sama
+  // dengan donateGold. Selain itu @71-201 memeriksa res.msg lebih dulu:
+  //     "wrong_password"  -> showInfo(langLib 1823)
+  //     "not_registered"  -> showInfo("Not Registered")
+  // Jadi msg TIDAK boleh diisi kalau donasinya berhasil.
+  'ClanManagement.donateToken': (args) => {
+    // args[1] = security password yang diketik pemain. Server ini tidak
+    // menyimpan password akun, jadi apa pun diterima. Yang penting `msg`
+    // TIDAK diisi -- donateTokenResult @151-201 memeriksanya lebih dulu dan
+    // "wrong_password" / "not_registered" akan menghentikan alur.
+    const jumlah = Number((args && args[4]) || 0);
+    const h = chars.donasiKlan('token', jumlah);
+    if (!h || h.tidakPunyaKlan || h.jumlahTidakSah) {
+      log('   !! donasi token ditolak: ' +
+          (h && h.tidakPunyaKlan ? 'belum punya klan' : 'jumlah tidak sah'));
+      return { status: 1, error: null, result: 0 };
+    }
+    log('   donasi token ' + h.diberikan +
+        (h.diberikan !== h.diminta ? ' (diminta ' + h.diminta + ', dibatasi saldo)' : '') +
+        '  -> kas klan ' + h.kasKlan + ', sisa token ' + h.sisa);
+    return { status: 1, error: null, result: h.diberikan };
+  },
+
+  // Daftar anggota klan. args: [sessionKey]
+  //
+  // ClanPanel.gotMemberList (method 1228) @45-58:
+  //     memberList = GF.objectToArray(res.result as Object);
+  //     memberList.sortOn("level", NUMERIC | DESCENDING);
+  //     clanData[MEMBER_NUMBER] = int(res.member_number);
+  // result dibaca sebagai Object lalu diubah jadi array, jadi array biasa pun
+  // diterima. member_number ada di TINGKAT ATAS, bukan di dalam result.
+  'ClanService.getMemberList': () => {
+    const anggota = chars.anggotaKlan();
+    log('   daftar anggota klan: ' + anggota.length + ' orang');
+    return {
+      status: 1,
+      error: null,
+      result: anggota,
+      member_number: anggota.length,
+    };
+  },
+
+  // Data ruang klan (Clan Hall). args: [sessionKey]
+  //
+  // ClanPanel.getClanHallDataResponse (method 1198) @35-113 MENIMPA tiga
+  // field di clanData yang sudah ada:
+  //     clanData[GOLD]          = res.result.clan_gold
+  //     clanData[TOKEN]         = res.result.clan_token
+  //     clanData[MEMBER_NUMBER] = res.result.member_number
+  // lalu clanHallMc.gotoAndStop("profile") -> frame11 -> onClanProfile().
+  //
+  // onClanProfile @460-540 memasang nilai itu ke TextField:
+  //     goldTxt.text = clanData[GOLD]
+  // Balasan generik membuat res.result berupa Array kosong, jadi ketiganya
+  // undefined. TextField.text bertipe String, dan undefined dikoersi jadi
+  // null -> #2007 Parameter text must be non-null, panel profil klan gagal
+  // digambar. Karena itu result harus objek dengan ketiga field tersebut.
+  //
+  // res.status juga diperiksa @26-31 dan harus bernilai 1.
+  'ClanService.getClanHallData': () => {
+    const clan = chars.klanAktif();
+    if (!clan) {
+      log('   !! getClanHallData dipanggil tapi karakter belum punya klan');
+      return {
+        status: 1, error: null,
+        result: { clan_gold: 0, clan_token: 0, member_number: 0 },
+      };
+    }
+    log('   data ruang klan "' + clan.name + '": gold=' + clan.gold +
+        ' token=' + clan.token + ' anggota=' + clan.member_number);
+    return {
+      status: 1,
+      error: null,
+      result: {
+        clan_gold:     clan.gold,
+        clan_token:    clan.token,
+        member_number: clan.member_number,
+      },
+    };
+  },
+
+  // Pembuatan klan. args (dari ClanPanel.confirmCreateClan @90-107):
+  //     [sessionKey, sequence, hash(saldo token), namaKlan, saldoToken]
+  //
+  // ClanPanel.createClanResponse (method 1157) @39-47 membaca
+  // int(response.result as int):
+  //     0 = BERHASIL -> saldo dikurangi 400, Clan.clanData = res.clan_data,
+  //         lalu gotoBase() (kalau group_id ada) atau gotoAndPlay(BASE_TL)
+  //     1 = nama sudah dipakai   -> showInfo(langLib 172)
+  //     2 = token tidak cukup    -> showOk(langLib 1792[8])
+  //
+  // Balasan generik `result: []` dikoersi jadi 0 alias BERHASIL, padahal
+  // clan_data-nya tidak ada -> Clan.clanData = null -> panel loncat ke
+  // frame13 -> onBase -> updateClanStatus -> #1009, dan frame terus diulang
+  // sehingga panel tampak kelap-kelip. Karena itu result harus jujur.
+  'ClanManagement.createClan': (args) => {
+    const nama = (args && args[3] != null) ? String(args[3]).trim() : '';
+    if (!nama) {
+      log('   !! createClan tanpa nama: ' + JSON.stringify(args));
+      return { status: 1, error: null, result: 1, stamina_item: 0 };
+    }
+
+    const saldo = Number(chars.characterById(chars.getActiveId())?.token) || 0;
+    if (saldo < chars.BIAYA_BUAT_KLAN_TOKEN) {
+      log('   createClan ditolak: token ' + saldo + ' < ' +
+          chars.BIAYA_BUAT_KLAN_TOKEN);
+      return { status: 1, error: null, result: 2, stamina_item: 0 };
+    }
+
+    const hasil = chars.buatKlan(nama);
+    if (!hasil) {
+      log('   !! createClan: karakter aktif tidak ditemukan');
+      return { status: 1, error: null, result: 1, stamina_item: 0 };
+    }
+    if (hasil.sudahPunya) {
+      log('   createClan ditolak: sudah punya klan "' + hasil.clan.name + '"');
+      return { status: 1, error: null, result: 1, stamina_item: 0 };
+    }
+
+    log('   klan dibuat: "' + hasil.clan.name + '" (biaya ' +
+        chars.BIAYA_BUAT_KLAN_TOKEN + ' token, sisa ' + hasil.sisaToken + ')');
+    return {
+      status: 1,
+      error: null,
+      result: 0,                       // berhasil
+      clan_data: hasil.clan,
+      group_id: hasil.clan.id,         // non-null -> gotoBase()
+      server_time: Math.floor(Date.now() / 1000),
+      stamina_item: 0,
+    };
   },
 
   // Merekrut NPC jadi anggota party (dipanggil dari panel Recruit Friends).
