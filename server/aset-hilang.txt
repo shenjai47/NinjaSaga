@@ -1,1 +1,5 @@
-skill_3109
+hair_88_0
+popup_reset_skill
+set_935_0
+skill_icon_541-550
+skill_icon_551-560

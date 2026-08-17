@@ -11,7 +11,7 @@
     "level": 80,
     "xp": 55735935,
     "rank": 9,
-    "gold": 887506564,
+    "gold": 887506553,
     "token": 999863669,
     "crystal": 999999999,
     "premium": 0,
@@ -217,12 +217,14 @@
       "249",
       "250",
       "252",
-      "393"
+      "393",
+      "896",
+      "719"
     ],
     "equip": {
-      "weapon": "wpn9",
-      "bodySet": "set1",
-      "backItem": "back81",
+      "weapon": "wpn1343",
+      "bodySet": "set2248",
+      "backItem": "back557",
       "accessory": "",
       "jutsu": [
         "178",
@@ -237,13 +239,10 @@
         "3109"
       ]
     },
-    "items": [
-      "1",
-      "2"
-    ],
+    "items": [],
     "created": 1785943126,
     "stats": {
-      "12": 71987,
+      "12": 96990,
       "14": 1
     },
     "missions": {
@@ -443,7 +442,7 @@
         "time": 0
       },
       "274": {
-        "success": 5,
+        "success": 6,
         "fail": 0,
         "time": 0
       },
@@ -459,7 +458,10 @@
       }
     },
     "weapons": [
-      "9"
+      "9",
+      "1498",
+      "1109",
+      "1343"
     ],
     "sjClass": 3,
     "pets": [
@@ -498,7 +500,7 @@
         "skills": [],
         "swfName": "snake_1",
         "clsName": "Snake_1",
-        "equipped": true
+        "equipped": false
       },
       {
         "id": "16",
@@ -590,6 +592,32 @@
         "swfName": "pig_1",
         "clsName": "Pig_1",
         "equipped": false
+      },
+      {
+        "id": "205",
+        "trained": [
+          0
+        ],
+        "name": "Ninja Falcon",
+        "level": 1,
+        "xp": 0,
+        "skills": [],
+        "swfName": "pet_205",
+        "clsName": "Pet_205",
+        "equipped": false
+      },
+      {
+        "id": "71",
+        "trained": [
+          0
+        ],
+        "name": "Nanabi",
+        "level": 1,
+        "xp": 0,
+        "skills": [],
+        "swfName": "tail_7",
+        "clsName": "Tail_7",
+        "equipped": true
       }
     ],
     "sjeNoticeWatched": true,
@@ -767,9 +795,23 @@
         "level": "8"
       }
     ],
-    "bloodlinePoint": 4713,
+    "bloodlinePoint": 4603,
     "backitems": [
-      "81"
+      "81",
+      "684",
+      "427",
+      "557"
+    ],
+    "hairs": [
+      "757",
+      "429",
+      "683"
+    ],
+    "bodysets": [
+      "1255",
+      "2416",
+      "1430",
+      "2248"
     ]
   }
 }

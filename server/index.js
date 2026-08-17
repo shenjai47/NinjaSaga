@@ -90,6 +90,110 @@ function systemDataFields() {
 }
 
 // ---------------------------------------------------------------
+/* Isi paket, dibaca langsung dari Anni4_ClaimCode.show() di tiap popup.
+ *
+ * PENTING: jangan memakai ClaimRewardArr dari konstruktor. Nilai di situ
+ * ('hair_757','set_1255','back_684','wpn_1498') ternyata sisa salinan yang
+ * SAMA di p8 maupun p11, dan langsung ditimpa oleh show() @21-80:
+ *
+ *     if (CHAR_GENDER == 0) ClaimRewardArr = [ ...versi laki-laki... ];
+ *     else                  ClaimRewardArr = [ ...versi perempuan... ];
+ *
+ * Baju, rambut, dan senjata punya versi per jenis kelamin; tas, skill, dan
+ * pet dipakai bersama. Sudah dicocokkan dengan data_library_en.swf:
+ *     set2248 BOY / set2249 GIRL      hair683 gender 0 / hair684 gender 1
+ *     set1430 BOY / set1431 GIRL      hair429 gender 0 / hair430 gender 1
+ */
+const PAKET_AGUSTUS = {
+  0: ['set_2248', 'wpn_1343', 'hair_683', 'back_557', 'skill_719', 'pet_71'],
+  1: ['set_2249', 'wpn_1343', 'hair_684', 'back_557', 'skill_719', 'pet_71'],
+};
+const PAKET_PATRIOT = {
+  0: ['set_1430', 'wpn_1109', 'hair_429', 'back_427', 'skill_896', 'pet_205'],
+  1: ['set_1431', 'wpn_1109', 'hair_430', 'back_427', 'skill_896', 'pet_205'],
+};
+
+const perGender = tabel => c => tabel[Number(c && c.gender) === 1 ? 1 : 0];
+
+/* Peta servis paket -> isi hadiah.
+ *
+ * Di peta ada beberapa tombol paket (PackageBtn10, PackageBtn13, ...). Tiap
+ * tombol memuat popup_4th_claim_code_pNN.swf yang berbeda, tapi SEMUANYA
+ * memakai kelas Anni4_ClaimCode yang sama dan callback ClaimItemResponse yang
+ * hanya membaca res.message. Yang berbeda cuma nama servisnya:
+ *
+ *     p8   -> SpecialReward.claimAugustPackage
+ *     p11  -> SpecialReward.claimPatriotPackage
+ */
+const PAKET_KLAIM = {
+  'SpecialReward.claimAugustPackage':  perGender(PAKET_AGUSTUS),
+  'SpecialReward.claimPatriotPackage': perGender(PAKET_PATRIOT),
+};
+
+/* Pemberi hadiah generik untuk semua servis di PAKET_KLAIM. */
+function klaimPaket(namaServis) {
+  const pilih = PAKET_KLAIM[namaServis];
+  const balas = pesan => ({ status: 1, error: null, result: [], data: {}, message: pesan });
+
+  if (!pilih) {
+    return balas('Paket ini belum tersedia di server.');
+  }
+
+  const aktif = chars.getActiveId();
+  const c = (aktif && chars.characterById(aktif)) || chars.firstCharacter();
+  if (!c) return balas('Karakter tidak ditemukan.');
+
+  const baru = pilih(c).filter(id => !sudahPunya(c, id));
+  if (!baru.length) return balas('Kamu sudah mengambil semua hadiah paket ini.');
+
+  // skill dan pet punya jalurnya sendiri; sisanya lewat addItem.
+  for (const id of baru) {
+    const sk = String(id).match(/^skill_?(\d+)$/);
+    const pt = String(id).match(/^pet_?(\d+)$/);
+    if (sk)      chars.addSkill(sk[1]);
+    else if (pt) chars.addPet({ id: pt[1] });
+    else         chars.addItem(String(id).replace('_', ''), 1);
+  }
+  log('   paket ' + namaServis + ' diberikan: ' + baru.join(', '));
+  return balas('Kamu mendapat ' + baru.join(', ') +
+               '. Muat ulang permainan supaya muncul di inventaris.');
+}
+
+/* Apakah karakter sudah memiliki perlengkapan ini?
+ * ClaimRewardArr memakai "hair_757"; kantong di characters.json menyimpan
+ * nomornya saja ("757"), jadi garis bawahnya dipisah di sini.
+ */
+function sudahPunya(c, id) {
+  const m = String(id).match(/^(wpn|set|hair|back|acsy)_?(\d+)$/);
+  if (m) {
+    const bag = { wpn: 'weapons', set: 'bodysets', hair: 'hairs',
+                  back: 'backitems', acsy: 'accessories' }[m[1]];
+    return Array.isArray(c[bag]) && c[bag].includes(m[2]);
+  }
+  const sk = String(id).match(/^skill_?(\d+)$/);
+  if (sk) return Array.isArray(c.skills) && c.skills.map(String).includes(sk[1]);
+  const pt = String(id).match(/^pet_?(\d+)$/);
+  if (pt) return Array.isArray(c.pets) &&
+                 c.pets.some(x => String(x && x.id != null ? x.id : x) === pt[1]);
+  return false;
+}
+
+/* Kode klaim manual (panel dua kotak). Kunci = isi kotak pertama + "-" +
+ * kotak kedua, huruf besar semua. Isinya mengikuti paket Agustus, urutan
+ * indeksnya sama dengan PAKET_AGUSTUS di atas:
+ *     0 set   1 wpn   2 hair   3 back   4 skill   5 pet
+ */
+const agustus = perGender(PAKET_AGUSTUS);
+const KODE_ANNI4 = {
+  'ANNI4-SET':   c => [agustus(c)[0]],
+  'ANNI4-WPN':   c => [agustus(c)[1]],
+  'ANNI4-HAIR':  c => [agustus(c)[2]],
+  'ANNI4-BACK':  c => [agustus(c)[3]],
+  'ANNI4-SKILL': c => [agustus(c)[4]],
+  'ANNI4-PET':   c => [agustus(c)[5]],
+  'ANNI4-ALL':   agustus,
+};
+
 const handlers = {
 
   'SystemService.requireLogin': () => ({ status: 1, error: null }),
@@ -1338,6 +1442,85 @@ const handlers = {
     status: 1, error: null, result: [],
   }),
 
+  // --- Paket / kode klaim ulang tahun ke-4 -----------------------------
+  //
+  // ClaimItemResponse (popup_4th_claim_code_p8.swf) HANYA membaca satu field:
+  //
+  //    @58-65:  if (res.message == 'You do not have a claim for this package.')
+  //                  -> buka toko (webview / postMessage), selesai
+  //             else Central.main.showOk(res.message);
+  //    ConfirmationDoc.onShow @26-30:  displayTxt.htmlText = confirmationTxt
+  //
+  // Tanpa `message`, showOk() menerima undefined dan set htmlText melempar
+  // #2007 "Parameter text must be non-null". Jadi field ini WAJIB string.
+  //
+  // Tombol "claim code" di panel depan (onShow @296-315) terikat ke
+  // gotoClaimPanel, yang memanggil SpecialReward.claimAugustPackage dan
+  // hasilnya cuma pesan -- tombol itu memang tidak pernah membuka panel kode.
+  // Panel kodenya dibuka lewat detailBtn -> gotoRewardListPanel -> pilih
+  // hadiah -> rewardGotoClaimPanel @330.
+  // Tombol "Claim" di panel depan -> gotoClaimPanel @19 -> servis ini,
+  // callback ClaimItemResponse. Inilah SATU-SATUNYA jalur klaim yang terbukti
+  // jalan di log: panel kode (popupClaimCodeMc) terbuka tapi klik pada
+  // claimItemBtn tidak pernah sampai ke claimReward, jadi hadiahnya diberikan
+  // langsung dari sini.
+  //
+  // ClaimItemResponse @58-65 hanya membaca res.message:
+  //     == 'You do not have a claim for this package.' -> buka toko
+  //     selain itu                                     -> showOk(res.message)
+  // Jadi pesan di bawah sekaligus jadi tampilan hasilnya.
+  'SpecialReward.claimAugustPackage':  () => klaimPaket('SpecialReward.claimAugustPackage'),
+  'SpecialReward.claimPatriotPackage': () => klaimPaket('SpecialReward.claimPatriotPackage'),
+
+  // Jalur kode klaim: claimReward @449-486 mengirim
+  // [sessionKey, ClaimCode_1, ClaimCode_2].
+  //
+  // MAX_CHARS_ONE / MAX_CHARS_TWO tidak pernah diisi di SWF, jadi
+  // pemeriksaan panjang di claimReward @49-113 tinggal "tidak boleh kosong"
+  // -- panjang kode bebas.
+  //
+  // Server tidak menerima hadiah mana yang dipilih (selectedClaimID hanya
+  // ada di klien), jadi KODE-lah yang menentukan hadiahnya.
+  'Anni4th.claimStickerGift': (args) => {
+    const gabung = (a, b) => (String(a || '').trim() + '-' + String(b || '').trim()).toUpperCase();
+    const kode = gabung(args[1], args[2]);
+    const pilih = KODE_ANNI4[kode];
+
+    if (!pilih) {
+      log('   kode klaim ditolak: ' + JSON.stringify(kode));
+      return { status: 1, error: null, result: [], data: {},
+               message: 'Kode klaim tidak dikenal.' };
+    }
+
+    const aktif = chars.getActiveId();
+    const c = (aktif && chars.characterById(aktif)) || chars.firstCharacter();
+    if (!c) {
+      return { status: 1, error: null, result: [], data: {},
+               message: 'Karakter tidak ditemukan.' };
+    }
+
+    const baru = pilih(c).filter(id => !sudahPunya(c, id));
+    if (!baru.length) {
+      return { status: 1, error: null, result: [], data: {},
+               message: 'Hadiah untuk kode ini sudah pernah kamu ambil.' };
+    }
+
+    for (const id of baru) {
+      const sk = String(id).match(/^skill_?(\d+)$/);
+      const pt = String(id).match(/^pet_?(\d+)$/);
+      if (sk)      chars.addSkill(sk[1]);
+      else if (pt) chars.addPet({ id: pt[1] });
+      else         chars.addItem(String(id).replace('_', ''), 1);
+    }
+    log('   kode klaim ' + kode + ' -> ' + baru.join(', '));
+
+    return {
+      status: 1, error: null, result: [], data: {},
+      message: 'Berhasil! Kamu mendapat ' + baru.join(', ') +
+               '. Muat ulang permainan supaya muncul di inventaris.',
+    };
+  },
+
   // Tanpa Facebook, daftar teman selalu kosong.
   // RequestBox.gotoHide() berbunyi:
   //     Central.main.currRequest = this.requestListResult.requests.length;
@@ -1863,6 +2046,18 @@ function dispatch(target, args) {
       return { status: 1, error: null, result: [], data: {} };
     }
   }
+  // Jaring pengaman untuk semua servis klaim paket. Callback ClaimItemResponse
+  // (Anni4_ClaimCode) meneruskan res.message langsung ke showOk(), lalu
+  // ConfirmationDoc.onShow menulis displayTxt.htmlText = confirmationTxt.
+  // Balasan tanpa `message` berarti htmlText = null -> #2007 "Parameter text
+  // must be non-null". Jadi setiap tombol paket -- termasuk yang belum pernah
+  // saya lihat -- tetap harus menerima string.
+  if (/^SpecialReward\.claim.*Package$/.test(target)) {
+    log('   -> servis paket belum terdaftar, balas message aman');
+    return { status: 1, error: null, result: [], data: {},
+             message: 'Paket ini belum tersedia di server.' };
+  }
+
   log('   -> handler BELUM ADA, balas status=1 kosong');
   return { status: 1, error: null, result: [], data: {} };
 }
@@ -1872,6 +2067,19 @@ const missing = new Set();
 
 // Folder aset. Server ada di C:\ninjasaga\server, web di C:\ninjasaga\web
 const WEB_ROOT = path.resolve(__dirname, '..', 'web');
+
+/* Header anti-cache untuk semua aset.
+ *
+ * Tanpa ini peramban menyimpan ninja_saga.swf selamanya (URL-nya tidak punya
+ * "?_t=<timestamp>" seperti SWF lain), sehingga setiap patch bytecode pada
+ * berkas itu tidak pernah sampai ke klien -- gejalanya: patch yang sudah
+ * disalin ke folder web tapi log tetap menunjukkan perilaku versi lama.
+ */
+const TANPA_CACHE = {
+  'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+  'Pragma': 'no-cache',
+  'Expires': '0',
+};
 
 const MIME = {
   '.swf': 'application/x-shockwave-flash',
@@ -1904,10 +2112,25 @@ function serveStatic(req, res) {
 
   if (fs.existsSync(full) && fs.statSync(full).isFile()) {
     const data = fs.readFileSync(full);
-    res.writeHead(200, {
+
+    // Catat ukuran SWF utama setiap kali diminta.
+    //
+    // ninja_saga.swf adalah SATU-SATUNYA berkas yang URL-nya tanpa pembusuk
+    // cache: semua SWF lain dimuat Preloader dengan "?_t=<timestamp>",
+    // sedangkan yang ini dipanggil halaman sebagai
+    //     cdn.ninjasaga.cc/ninja_saga.swf?fb_uid=...   (querynya tetap)
+    // Jadi tanpa header cache, peramban memakai salinan lamanya terus dan
+    // patch bytecode apa pun terlihat "hilang sendiri". Baris log ini
+    // memastikan versi mana yang benar-benar terkirim.
+    if (path.basename(full).toLowerCase() === 'ninja_saga.swf') {
+      log('   [aset] ninja_saga.swf terkirim, ' +
+          data.length.toLocaleString('id-ID') + ' byte');
+    }
+
+    res.writeHead(200, Object.assign({
       'Content-Type': MIME[path.extname(full).toLowerCase()] || 'application/octet-stream',
       'Content-Length': data.length,
-    });
+    }, TANPA_CACHE));
     return res.end(data);
   }
 
@@ -1941,10 +2164,10 @@ function serveStatic(req, res) {
     // Donor asli punya ABC lengkap, jadi cukup diganti namanya.
     // Hasilnya terlihat seperti donor, tapi tidak error.
     const swf = cloneOrStub(path.dirname(full), name);
-    res.writeHead(200, {
+    res.writeHead(200, Object.assign({
       'Content-Type': 'application/x-shockwave-flash',
       'Content-Length': swf.length,
-    });
+    }, TANPA_CACHE));
     return res.end(swf);
   }
 
