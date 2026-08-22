@@ -1,0 +1,347 @@
+﻿kunci,nama,nama_swf,nama_kelas,berkas_swf,level,min_level,max_level,gold,xp,tipe,stat_lengkap,jumlah_skill,hp_dasar,random_battle
+enemy1,Training Dummy,ene_01,Ene_01,cdn/swf/latest/swf/enemies/ene_01.swf,1,1,99,2,1,1,tidak,0,,False
+enemy2,Undead Marionette,ene_02,Ene_02,cdn/swf/latest/swf/enemies/ene_02.swf,1,1,99,2,1,1,tidak,0,,False
+enemy3,Ninja Spy,ene_03,Ene_03,cdn/swf/latest/swf/enemies/ene_03.swf,1,1,99,2,1,1,tidak,0,,False
+enemy4,Ninja Thief,ene_04,Ene_04,cdn/swf/latest/swf/enemies/ene_04.swf,1,1,99,2,1,1,tidak,0,,False
+enemy5,Ninja Thief,ene_05,Ene_05,cdn/swf/latest/swf/enemies/ene_05.swf,1,1,99,2,1,1,tidak,0,,False
+enemy7,Samurai,ene_07,Ene_07,cdn/swf/latest/swf/enemies/ene_07.swf,1,1,99,2,1,1,tidak,0,,False
+enemy8,Ninja Ops,ene_08,Ene_08,cdn/swf/latest/swf/enemies/ene_08.swf,1,1,99,2,1,1,tidak,0,,False
+enemy28,Fierce Cat,ene_28,Ene_28,cdn/swf/latest/swf/enemies/ene_28.swf,1,1,99,2,1,1,tidak,0,,False
+enemy29,Water Village Genin,ene_29,Ene_29,cdn/swf/latest/swf/enemies/ene_29.swf,1,1,99,2,1,1,tidak,0,,False
+enemy31,Toxic Village Genin,ene_31,Ene_31,cdn/swf/latest/swf/enemies/ene_31.swf,1,1,99,2,1,1,tidak,0,,False
+enemy34,Lightning Village Genin,ene_34,Ene_34,cdn/swf/latest/swf/enemies/ene_34.swf,1,1,99,2,1,1,tidak,0,,False
+enemy37,Boneco de Protecção,ene_37,Ene_37,cdn/swf/latest/swf/enemies/ene_37.swf,1,1,99,2,1,1,tidak,0,,False
+enemy38,Ninja Spy Captain,ene_38,Ene_38,cdn/swf/latest/swf/enemies/ene_38.swf,1,1,99,2,1,1,tidak,0,,False
+enemy41,Red Bandit Ninja,ene_41,Ene_41,cdn/swf/latest/swf/enemies/ene_41.swf,1,1,99,2,1,1,tidak,0,,False
+enemy47,Crazy Hooligan,ene_47,Ene_47,cdn/swf/latest/swf/enemies/ene_47.swf,1,1,99,2,1,1,tidak,0,,False
+enemy60,Iron Arm Hooligan,ene_60,Ene_60,cdn/swf/latest/swf/enemies/ene_60.swf,1,1,99,2,1,1,tidak,0,,False
+enemy62,Wind Village Genin,ene_62,Ene_62,cdn/swf/latest/swf/enemies/ene_62.swf,1,1,99,2,1,1,tidak,0,,False
+enemy69,Battle Dog,ene_69,Ene_69,cdn/swf/latest/swf/enemies/ene_69.swf,1,1,99,2,1,1,tidak,0,,False
+enemy70,Reindeer,ene_70,Ene_70,cdn/swf/latest/swf/enemies/ene_70.swf,1,1,99,2,1,1,tidak,0,,False
+enemy72,Wind Village Genin,ene_72,Ene_72,cdn/swf/latest/swf/enemies/ene_72.swf,1,1,99,2,1,1,tidak,0,,False
+enemy83,Ginkotsu,ene_83,Ene_83,cdn/swf/latest/swf/enemies/ene_83.swf,5,5,99,400,550,2,tidak,0,,False
+enemy88,Byakko,ene_88,Ene_88,cdn/swf/latest/swf/enemies/ene_88.swf,10,10,99,400,550,2,tidak,0,,False
+enemy89,Aka Tengu,ene_89,Ene_89,cdn/swf/latest/swf/enemies/ene_89.swf,5,5,99,400,550,2,tidak,0,,False
+enemy90,Ao Tengu,ene_90,Ene_90,cdn/swf/latest/swf/enemies/ene_90.swf,5,5,99,400,550,2,tidak,0,,False
+enemy91,Shikigami YanKi,ene_91,Ene_91,cdn/swf/latest/swf/enemies/ene_91.swf,5,5,99,400,550,2,tidak,0,,False
+enemy94,Gedo Sessho Seki,ene_94,Ene_94,cdn/swf/latest/swf/enemies/ene_94.swf,5,5,99,400,550,2,tidak,0,,False
+enemy106,Ape King,ene_106,Ene_106,cdn/swf/latest/swf/enemies/ene_106.swf,20,20,99,400,550,2,tidak,0,,False
+enemy120,Battle Turtle,ene_120,Ene_120,cdn/swf/latest/swf/enemies/ene_120.swf,30,30,99,400,550,2,tidak,0,,False
+enemy155,Soul General Mutoh,ene_155,Ene_155,cdn/swf/latest/swf/enemies/ene_155.swf,40,40,99,400,550,2,tidak,0,,False
+enemy179,Clone of Shin,ene_179,Ene_179,cdn/swf/latest/swf/enemies/ene_179.swf,1,1,1,2,1,1,tidak,0,,False
+enemy195,Yosuzume,ene_195,Ene_195,cdn/swf/latest/swf/enemies/ene_195.swf,5,5,99,400,550,2,tidak,0,,False
+enemy196,Kari Mori,ene_196,Ene_196,cdn/swf/latest/swf/enemies/ene_196.swf,5,5,99,400,550,2,tidak,0,,False
+enemy197,Soft Claw,ene_197,Ene_197,cdn/swf/latest/swf/enemies/ene_197.swf,5,5,99,400,550,2,tidak,0,,False
+enemy198,Shi To,ene_198,Ene_198,cdn/swf/latest/swf/enemies/ene_198.swf,5,5,99,400,550,2,tidak,0,,False
+enemy200,"""Hachibi's Father""",ene_200,Ene_200,cdn/swf/latest/swf/enemies/ene_200.swf,1,1,99,400,550,2,tidak,0,,False
+enemy201,"""Nanabi's Father""",ene_201,Ene_201,cdn/swf/latest/swf/enemies/ene_201.swf,1,1,99,400,550,2,tidak,0,,False
+enemy202,"""Rokubi's Father""",ene_202,Ene_202,cdn/swf/latest/swf/enemies/ene_202.swf,1,1,99,400,550,2,tidak,0,,False
+enemy203,"""Gobi's Father""",ene_203,Ene_203,cdn/swf/latest/swf/enemies/ene_203.swf,1,1,99,400,550,2,tidak,0,,False
+enemy204,Fire Village Ninja,ene_204,Ene_204,cdn/swf/latest/swf/enemies/ene_204.swf,1,1,99,400,550,2,tidak,0,,False
+enemy205,Wind Village Ninja,ene_205,Ene_205,cdn/swf/latest/swf/enemies/ene_205.swf,1,1,99,400,550,2,tidak,0,,False
+enemy206,Lightning Village Ninja,ene_206,Ene_206,cdn/swf/latest/swf/enemies/ene_206.swf,1,1,99,400,550,2,tidak,0,,False
+enemy207,Earth Village Ninja,ene_207,Ene_207,cdn/swf/latest/swf/enemies/ene_207.swf,1,1,99,400,550,2,tidak,0,,False
+enemy208,Water Village Ninja,ene_208,Ene_208,cdn/swf/latest/swf/enemies/ene_208.swf,1,1,99,400,550,2,tidak,0,,False
+enemy210,"""Kyubi's Father""",ene_210,Ene_210,cdn/swf/latest/swf/enemies/ene_210.swf,1,1,99,400,550,2,tidak,0,,False
+enemy211,Fire Village Ninja,ene_204,Ene_204,cdn/swf/latest/swf/enemies/ene_204.swf,1,1,99,400,550,2,tidak,0,,False
+enemy212,Wind Village Ninja,ene_205,Ene_205,cdn/swf/latest/swf/enemies/ene_205.swf,1,1,99,400,550,2,tidak,0,,False
+enemy213,Lightning Village Ninja,ene_206,Ene_206,cdn/swf/latest/swf/enemies/ene_206.swf,1,1,99,400,550,2,tidak,0,,False
+enemy214,Earth Village Ninja,ene_207,Ene_207,cdn/swf/latest/swf/enemies/ene_207.swf,1,1,99,400,550,2,tidak,0,,False
+enemy215,Water Village Ninja,ene_208,Ene_208,cdn/swf/latest/swf/enemies/ene_208.swf,1,1,99,400,550,2,tidak,0,,False
+enemy216,Random Player Character,ene_216,Ene_216,cdn/swf/latest/swf/enemies/ene_216.swf,1,1,99,400,550,2,tidak,0,,False
+enemy217,Random Player Character,ene_217,Ene_217,cdn/swf/latest/swf/enemies/ene_217.swf,1,1,99,400,550,2,tidak,0,,False
+enemy218,Random Player Character,ene_218,Ene_218,cdn/swf/latest/swf/enemies/ene_218.swf,1,1,99,400,550,2,tidak,0,,False
+enemy251,SNF of Lava,ene_251,Ene_251,cdn/swf/latest/swf/enemies/ene_251.swf,1,1,99,400,550,2,tidak,0,,False
+enemy252,SNF of Gaia,ene_252,Ene_252,cdn/swf/latest/swf/enemies/ene_252.swf,1,1,99,400,550,2,tidak,0,,False
+enemy253,SNF of Hurricane,ene_253,Ene_253,cdn/swf/latest/swf/enemies/ene_253.swf,1,1,99,400,550,2,tidak,0,,False
+enemy254,SNF of Tsunami,ene_254,Ene_254,cdn/swf/latest/swf/enemies/ene_254.swf,1,1,99,400,550,2,tidak,0,,False
+enemy255,SNF of  Lightning,ene_255,Ene_255,cdn/swf/latest/swf/enemies/ene_255.swf,1,1,99,400,550,2,tidak,0,,False
+enemy256,"""Kyunoki's Head""",ene_256,Ene_256,cdn/swf/latest/swf/enemies/ene_256.swf,1,1,99,1200,1500,2,tidak,0,,False
+enemy257,"""Kyunoki's Left Hand""",ene_257,Ene_257,cdn/swf/latest/swf/enemies/ene_257.swf,1,1,99,1200,1500,2,tidak,0,,False
+enemy258,"""Kyunoki's Right Hand""",ene_258,Ene_258,cdn/swf/latest/swf/enemies/ene_258.swf,1,1,99,1200,1500,2,tidak,0,,False
+enemy259,Riot Mad Bull,ene_259,Ene_259,cdn/swf/latest/swf/enemies/ene_259.swf,1,1,99,400,550,2,tidak,0,,False
+enemy260,Lightning Viper,ene_260,Ene_260,cdn/swf/latest/swf/enemies/ene_260.swf,1,1,99,400,550,2,tidak,0,,False
+enemy261,Metal Head Ostrich,ene_261,Ene_261,cdn/swf/latest/swf/enemies/ene_261.swf,1,1,99,400,550,2,tidak,0,,False
+enemy262,Hellgate Wolf,ene_262,Ene_262,cdn/swf/latest/swf/enemies/ene_262.swf,1,1,99,400,550,2,tidak,0,,False
+enemy263,Evil Toad,ene_263,Ene_263,cdn/swf/latest/swf/enemies/ene_263.swf,1,1,99,400,550,2,tidak,0,,False
+enemy264,Wild Rainbow Bird,ene_264,Ene_264,cdn/swf/latest/swf/enemies/ene_264.swf,6,6,99,400,550,1,tidak,0,,False
+enemy265,Vortex Beast,ene_265,Ene_265,cdn/swf/latest/swf/enemies/ene_265.swf,6,6,99,400,550,2,tidak,0,,False
+enemy266,Snow Reindeer,ene_266,Ene_266,cdn/swf/latest/swf/enemies/ene_266.swf,6,6,99,500,550,2,tidak,0,,False
+enemy267,Lightning Howl Lion,ene_267,Ene_267,cdn/swf/latest/swf/enemies/ene_267.swf,6,6,99,500,650,2,tidak,0,,False
+enemy268,"""Tootetsu's Head""",ene_268,Ene_268,cdn/swf/latest/swf/enemies/ene_268.swf,40,40,99,600,800,2,tidak,0,,False
+enemy269,"""Tootetsu's Left Hand""",ene_269,Ene_269,cdn/swf/latest/swf/enemies/ene_269.swf,40,40,99,600,800,2,tidak,0,,False
+enemy270,"""Tootetsu's Right Hand""",ene_270,Ene_270,cdn/swf/latest/swf/enemies/ene_270.swf,40,40,99,600,800,2,tidak,0,,False
+enemy271,Kyotaro,ene_271,Ene_271,cdn/swf/latest/swf/enemies/ene_271.swf,1,1,99,1200,1500,2,tidak,0,,False
+enemy272,Mudo,ene_272,Ene_272,cdn/swf/latest/swf/enemies/ene_272.swf,1,1,99,1200,1500,2,tidak,0,,False
+enemy273,Izo,ene_273,Ene_273,cdn/swf/latest/swf/enemies/ene_273.swf,1,1,99,1200,1500,2,tidak,0,,False
+enemy274,"""Zeus' Right Hand""",ene_274,Ene_274,cdn/swf/latest/swf/enemies/ene_274.swf,20,20,99,400,550,2,tidak,0,,False
+enemy275,"""Zeus' Left Hand""",ene_275,Ene_275,cdn/swf/latest/swf/enemies/ene_275.swf,20,20,99,400,550,2,tidak,0,,False
+enemy276,Zeus,ene_276,Ene_276,cdn/swf/latest/swf/enemies/ene_276.swf,20,20,99,400,550,2,tidak,0,,False
+enemy277,Cerberus,ene_277,Ene_277,cdn/swf/latest/swf/enemies/ene_277.swf,1,1,99,400,550,2,tidak,0,,False
+enemy280,Rage Bear,ene_280,Ene_280,cdn/swf/latest/swf/enemies/ene_280.swf,1,1,99,400,550,2,tidak,0,,False
+enemy281,Hanasikukozo,ene_281,Ene_281,cdn/swf/latest/swf/enemies/ene_281.swf,1,1,99,400,550,2,tidak,0,,False
+enemy282,Kakushi Toridetoko,ene_282,Ene_282,cdn/swf/latest/swf/enemies/ene_282.swf,1,1,99,400,550,2,tidak,0,,False
+enemy283,Kasikoki,ene_283,Ene_283,cdn/swf/latest/swf/enemies/ene_283.swf,1,1,99,400,550,2,tidak,0,,False
+enemy284,Raven Ninja,ene_284,Ene_284,cdn/swf/latest/swf/enemies/ene_284.swf,1,1,99,400,550,2,tidak,0,,False
+enemy285,Kappa,ene_285,Ene_285,cdn/swf/latest/swf/enemies/ene_285.swf,1,1,99,400,550,2,tidak,0,,False
+enemy286,Kojima,ene_286,Ene_286,cdn/swf/latest/swf/enemies/ene_286.swf,1,1,99,400,550,2,tidak,0,,False
+enemy287,Kojima,ene_287,Ene_287,cdn/swf/latest/swf/enemies/ene_287.swf,1,1,99,400,550,2,tidak,0,,False
+enemy288,Gedou Snake,ene_288,Ene_288,cdn/swf/latest/swf/enemies/ene_288.swf,1,1,99,400,550,2,tidak,0,,False
+enemy289,Origami Deer,ene_289,Ene_289,cdn/swf/latest/swf/enemies/ene_289.swf,1,1,99,400,550,2,tidak,0,,False
+enemy290,Origami Crane,ene_290,Ene_290,cdn/swf/latest/swf/enemies/ene_290.swf,1,1,99,400,550,2,tidak,0,,False
+enemy291,Origami Dragon,ene_291,Ene_291,cdn/swf/latest/swf/enemies/ene_291.swf,1,1,99,400,550,2,tidak,0,,False
+enemy292,Origami Bear,ene_292,Ene_292,cdn/swf/latest/swf/enemies/ene_292.swf,1,1,99,400,550,2,tidak,0,,False
+enemy293,Evil Yobi,ene_293,Ene_293,cdn/swf/latest/swf/enemies/ene_293.swf,1,1,99,400,550,2,tidak,0,,False
+enemy294,Evil Gobi,ene_294,Ene_294,cdn/swf/latest/swf/enemies/ene_294.swf,1,1,99,400,550,2,tidak,0,,False
+enemy295,Evil Rokubi,ene_295,Ene_295,cdn/swf/latest/swf/enemies/ene_295.swf,1,1,99,400,550,2,tidak,0,,False
+enemy296,Evil Nanabi,ene_296,Ene_296,cdn/swf/latest/swf/enemies/ene_296.swf,1,1,99,400,550,2,tidak,0,,False
+enemy297,Evil Hachibi,ene_297,Ene_297,cdn/swf/latest/swf/enemies/ene_297.swf,1,1,99,400,550,2,tidak,0,,False
+enemy298,Evil Kyubi,ene_298,Ene_298,cdn/swf/latest/swf/enemies/ene_298.swf,1,1,99,400,550,2,tidak,0,,False
+enemy299,Cheese Thief - A,ene_299,Ene_299,cdn/swf/latest/swf/enemies/ene_299.swf,1,1,99,400,550,2,tidak,0,,False
+enemy300,Cheese Thief - R,ene_300,Ene_300,cdn/swf/latest/swf/enemies/ene_300.swf,1,1,99,400,550,2,tidak,0,,False
+enemy301,Cheese Thief - E,ene_301,Ene_301,cdn/swf/latest/swf/enemies/ene_301.swf,1,1,99,400,550,2,tidak,0,,False
+enemy302,Cheese Thief - T,ene_302,Ene_302,cdn/swf/latest/swf/enemies/ene_302.swf,1,1,99,400,550,2,tidak,0,,False
+enemy303,Cheese Thief - S,ene_303,Ene_303,cdn/swf/latest/swf/enemies/ene_303.swf,1,1,99,400,550,2,tidak,0,,False
+enemy304,Zombie,ene_304,Ene_304,cdn/swf/latest/swf/enemies/ene_304.swf,1,1,99,400,550,2,tidak,0,,False
+enemy305,Werewolf,ene_305,Ene_305,cdn/swf/latest/swf/enemies/ene_305.swf,1,1,99,400,550,2,tidak,0,,False
+enemy306,Pirate Skeleton,ene_306,Ene_306,cdn/swf/latest/swf/enemies/ene_306.swf,1,1,99,400,550,2,tidak,0,,False
+enemy307,Sadness Joker,ene_307,Ene_307,cdn/swf/latest/swf/enemies/ene_307.swf,1,1,99,400,550,2,tidak,0,,False
+enemy308,Geisha Girl,ene_308,Ene_308,cdn/swf/latest/swf/enemies/ene_308.swf,1,1,99,400,550,2,tidak,0,,False
+enemy309,Legend Griffin,ene_309,Ene_309,cdn/swf/latest/swf/enemies/ene_309.swf,1,1,99,400,550,2,tidak,0,,False
+enemy310,Red Griffin,ene_310,Ene_310,cdn/swf/latest/swf/enemies/ene_310.swf,1,1,99,400,550,2,tidak,0,,False
+enemy311,Yellow Griffin,ene_311,Ene_311,cdn/swf/latest/swf/enemies/ene_311.swf,1,1,99,400,550,2,tidak,0,,False
+enemy312,Legend Phoenix,ene_312,Ene_312,cdn/swf/latest/swf/enemies/ene_312.swf,1,1,99,400,550,2,tidak,0,,False
+enemy313,Flamy Phoenix,ene_313,Ene_313,cdn/swf/latest/swf/enemies/ene_313.swf,1,1,99,400,550,2,tidak,0,,False
+enemy314,Golden Phoenix,ene_314,Ene_314,cdn/swf/latest/swf/enemies/ene_314.swf,1,1,99,400,550,2,tidak,0,,False
+enemy315,Legend Kraken,ene_315,Ene_315,cdn/swf/latest/swf/enemies/ene_315.swf,1,1,99,400,550,2,tidak,0,,False
+enemy316,Red Kraken,ene_316,Ene_316,cdn/swf/latest/swf/enemies/ene_316.swf,1,1,99,400,550,2,tidak,0,,False
+enemy317,Orange Kraken,ene_317,Ene_317,cdn/swf/latest/swf/enemies/ene_317.swf,1,1,99,400,550,2,tidak,0,,False
+enemy318,Miss Yolanda,ene_318,Ene_318,cdn/swf/latest/swf/enemies/ene_318.swf,1,1,99,400,550,2,tidak,0,,False
+enemy319,Arctic Dweller,ene_319,Ene_319,cdn/swf/latest/swf/enemies/ene_319.swf,1,1,99,400,550,2,tidak,0,,False
+enemy320,Ancient Frost Demon,ene_320,Ene_320,cdn/swf/latest/swf/enemies/ene_320.swf,1,1,99,400,550,2,tidak,0,,False
+enemy321,Tundra Wolf,ene_321,Ene_321,cdn/swf/latest/swf/enemies/ene_321.swf,1,1,99,400,550,2,tidak,0,,False
+enemy322,Glacial Ward,ene_322,Ene_322,cdn/swf/latest/swf/enemies/ene_322.swf,1,1,99,400,550,2,tidak,0,,False
+enemy323,Snow Sapling,ene_323,Ene_323,cdn/swf/latest/swf/enemies/ene_323.swf,1,1,99,400,550,2,tidak,0,,False
+enemy324,Snow Treant,ene_324,Ene_324,cdn/swf/latest/swf/enemies/ene_324.swf,1,1,99,400,550,2,tidak,0,,False
+enemy325,Shrub Wolf,ene_325,Ene_325,cdn/swf/latest/swf/enemies/ene_325.swf,1,1,99,400,550,2,tidak,0,,False
+enemy326,Poinsettia Wolf,ene_326,Ene_326,cdn/swf/latest/swf/enemies/ene_326.swf,1,1,99,400,550,2,tidak,0,,False
+enemy327,Ice Giant,ene_327,Ene_327,cdn/swf/latest/swf/enemies/ene_327.swf,1,1,99,400,550,2,tidak,0,,False
+enemy328,Ice Titan,ene_328,Ene_328,cdn/swf/latest/swf/enemies/ene_328.swf,1,1,99,400,550,2,tidak,0,,False
+enemy329,Akajuu,ene_329,Ene_329,cdn/swf/latest/swf/enemies/ene_329.swf,1,1,99,400,550,2,tidak,0,,False
+enemy330,Shadowfang,ene_330,Ene_330,cdn/swf/latest/swf/enemies/ene_330.swf,1,1,99,400,550,2,tidak,0,,False
+enemy331,Explosive Egg,ene_331,Ene_331,cdn/swf/latest/swf/enemies/ene_331.swf,1,1,99,400,550,2,tidak,0,,False
+enemy332,Akuma Gobi,ene_332,Ene_332,cdn/swf/latest/swf/enemies/ene_332.swf,1,1,99,400,550,2,tidak,0,,False
+enemy333,Berserk Hornbill,ene_333,Ene_333,cdn/swf/latest/swf/enemies/ene_333.swf,1,1,99,400,550,2,tidak,0,,False
+enemy334,Panzer Bear,ene_334,Ene_334,cdn/swf/latest/swf/enemies/ene_334.swf,1,1,99,400,550,2,tidak,0,,False
+enemy335,Crimson Thorn Archelon,ene_335,Ene_335,cdn/swf/latest/swf/enemies/ene_335.swf,1,1,99,400,550,2,tidak,0,,False
+enemy336,Crimson Demon,ene_336,Ene_336,cdn/swf/latest/swf/enemies/ene_336.swf,1,1,99,400,550,2,tidak,0,,False
+enemy337,Calamity Serpent,ene_337,Ene_337,cdn/swf/latest/swf/enemies/ene_337.swf,1,1,99,400,550,2,tidak,0,,False
+enemy338,Evil Clown Dragon,ene_338,Ene_338,cdn/swf/latest/swf/enemies/ene_338.swf,1,1,99,400,550,1,ya,8,300,False
+enemy339,Snow Blue Dragon,ene_339,Ene_339,cdn/swf/latest/swf/enemies/ene_339.swf,1,1,99,400,550,1,ya,8,300,False
+enemy340,Earth Dragon Turtle,ene_340,Ene_340,cdn/swf/latest/swf/enemies/ene_340.swf,1,1,99,400,550,1,ya,8,300,False
+enemy341,Thunder Triple Dragon,ene_341,Ene_341,cdn/swf/latest/swf/enemies/ene_341.swf,1,1,99,400,550,1,ya,8,300,False
+enemy342,Inferno Chains Dragon,ene_342,Ene_342,cdn/swf/latest/swf/enemies/ene_342.swf,1,1,99,400,550,1,ya,8,300,False
+enemy343,Fire Origami Fox,ene_343,Ene_343,cdn/swf/latest/swf/enemies/ene_343.swf,1,1,99,400,550,2,ya,5,400,False
+enemy344,Rebound,ene_344,Ene_344,cdn/swf/latest/swf/enemies/ene_344.swf,1,1,99,400,550,2,ya,2,400,False
+enemy345,White Puppet,ene_345,Ene_345,cdn/swf/latest/swf/enemies/ene_345.swf,80,80,80,400,550,1,ya,3,450,False
+enemy346,Shadow Cerberus,ene_346,Ene_346,cdn/swf/latest/swf/enemies/ene_346.swf,80,80,80,400,550,1,ya,3,450,False
+enemy347,Purple Giant Bird,ene_347,Ene_347,cdn/swf/latest/swf/enemies/ene_347.swf,80,80,80,400,550,1,ya,3,450,False
+enemy348,Crimson Armor Centipede,ene_357,Ene_357,cdn/swf/latest/swf/enemies/ene_357.swf,80,80,80,400,550,1,ya,2,450,False
+enemy349,Rage Bull,ene_349,Ene_349,cdn/swf/latest/swf/enemies/ene_349.swf,80,80,80,400,550,1,ya,2,450,False
+enemy350,Golden Giant Crab,ene_350,Ene_350,cdn/swf/latest/swf/enemies/ene_350.swf,80,80,80,400,550,1,ya,2,450,False
+enemy351,Rock Giants,ene_351,Ene_351,cdn/swf/latest/swf/enemies/ene_351.swf,80,80,80,400,550,1,ya,2,450,False
+enemy352,Flame Snake,ene_352,Ene_352,cdn/swf/latest/swf/enemies/ene_352.swf,80,80,80,400,550,1,ya,2,450,False
+enemy353,Thunder Bird,ene_353,Ene_353,cdn/swf/latest/swf/enemies/ene_353.swf,80,80,80,400,550,1,ya,2,450,False
+enemy354,Abyss Conger,ene_354,Ene_354,cdn/swf/latest/swf/enemies/ene_354.swf,80,80,80,400,550,1,ya,2,450,False
+enemy355,Wind Lady,ene_355,Ene_355,cdn/swf/latest/swf/enemies/ene_355.swf,80,80,80,400,550,1,ya,2,450,False
+enemy356,Animal Realm,ene_356,Ene_356,cdn/swf/latest/swf/enemies/ene_356.swf,80,80,80,400,550,1,ya,1,450,False
+enemy357,Asura Realm,ene_357,Ene_357,cdn/swf/latest/swf/enemies/ene_357.swf,80,80,80,400,550,1,ya,5,450,False
+enemy358,Rage Asura Realm,ene_358,Ene_358,cdn/swf/latest/swf/enemies/ene_358.swf,80,80,80,400,550,1,ya,8,450,False
+enemy359,Preta Realm,ene_359,Ene_359,cdn/swf/latest/swf/enemies/ene_359.swf,80,80,80,400,550,1,ya,5,450,False
+enemy360,Human Realm,ene_360,Ene_360,cdn/swf/latest/swf/enemies/ene_360.swf,80,80,80,400,550,1,ya,6,450,False
+enemy361,Hell Realm,ene_361,Ene_361,cdn/swf/latest/swf/enemies/ene_361.swf,80,80,80,400,550,1,ya,5,450,False
+enemy362,Deva Realm,ene_362,Ene_362,cdn/swf/latest/swf/enemies/ene_362.swf,80,80,80,400,550,1,ya,6,450,False
+enemy363,Mantra,ene_363,Ene_363,cdn/swf/latest/swf/enemies/ene_363.swf,80,80,80,400,550,1,ya,7,450,False
+enemy364,Forest Nymphs,ene_364,Ene_364,cdn/swf/latest/swf/enemies/ene_364.swf,80,80,80,400,550,1,ya,3,250,False
+enemy365,Holy Unicorn,ene_365,Ene_365,cdn/swf/latest/swf/enemies/ene_365.swf,80,80,80,400,550,1,ya,6,450,False
+enemy366,Gloomy Unicorn,ene_366,Ene_366,cdn/swf/latest/swf/enemies/ene_366.swf,80,80,80,400,550,1,ya,6,450,False
+enemy367,Mech Tyrannzord,ene_367,Ene_367,cdn/swf/latest/swf/enemies/ene_367.swf,1,1,99,400,550,1,ya,3,300,False
+enemy368,Mech Tricerzord,ene_368,Ene_368,cdn/swf/latest/swf/enemies/ene_368.swf,1,1,99,400,550,1,ya,3,300,False
+enemy369,Mech Sabertooth Tigerzord,ene_369,Ene_369,cdn/swf/latest/swf/enemies/ene_369.swf,1,1,99,400,550,1,ya,3,300,False
+enemy370,Mech Mastodonzord,ene_370,Ene_370,cdn/swf/latest/swf/enemies/ene_370.swf,1,1,99,400,550,1,ya,4,300,False
+enemy371,Mech Pterodactylzord,ene_371,Ene_371,cdn/swf/latest/swf/enemies/ene_371.swf,1,1,99,400,550,1,ya,4,300,False
+enemy372,Batarizord,ene_372,Ene_372,cdn/swf/latest/swf/enemies/ene_372.swf,1,1,99,400,550,1,ya,6,450,False
+enemy373,Ravan,ene_373,Ene_373,cdn/swf/latest/swf/enemies/ene_373.swf,1,1,99,400,550,1,ya,7,400,False
+enemy374,Spooky Mech Tyrannzord,ene_374,Ene_374,cdn/swf/latest/swf/enemies/ene_374.swf,1,1,99,400,550,1,ya,3,300,False
+enemy375,Spooky Mech Tricerzord,ene_375,Ene_375,cdn/swf/latest/swf/enemies/ene_375.swf,1,1,99,400,550,1,ya,3,300,False
+enemy376,Spooky Mech Sabertooth Tigerzord,ene_376,Ene_376,cdn/swf/latest/swf/enemies/ene_376.swf,1,1,99,400,550,1,ya,3,300,False
+enemy377,Spooky Mech Mastodonzord,ene_377,Ene_377,cdn/swf/latest/swf/enemies/ene_377.swf,1,1,99,400,550,1,ya,4,300,False
+enemy378,Spooky Mech Pterodactylzord,ene_378,Ene_378,cdn/swf/latest/swf/enemies/ene_378.swf,1,1,99,400,550,1,ya,4,300,False
+enemy379,Spooky Batarizord,ene_379,Ene_379,cdn/swf/latest/swf/enemies/ene_379.swf,1,1,99,400,550,1,ya,6,450,False
+enemy380,Turkey Player,ene_380,Ene_380,cdn/swf/latest/swf/enemies/ene_380.swf,1,1,99,400,550,1,ya,4,300,False
+enemy381,Giant turkey player,ene_381,Ene_381,cdn/swf/latest/swf/enemies/ene_381.swf,1,1,99,400,550,1,ya,7,300,False
+enemy382,Jin,ene_382,Ene_382,cdn/swf/latest/swf/enemies/ene_382.swf,1,1,99,400,550,1,ya,4,300,False
+enemy383,Hanzo,ene_383,Ene_383,cdn/swf/latest/swf/enemies/ene_383.swf,1,1,99,400,550,1,ya,4,300,False
+enemy384,Suzune,ene_384,Ene_384,cdn/swf/latest/swf/enemies/ene_384.swf,1,1,99,400,550,1,ya,4,300,False
+enemy385,"""Shin'ichi""",ene_385,Ene_385,cdn/swf/latest/swf/enemies/ene_385.swf,1,1,99,400,550,1,ya,4,300,False
+enemy386,Takeda,ene_386,Ene_386,cdn/swf/latest/swf/enemies/ene_386.swf,1,1,99,400,550,1,ya,4,300,False
+enemy387,Vengeful Fury Jin,ene_387,Ene_387,cdn/swf/latest/swf/enemies/ene_387.swf,1,1,99,400,550,1,ya,6,300,False
+enemy388,Rogue Samurai Mochi,ene_388,Ene_388,cdn/swf/latest/swf/enemies/ene_388.swf,1,1,99,400,550,1,ya,7,300,False
+enemy389,Huffish Male Ninja,ene_389,Ene_389,cdn/swf/latest/swf/enemies/ene_389.swf,1,1,99,400,550,1,ya,4,300,False
+enemy390,Huffish Female Ninja,ene_390,Ene_390,cdn/swf/latest/swf/enemies/ene_390.swf,1,1,99,400,550,1,ya,4,300,False
+enemy391,Chocolate Evil Beast,ene_391,Ene_391,cdn/swf/latest/swf/enemies/ene_391.swf,1,1,99,400,550,1,ya,5,300,False
+enemy392,Chocolate Demon King,ene_392,Ene_392,cdn/swf/latest/swf/enemies/ene_392.swf,1,1,99,400,550,1,ya,6,300,False
+enemy393,Origami Devil Spider,ene_393,Ene_393,cdn/swf/latest/swf/enemies/ene_393.swf,1,1,99,400,550,2,ya,5,200,False
+enemy394,Ax Aboriginal,ene_394,Ene_394,cdn/swf/latest/swf/enemies/ene_394.swf,1,1,99,400,550,1,ya,4,300,False
+enemy395,Broadsword Aboriginal,ene_395,Ene_395,cdn/swf/latest/swf/enemies/ene_395.swf,1,1,99,400,550,1,ya,4,300,False
+enemy396,Spear Aboriginal,ene_396,Ene_396,cdn/swf/latest/swf/enemies/ene_396.swf,1,1,99,400,550,1,ya,4,300,False
+enemy397,Moai,ene_397,Ene_397,cdn/swf/latest/swf/enemies/ene_397.swf,1,1,99,400,550,1,ya,5,300,False
+enemy398,Moai Giant,ene_398,Ene_398,cdn/swf/latest/swf/enemies/ene_398.swf,1,1,99,400,550,1,ya,6,300,False
+enemy399,Frigga,ene_399,Ene_399,cdn/swf/latest/swf/enemies/ene_399.swf,1,1,99,400,550,1,ya,5,300,False
+enemy400,Odin,ene_400,Ene_400,cdn/swf/latest/swf/enemies/ene_400.swf,1,1,99,400,550,1,ya,6,300,False
+enemy401,Huginn,ene_401,Ene_401,cdn/swf/latest/swf/enemies/ene_401.swf,1,1,99,400,550,1,ya,2,300,False
+enemy402,Muninn,ene_402,Ene_402,cdn/swf/latest/swf/enemies/ene_402.swf,1,1,99,400,550,1,ya,2,300,False
+enemy403,Ebisu,ene_403_404_405_406,Ene_403,cdn/swf/latest/swf/enemies/ene_403_404_405_406.swf,1,1,99,1000,1000,1,ya,6,300,False
+enemy404,Ebisu,ene_403_404_405_406,Ene_404,cdn/swf/latest/swf/enemies/ene_403_404_405_406.swf,1,1,99,5000,2500,1,ya,6,300,False
+enemy405,Ebisu,ene_403_404_405_406,Ene_405,cdn/swf/latest/swf/enemies/ene_403_404_405_406.swf,1,1,99,10000,10000,1,ya,6,300,False
+enemy406,Ebisu,ene_403_404_405_406,Ene_406,cdn/swf/latest/swf/enemies/ene_403_404_405_406.swf,1,1,99,25000,75000,1,ya,6,300,False
+enemy407,Daikokuten,ene_407_408_409_410,Ene_407,cdn/swf/latest/swf/enemies/ene_407_408_409_410.swf,1,1,99,1000,1000,1,ya,6,300,False
+enemy408,Daikokuten,ene_407_408_409_410,Ene_408,cdn/swf/latest/swf/enemies/ene_407_408_409_410.swf,1,1,99,5000,2500,1,ya,6,300,False
+enemy409,Daikokuten,ene_407_408_409_410,Ene_409,cdn/swf/latest/swf/enemies/ene_407_408_409_410.swf,1,1,99,10000,10000,1,ya,6,300,False
+enemy410,Daikokuten,ene_407_408_409_410,Ene_410,cdn/swf/latest/swf/enemies/ene_407_408_409_410.swf,1,1,99,25000,75000,1,ya,6,300,False
+enemy411,Fukurokuju,ene_411_412_413_414,Ene_411,cdn/swf/latest/swf/enemies/ene_411_412_413_414.swf,1,1,99,1000,1000,1,ya,6,300,False
+enemy412,Fukurokuju,ene_411_412_413_414,Ene_412,cdn/swf/latest/swf/enemies/ene_411_412_413_414.swf,1,1,99,5000,2500,1,ya,6,300,False
+enemy413,Fukurokuju,ene_411_412_413_414,Ene_413,cdn/swf/latest/swf/enemies/ene_411_412_413_414.swf,1,1,99,10000,10000,1,ya,6,300,False
+enemy414,Fukurokuju,ene_411_412_413_414,Ene_414,cdn/swf/latest/swf/enemies/ene_411_412_413_414.swf,1,1,99,25000,75000,1,ya,6,300,False
+enemy415,Jurojin,ene_415_416_417_418,Ene_415,cdn/swf/latest/swf/enemies/ene_415_416_417_418.swf,1,1,99,1000,1000,1,ya,6,300,False
+enemy416,Jurojin,ene_415_416_417_418,Ene_416,cdn/swf/latest/swf/enemies/ene_415_416_417_418.swf,1,1,99,5000,2500,1,ya,6,300,False
+enemy417,Jurojin,ene_415_416_417_418,Ene_417,cdn/swf/latest/swf/enemies/ene_415_416_417_418.swf,1,1,99,10000,10000,1,ya,6,300,False
+enemy418,Jurojin,ene_415_416_417_418,Ene_418,cdn/swf/latest/swf/enemies/ene_415_416_417_418.swf,1,1,99,25000,75000,1,ya,6,300,False
+enemy419,Hotei,ene_419_420_421_422,Ene_419,cdn/swf/latest/swf/enemies/ene_419_420_421_422.swf,1,1,99,1000,1000,1,ya,6,300,False
+enemy420,Hotei,ene_419_420_421_422,Ene_420,cdn/swf/latest/swf/enemies/ene_419_420_421_422.swf,1,1,99,5000,2500,1,ya,6,300,False
+enemy421,Hotei,ene_419_420_421_422,Ene_421,cdn/swf/latest/swf/enemies/ene_419_420_421_422.swf,1,1,99,10000,10000,1,ya,6,300,False
+enemy422,Hotei,ene_419_420_421_422,Ene_422,cdn/swf/latest/swf/enemies/ene_419_420_421_422.swf,1,1,99,25000,75000,1,ya,6,300,False
+enemy423,Bishamonten,ene_423_424_425_426,Ene_423,cdn/swf/latest/swf/enemies/ene_423_424_425_426.swf,1,1,99,1000,1000,1,ya,6,300,False
+enemy424,Bishamonten,ene_423_424_425_426,Ene_424,cdn/swf/latest/swf/enemies/ene_423_424_425_426.swf,1,1,99,5000,2500,1,ya,6,300,False
+enemy425,Bishamonten,ene_423_424_425_426,Ene_425,cdn/swf/latest/swf/enemies/ene_423_424_425_426.swf,1,1,99,10000,10000,1,ya,6,300,False
+enemy426,Bishamonten,ene_423_424_425_426,Ene_426,cdn/swf/latest/swf/enemies/ene_423_424_425_426.swf,1,1,99,25000,75000,1,ya,6,300,False
+enemy427,Benzaiten,ene_427_428_429_430,Ene_427,cdn/swf/latest/swf/enemies/ene_427_428_429_430.swf,1,1,99,1000,1000,1,ya,6,300,False
+enemy428,Benzaiten,ene_427_428_429_430,Ene_428,cdn/swf/latest/swf/enemies/ene_427_428_429_430.swf,1,1,99,5000,2500,1,ya,6,300,False
+enemy429,Benzaiten,ene_427_428_429_430,Ene_429,cdn/swf/latest/swf/enemies/ene_427_428_429_430.swf,1,1,99,10000,10000,1,ya,6,300,False
+enemy430,Benzaiten,ene_427_428_429_430,Ene_430,cdn/swf/latest/swf/enemies/ene_427_428_429_430.swf,1,1,99,25000,75000,1,ya,6,300,False
+enemy431,Taikoman,ene_431,Ene_431,cdn/swf/latest/swf/enemies/ene_431.swf,1,1,99,100,3000,1,ya,3,300,False
+enemy432,Taowu,ene_432_433_434_435,Ene_432,cdn/swf/latest/swf/enemies/ene_432_433_434_435.swf,1,1,99,1000,1000,1,ya,7,300,False
+enemy433,Taowu,ene_432_433_434_435,Ene_433,cdn/swf/latest/swf/enemies/ene_432_433_434_435.swf,1,1,99,5000,2500,1,ya,7,300,False
+enemy434,Taowu,ene_432_433_434_435,Ene_434,cdn/swf/latest/swf/enemies/ene_432_433_434_435.swf,1,1,99,10000,10000,1,ya,7,300,False
+enemy435,Taowu,ene_432_433_434_435,Ene_435,cdn/swf/latest/swf/enemies/ene_432_433_434_435.swf,1,1,99,25000,75000,1,ya,7,300,False
+enemy436,Taotie,ene_436_437_438_439,Ene_436,cdn/swf/latest/swf/enemies/ene_436_437_438_439.swf,1,1,99,1000,1000,1,ya,7,300,False
+enemy437,Taotie,ene_436_437_438_439,Ene_437,cdn/swf/latest/swf/enemies/ene_436_437_438_439.swf,1,1,99,5000,2500,1,ya,7,300,False
+enemy438,Taotie,ene_436_437_438_439,Ene_438,cdn/swf/latest/swf/enemies/ene_436_437_438_439.swf,1,1,99,10000,10000,1,ya,7,300,False
+enemy439,Taotie,ene_436_437_438_439,Ene_439,cdn/swf/latest/swf/enemies/ene_436_437_438_439.swf,1,1,99,25000,75000,1,ya,7,300,False
+enemy440,Kenta,ene_440,Ene_440,cdn/swf/latest/swf/enemies/ene_440.swf,80,80,80,400,550,1,ya,5,28000,False
+enemy441,Kaguya,ene_441,Ene_441,cdn/swf/latest/swf/enemies/ene_441.swf,80,80,80,400,550,1,ya,5,23600,False
+enemy442,Genjiro,ene_442,Ene_442,cdn/swf/latest/swf/enemies/ene_442.swf,80,80,80,400,550,1,ya,5,25600,False
+enemy443,Kumataro,ene_443,Ene_443,cdn/swf/latest/swf/enemies/ene_443.swf,80,80,80,400,550,1,ya,5,25000,False
+enemy444,Ayako,ene_444,Ene_444,cdn/swf/latest/swf/enemies/ene_444.swf,80,80,80,400,550,1,ya,5,23860,False
+enemy445,Thief,ene_445,Ene_445,cdn/swf/latest/swf/enemies/ene_445.swf,82,82,82,400,550,1,ya,2,27000,False
+enemy446,Giant,ene_446,Ene_446,cdn/swf/latest/swf/enemies/ene_446.swf,82,82,82,400,550,1,ya,2,26800,False
+enemy447,Fiend,ene_447,Ene_447,cdn/swf/latest/swf/enemies/ene_447.swf,82,82,82,400,550,1,ya,2,26700,False
+enemy448,Escaped Ninja,ene_448,Ene_448,cdn/swf/latest/swf/enemies/ene_448.swf,83,83,83,400,550,1,ya,2,29500,False
+enemy449,Bobcat,ene_449,Ene_449,cdn/swf/latest/swf/enemies/ene_449.swf,83,83,83,400,550,1,ya,4,29000,False
+enemy450,Strong Warrior,ene_450,Ene_450,cdn/swf/latest/swf/enemies/ene_450.swf,83,83,83,400,550,1,ya,2,24000,False
+enemy451,Gold Wolf,ene_451,Ene_451,cdn/swf/latest/swf/enemies/ene_451.swf,84,84,84,400,550,1,ya,6,24700,False
+enemy452,Rebel Ninja Assistant,ene_452,Ene_452,cdn/swf/latest/swf/enemies/ene_452.swf,84,84,84,400,550,1,ya,2,28000,False
+enemy453,Rebel Ninja Assistant,ene_453,Ene_453,cdn/swf/latest/swf/enemies/ene_453.swf,84,84,84,400,550,1,ya,2,28500,False
+enemy454,Rebel Ninja Team Leader,ene_454,Ene_454,cdn/swf/latest/swf/enemies/ene_454.swf,83,83,83,400,550,1,ya,2,30000,False
+enemy455,Rebel Ninja Team Leader,ene_455,Ene_455,cdn/swf/latest/swf/enemies/ene_455.swf,83,83,83,400,550,1,ya,2,13500,False
+enemy456,Rebel Ninja Cadre,ene_456,Ene_456,cdn/swf/latest/swf/enemies/ene_456.swf,85,85,85,400,550,1,ya,2,30000,False
+enemy457,Rebel Ninja,ene_457,Ene_457,cdn/swf/latest/swf/enemies/ene_457.swf,85,85,85,400,550,1,ya,2,31500,False
+enemy458,Rebel Ninja Elite,ene_458,Ene_458,cdn/swf/latest/swf/enemies/ene_458.swf,85,85,85,400,550,1,ya,3,37000,False
+enemy459,Rebel Ninja Captain,ene_459,Ene_459,cdn/swf/latest/swf/enemies/ene_459.swf,85,85,85,400,550,1,ya,8,40860,False
+enemy460,Kamaitachi,ene_460,Ene_460,cdn/swf/latest/swf/enemies/ene_460.swf,10,10,10,30000,20000,1,ya,10,13860,False
+enemy461,Hell Horse,ene_461,Ene_461,cdn/swf/latest/swf/enemies/ene_461.swf,20,20,20,35000,23000,1,ya,11,24780,False
+enemy462,Kabutomushi Musha,ene_462,Ene_462,cdn/swf/latest/swf/enemies/ene_462.swf,25,25,25,38000,25000,1,ya,11,33860,False
+enemy463,Kinkaku,ene_463,Ene_463,cdn/swf/latest/swf/enemies/ene_463.swf,30,30,30,20000,15000,1,ya,7,40670,False
+enemy464,Ginkaku,ene_464,Ene_464,cdn/swf/latest/swf/enemies/ene_464.swf,30,30,30,20000,15000,1,ya,7,38490,False
+enemy465,Thunder Eagle,ene_465,Ene_465,cdn/swf/latest/swf/enemies/ene_465.swf,40,40,40,49000,35000,1,ya,12,86960,False
+enemy466,Mammoth King,ene_466,Ene_466,cdn/swf/latest/swf/enemies/ene_466.swf,50,50,50,55000,38000,1,ya,12,113400,False
+enemy467,Oceans Queen,ene_467,Ene_467,cdn/swf/latest/swf/enemies/ene_467.swf,55,55,55,57000,40000,1,ya,13,158200,False
+enemy468,Ghost Soldier,ene_468,Ene_468,cdn/swf/latest/swf/enemies/ene_468.swf,60,60,60,62000,48000,1,ya,14,256790,False
+enemy469,Battle Angel,ene_469,Ene_469,cdn/swf/latest/swf/enemies/ene_469.swf,70,70,70,72000,56000,2,ya,14,359360,False
+enemy470,Infernal Chimera,ene_470,Ene_470,cdn/swf/latest/swf/enemies/ene_470.swf,80,80,80,100000,75000,2,ya,15,530980,False
+enemy471,Wyvern,ene_471,Ene_471,cdn/swf/latest/swf/enemies/ene_471.swf,1,1,100,1500,1500,1,ya,13,300,False
+enemy472,Darkness Kitty,ene_472,Ene_472,cdn/swf/latest/swf/enemies/ene_472.swf,1,1,99,0,0,1,ya,5,280,False
+enemy473,Darkness Soul,ene_473,Ene_473,cdn/swf/latest/swf/enemies/ene_473.swf,1,1,99,0,0,1,ya,6,300,False
+enemy474,Mr.Pumpkin,ene_474,Ene_474,cdn/swf/latest/swf/enemies/ene_474.swf,1,1,99,0,0,1,ya,6,300,False
+enemy475,Dracula,ene_475,Ene_475,cdn/swf/latest/swf/enemies/ene_475.swf,1,1,100,400,400,1,ya,6,300,False
+enemy476,Witch,ene_476,Ene_476,cdn/swf/latest/swf/enemies/ene_476.swf,1,1,99,100,2000,1,ya,6,300,False
+enemy477,Giant Rainbow Turkey,ene_477,Ene_477,cdn/swf/latest/swf/enemies/ene_477.swf,1,1,99,300,450,1,ya,6,300,False
+enemy478,Monster Pumpkin,ene_478,Ene_478,cdn/swf/latest/swf/enemies/ene_478.swf,1,1,99,300,450,1,ya,6,300,False
+enemy479,Cranberry Fairy,ene_479,Ene_479,cdn/swf/latest/swf/enemies/ene_479.swf,1,1,99,300,450,1,ya,6,300,False
+enemy480,Human Face Yam,ene_480,Ene_480,cdn/swf/latest/swf/enemies/ene_480.swf,1,1,99,300,450,1,ya,6,300,False
+enemy481,Giant Corn Humanoid,ene_481,Ene_481,cdn/swf/latest/swf/enemies/ene_481.swf,1,1,99,300,450,1,ya,6,300,False
+enemy482,Frozen Grunt,ene_482_483_484,Ene_482,cdn/swf/latest/swf/enemies/ene_482_483_484.swf,1,1,100,20,250,1,ya,6,300,False
+enemy483,Frozen Grunt,ene_482_483_484,Ene_483,cdn/swf/latest/swf/enemies/ene_482_483_484.swf,1,1,100,50,350,1,ya,6,300,False
+enemy484,Frozen Grunt,ene_482_483_484,Ene_484,cdn/swf/latest/swf/enemies/ene_482_483_484.swf,1,1,100,70,450,1,ya,6,300,False
+enemy485,Frozen Scourge,ene_485_486_487,Ene_485,cdn/swf/latest/swf/enemies/ene_485_486_487.swf,1,1,100,20,250,1,ya,6,300,False
+enemy486,Frozen Scourge,ene_485_486_487,Ene_486,cdn/swf/latest/swf/enemies/ene_485_486_487.swf,1,1,100,50,350,1,ya,6,300,False
+enemy487,Frozen Scourge,ene_485_486_487,Ene_487,cdn/swf/latest/swf/enemies/ene_485_486_487.swf,1,1,100,70,450,1,ya,6,300,False
+enemy488,Frozen Butcher,ene_488_489_490,Ene_488,cdn/swf/latest/swf/enemies/ene_488_489_490.swf,1,1,100,20,250,1,ya,6,300,False
+enemy489,Frozen Butcher,ene_488_489_490,Ene_489,cdn/swf/latest/swf/enemies/ene_488_489_490.swf,1,1,100,50,350,1,ya,6,300,False
+enemy490,Frozen Butcher,ene_488_489_490,Ene_490,cdn/swf/latest/swf/enemies/ene_488_489_490.swf,1,1,100,70,450,1,ya,6,300,False
+enemy491,Frozen skeleton,ene_491_492_493,Ene_491,cdn/swf/latest/swf/enemies/ene_491_492_493.swf,1,1,100,20,250,1,ya,6,300,False
+enemy492,Frozen skeleton,ene_491_492_493,Ene_492,cdn/swf/latest/swf/enemies/ene_491_492_493.swf,1,1,100,50,350,1,ya,6,300,False
+enemy493,Frozen skeleton,ene_491_492_493,Ene_493,cdn/swf/latest/swf/enemies/ene_491_492_493.swf,1,1,100,70,450,1,ya,6,300,False
+enemy494,Frost Guardian,ene_494_495_496,Ene_494,cdn/swf/latest/swf/enemies/ene_494_495_496.swf,1,1,100,30,300,1,ya,6,300,False
+enemy495,Frost Guardian,ene_494_495_496,Ene_495,cdn/swf/latest/swf/enemies/ene_494_495_496.swf,1,1,100,60,400,1,ya,6,300,False
+enemy496,Frost Guardian,ene_494_495_496,Ene_496,cdn/swf/latest/swf/enemies/ene_494_495_496.swf,1,1,100,80,500,1,ya,6,300,False
+enemy497,Frost Giant,ene_497_498_499,Ene_497,cdn/swf/latest/swf/enemies/ene_497_498_499.swf,1,1,100,30,300,1,ya,6,300,False
+enemy498,Frost Giant,ene_497_498_499,Ene_498,cdn/swf/latest/swf/enemies/ene_497_498_499.swf,1,1,100,60,400,2,ya,6,300,False
+enemy499,Frost Giant,ene_497_498_499,Ene_499,cdn/swf/latest/swf/enemies/ene_497_498_499.swf,1,1,100,80,500,1,ya,6,300,False
+enemy500,Snow monster,ene_500,Ene_500,cdn/swf/latest/swf/enemies/ene_500.swf,1,1,100,100,3000,1,ya,6,300,False
+enemy501,Minotaur,ene_501,Ene_501,cdn/swf/latest/swf/enemies/ene_501.swf,80,80,80,0,0,1,ya,17,300,False
+enemy503,Devil Queen of Hearts,ene_503,Ene_503,cdn/swf/latest/swf/enemies/ene_503.swf,1,1,100,300,450,1,ya,6,300,False
+enemy504,Poker Ninja (Spades),ene_504,Ene_504,cdn/swf/latest/swf/enemies/ene_504.swf,1,1,100,300,450,1,ya,4,300,False
+enemy505,Poker Ninja (Hearts),ene_505,Ene_505,cdn/swf/latest/swf/enemies/ene_505.swf,1,1,100,300,450,1,ya,4,300,False
+enemy506,Poker Ninja (Clubs),ene_506,Ene_506,cdn/swf/latest/swf/enemies/ene_506.swf,1,1,100,300,450,1,ya,4,300,False
+enemy507,Poker Ninja (Diamonds),ene_507,Ene_507,cdn/swf/latest/swf/enemies/ene_507.swf,1,1,100,300,450,1,ya,4,300,False
+enemy508,Rabbit Samurai,ene_508,Ene_508,cdn/swf/latest/swf/enemies/ene_508.swf,1,1,100,300,450,1,ya,6,300,False
+enemy509,Rabbit Martial Artist,ene_509,Ene_509,cdn/swf/latest/swf/enemies/ene_509.swf,1,1,100,300,450,1,ya,4,300,False
+enemy510,Christmas Hippie,ene_510,Ene_510,cdn/swf/latest/swf/enemies/ene_510.swf,1,1,100,300,450,1,ya,7,300,False
+enemy511,Poker Ninja (Joker),ene_511,Ene_511,cdn/swf/latest/swf/enemies/ene_511.swf,1,1,99,100,2500,1,ya,4,300,False
+enemy512,Turtle Assassin,ene_512,Ene_512,cdn/swf/latest/swf/enemies/ene_512.swf,1,1,100,300,450,1,ya,6,300,False
+enemy513,Turtle Samurai,ene_513,Ene_513,cdn/swf/latest/swf/enemies/ene_513.swf,1,1,100,300,450,1,ya,4,300,False
+enemy514,Azure Dragon,ene_514,Ene_514,cdn/swf/latest/swf/enemies/ene_514.swf,1,1,100,400,500,1,ya,6,500,False
+enemy515,Vermilion Bird,ene_515,Ene_515,cdn/swf/latest/swf/enemies/ene_515.swf,1,1,100,400,500,1,ya,6,500,False
+enemy516,White Tiger,ene_516,Ene_516,cdn/swf/latest/swf/enemies/ene_516.swf,1,1,100,400,500,1,ya,6,500,False
+enemy517,Black Turtle,ene_517,Ene_517,cdn/swf/latest/swf/enemies/ene_517.swf,1,1,100,400,500,1,ya,6,500,False
+enemy518,Kirin,ene_518,Ene_518,cdn/swf/latest/swf/enemies/ene_518.swf,1,1,100,800,1000,1,ya,7,300,False
+enemy519,Dark Kirin,ene_519,Ene_519,cdn/swf/latest/swf/enemies/ene_519.swf,1,1,100,800,1000,1,ya,7,300,False
+enemy520,Dragon Soldier,ene_520,Ene_520,cdn/swf/latest/swf/enemies/ene_520.swf,1,1,100,300,400,1,ya,2,400,False
+enemy521,Phoenix Sorcerer,ene_521,Ene_521,cdn/swf/latest/swf/enemies/ene_521.swf,1,1,100,300,400,1,ya,2,400,False
+enemy522,Tiger Fighter,ene_522,Ene_522,cdn/swf/latest/swf/enemies/ene_522.swf,1,1,100,300,400,1,ya,2,400,False
+enemy523,Turtle Warrior,ene_523,Ene_523,cdn/swf/latest/swf/enemies/ene_523.swf,1,1,100,300,400,1,ya,2,400,False
+enemy524,Unicorn Knight,ene_524,Ene_524,cdn/swf/latest/swf/enemies/ene_524.swf,1,1,100,300,400,1,ya,2,300,False
+enemy525,Rock Guardian,ene_525,Ene_525,cdn/swf/latest/swf/enemies/ene_525.swf,1,1,100,100,2500,1,ya,2,300,False
+enemy526,Phantom of Azure Dragon,ene_526,Ene_526,cdn/swf/latest/swf/enemies/ene_526.swf,1,1,100,10,10,1,ya,5,200,False
+enemy527,Phantom of Vermilion Bird,ene_527,Ene_527,cdn/swf/latest/swf/enemies/ene_527.swf,1,1,100,10,10,1,ya,5,200,False
+enemy528,Phantom of White Tiger,ene_528,Ene_528,cdn/swf/latest/swf/enemies/ene_528.swf,1,1,100,300,400,1,ya,5,200,False
+enemy529,Phantom of Black Turtle,ene_529,Ene_529,cdn/swf/latest/swf/enemies/ene_529.swf,1,1,100,300,400,1,ya,5,200,False
+enemy530,Phantom of Kirin,ene_530,Ene_530,cdn/swf/latest/swf/enemies/ene_530.swf,1,1,100,10,10,2,ya,5,200,False
+enemy531,Blossom Spirit,ene_531,Ene_531,cdn/swf/latest/swf/enemies/ene_531.swf,1,1,99,100,2500,1,ya,3,100,False
+enemy532,Sunflower Monster,ene_532,Ene_532,cdn/swf/latest/swf/enemies/ene_532.swf,1,1,100,100,2500,1,ya,4,100,False
+enemy533,Cerberus,ene_533,Ene_533,cdn/swf/latest/swf/enemies/ene_533.swf,80,80,80,0,0,2,ya,15,300,False
+enemy534,Furious Zombie,ene_534,Ene_534,cdn/swf/latest/swf/enemies/ene_534.swf,1,1,100,300,300,2,ya,4,400,False
+enemy535,White Werewolf,ene_535,Ene_535,cdn/swf/latest/swf/enemies/ene_535.swf,1,1,100,300,300,2,ya,4,450,False
+enemy536,Captain Skeleton,ene_536,Ene_536,cdn/swf/latest/swf/enemies/ene_536.swf,1,1,100,300,300,2,ya,4,400,False
+enemy537,Golden Joker,ene_537,Ene_537,cdn/swf/latest/swf/enemies/ene_537.swf,1,1,100,300,300,2,ya,4,400,False
+enemy538,Geisha Ghost,ene_538,Ene_538,cdn/swf/latest/swf/enemies/ene_538.swf,1,1,100,300,300,2,ya,4,400,False
+enemy539,Kojima,ene_539,Ene_539,cdn/swf/latest/swf/enemies/ene_539.swf,1,1,99,400,550,1,ya,2,300,False
+enemy546,Griffin,ene_546,Ene_546,cdn/swf/latest/swf/enemies/ene_546.swf,80,80,80,0,0,2,ya,15,300,False
+enemy561,Wanyudo,ene_561,Ene_561,cdn/swf/latest/swf/enemies/ene_561.swf,80,80,80,0,0,2,ya,12,300,False
+enemy570,Gashadokuro,ene_570,Ene_570,cdn/swf/latest/swf/enemies/ene_570.swf,80,80,80,0,0,2,ya,12,300,False
+enemy1233,123,123,2312,cdn/swf/latest/swf/enemies/123.swf,0,0,0,0,0,2,ya,1,123,False
+enemy95995,"""Minotaur's Head, Minotaur's Right Arm, Minotaur's Left Arm""",ene_501,Ene_501,cdn/swf/latest/swf/enemies/ene_501.swf,80,80,80,0,0,1,ya,5,532800,False
+enemy95996,"""Minotaur's Head, Minotaur's Right Arm, Minotaur's Left Arm""",ene_501,Ene_501,cdn/swf/latest/swf/enemies/ene_501.swf,80,80,80,0,0,1,ya,5,532800,False
+enemy999999,Jurojin,ene_415,Ene_415,cdn/swf/latest/swf/enemies/ene_415.swf,1,1,99,400,550,1,ya,6,300,False
+enemy9999997,Jurojin,ene_415,Ene_415,cdn/swf/latest/swf/enemies/ene_415.swf,1,1,99,400,550,1,ya,6,300,False

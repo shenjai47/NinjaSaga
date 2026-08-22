@@ -908,6 +908,29 @@ function daftarPet(c, sessionKey) {
   });
 }
 
+/* XP minimum yang dibutuhkan sebuah pet untuk mencapai level tertentu.
+ *
+ * Salinan Formula.getPetXpByLv (code_library):
+ *     total = 0
+ *     for (i = 1; i < level; i++)
+ *         total += round(i * 130 * pow(50, i / 50) * 0.2)
+ *
+ * PENTING: klien TIDAK memakai field `level` yang kita kirim untuk menentukan
+ * level pet — ia menghitung ulang dari `xp` lewat Formula.getPetLvByXp. Jadi
+ * menyimpan level saja tanpa xp membuat pet kembali ke level 1 setiap muat
+ * ulang, walaupun characters.json sudah mencatat levelnya dengan benar.
+ *
+ *     level 2 -> 28      level 5 -> 330     level 10 -> 1948
+ */
+function xpPetUntukLevel(level) {
+  const lv = Math.max(1, Number(level) || 1);
+  let total = 0;
+  for (let i = 1; i < lv; i++) {
+    total += Math.round(i * 130 * Math.pow(50, i / 50) * 0.2);
+  }
+  return total;
+}
+
 /* Tambahkan pet ke koleksi karakter aktif.
  *   addPet({ id, name, level, xp, skills, swfName, clsName, equipped })
  * id yang sama tidak digandakan -- datanya diperbarui. */
@@ -924,19 +947,30 @@ function addPet(pet) {
   const swfName = String(pet.swfName || a.swfName);
   const baru = {
     id,
-    trained:  Array.isArray(pet.trained) ? pet.trained.map(Number) : [0],
+    trained:  Array.isArray(pet.trained) ? pet.trained.map(Number) : null,
     name:     String(pet.name || a.name),
     level:    Number(pet.level) || 1,
     xp:       Number(pet.xp)    || 0,
-    skills:   Array.isArray(pet.skills) ? pet.skills.map(String) : [],
+    skills:   Array.isArray(pet.skills) ? pet.skills.map(String) : null,
     swfName,
     clsName:  String(pet.clsName || a.clsName),
     equipped: !!pet.equipped,
   };
 
+  // Field bernilai null berarti "tidak disebutkan" -- dibuang supaya nilai
+  // lama tidak ikut terhapus. Tanpa ini, memanggil addPet({id, level}) saja
+  // akan mengosongkan daftar skill pet yang sudah susah payah dilatih.
+  for (const k of Object.keys(baru)) if (baru[k] === null) delete baru[k];
+
   const i = c.pets.findIndex(p => String(p.id) === id);
-  if (i >= 0) c.pets[i] = Object.assign({}, c.pets[i], baru);
-  else        c.pets.push(baru);
+  if (i >= 0) {
+    c.pets[i] = Object.assign({}, c.pets[i], baru);
+  } else {
+    // pet baru: isi nilai awal untuk field yang tadi dibuang
+    if (!baru.trained) baru.trained = [0];
+    if (!baru.skills)  baru.skills  = [];
+    c.pets.push(baru);
+  }
 
   if (baru.equipped && !petBisaBertarung(id)) {
     // Memasangnya aktif akan membekukan pertarungan pada giliran pet.
@@ -2814,7 +2848,7 @@ module.exports = {
   setActiveCharacter, getActiveId, characterById, hitungRank,
   createCharacter, firstCharacter, listCharacters,
   setElements, addItem, removeItem, addSkill, setEquip, kantongDari,
-  addPet, removePet, setPetEquipped, listPets, daftarPet,
+  addPet, removePet, setPetEquipped, listPets, daftarPet, xpPetUntukLevel,
   petBuyResult, bayarPet, petAsset, petById, PET_DATA,
   petBisaBertarung, skillPetTerlatih, latihSkillPet, biayaLatih,
   statusMisiSennin, SS_MISSION,
