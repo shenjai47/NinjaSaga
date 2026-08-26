@@ -17,6 +17,7 @@ const { buildStub } = require('./stub');
 const chars = require('./chardata');
 const { cloneFrom } = require('./assetclone');
 const HARGA = require('./harga');   // id -> [gold, crystal]
+const { HAIR_DATA } = require('./hairdata');   // tabel rambut Style Shop
 
 const PORT = 8080;
 const LOG = path.join(__dirname, 'amf-log.txt');
@@ -113,6 +114,27 @@ const PAKET_PATRIOT = {
   1: ['set_1431', 'wpn_1109', 'hair_430', 'back_427', 'skill_896', 'pet_205'],
 };
 
+/* Magic Package -- popup_4th_claim_code_p15.swf, servis
+ * SpecialReward.claimMagicPackage.
+ *
+ * Dibaca dari Anni4_ClaimCode.show() @21-83, yang menimpa ClaimRewardArr
+ * menurut CHAR_GENDER (ingat: nilai di KONSTRUKTOR sama di semua popup dan
+ * bukan isi paket):
+ *     @27  gender 0 -> set_2424 wpn_1502 hair_765 back_688 skill_914 pet_157
+ *     @59  gender 1 -> set_2425 wpn_1502 hair_766 back_688 skill_914 pet_157
+ *
+ * Semua id dicocokkan ke data_library_en.swf -- "Magic Emissary Set":
+ *     set2424  BODY_SET_BOY    set2425  BODY_SET_GIRL
+ *     hair765  gender 0        hair766  gender 1
+ *     wpn1502 Magic Emissary Sword, back688 Magic Emissary Wing,
+ *     skill914 Kinjutsu: Advanced Black Light, pet157 Mini Bat
+ * Senjata, tas, skill, dan pet dipakai bersama kedua jenis kelamin.
+ */
+const PAKET_MAGIC = {
+  0: ['set_2424', 'wpn_1502', 'hair_765', 'back_688', 'skill_914', 'pet_157'],
+  1: ['set_2425', 'wpn_1502', 'hair_766', 'back_688', 'skill_914', 'pet_157'],
+};
+
 const perGender = tabel => c => tabel[Number(c && c.gender) === 1 ? 1 : 0];
 
 /* Peta servis paket -> isi hadiah.
@@ -124,10 +146,12 @@ const perGender = tabel => c => tabel[Number(c && c.gender) === 1 ? 1 : 0];
  *
  *     p8   -> SpecialReward.claimAugustPackage
  *     p11  -> SpecialReward.claimPatriotPackage
+ *     p15  -> SpecialReward.claimMagicPackage
  */
 const PAKET_KLAIM = {
   'SpecialReward.claimAugustPackage':  perGender(PAKET_AGUSTUS),
   'SpecialReward.claimPatriotPackage': perGender(PAKET_PATRIOT),
+  'SpecialReward.claimMagicPackage':   perGender(PAKET_MAGIC),
 };
 
 /* Pemberi hadiah generik untuk semua servis di PAKET_KLAIM. */
@@ -1644,6 +1668,7 @@ const handlers = {
   // Jadi pesan di bawah sekaligus jadi tampilan hasilnya.
   'SpecialReward.claimAugustPackage':  () => klaimPaket('SpecialReward.claimAugustPackage'),
   'SpecialReward.claimPatriotPackage': () => klaimPaket('SpecialReward.claimPatriotPackage'),
+  'SpecialReward.claimMagicPackage':   () => klaimPaket('SpecialReward.claimMagicPackage'),
 
   // Jalur kode klaim: claimReward @449-486 mengirim
   // [sessionKey, ClaimCode_1, ClaimCode_2].
@@ -2313,6 +2338,40 @@ const handlers = {
   // WEAPON_DATA, ENEMY_DATA, BLOODLINE, dan BODY_SET dari data_library_en.swf
   // (lewat dataLib.getSkill(), dst) — jadi server TIDAK perlu mengirimnya.
   // Yang tetap dibaca dari respons hanya field di bawah ini.
+  // Daftar rambut untuk Style Shop.
+  //
+  // Tanpa handler ini, panel Style Shop menjatuhkan:
+  //     #1009 at ninjasaga::DataParser/parseHairData()
+  //        <- ninjasaga.linkage.panel::StyleShop/getHairDataResponse()
+  //
+  // parseHairData @16-60 langsung membaca param.length untuk mengisi
+  // Central.main.HAIR_DATA. Field yang tidak dikirim jadi undefined, dan
+  // undefined.length melempar #1009; larik kosong sekalipun sudah aman.
+  //
+  // Nama field yang dibaca StyleShop.getHairDataResponse belum dipastikan
+  // (kelasnya ada di swf/panels/style_shop.swf, bukan di code_library),
+  // jadi daftarnya dikirim di BEBERAPA nama sekaligus. Mengirim field
+  // berlebih tidak berbahaya; yang berbahaya adalah field yang dipakai
+  // tapi tidak dikirim.
+  'SystemData.getHairData': () => ({
+    status: 1, error: null,
+    result: HAIR_DATA,
+    data: HAIR_DATA,
+    hair: HAIR_DATA,
+    hair_data: HAIR_DATA,
+    hairData: HAIR_DATA,
+  }),
+
+  // Dua servis di bawah tidak menimbulkan error dengan balasan generik,
+  // tapi didaftarkan supaya tidak lagi tercatat "handler BELUM ADA".
+  'CharacterDAO.getSkillProfiles': () => ({
+    status: 1, error: null, result: [], data: {},
+  }),
+
+  'SkillPackageLimit.getPackageStatus': () => ({
+    status: 1, error: null, result: [], data: {},
+  }),
+
   'SystemData.get': () => ({
     status: 1, error: null, result: systemDataFields(),
   }),

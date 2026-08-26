@@ -243,6 +243,10 @@
       "600",
       "604",
       "600",
+      "604",
+      "600",
+      "604",
+      "600",
       "604"
     ],
     "created": 1785943126,
@@ -618,12 +622,12 @@
           1
         ],
         "name": "Nanabi",
-        "level": 5,
-        "xp": 0,
+        "level": 6,
+        "xp": 522,
         "skills": [],
         "swfName": "tail_7",
         "clsName": "Tail_7",
-        "equipped": true
+        "equipped": false
       }
     ],
     "sjeNoticeWatched": true,

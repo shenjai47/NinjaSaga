@@ -875,7 +875,21 @@ function petEntry(p, sessionKey) {
     id:       String(p.id == null ? '0' : p.id),
     name:     String(p.name || a.name),
     level:    Number(p.level) || 1,
-    xp:       Number(p.xp)    || 0,
+
+    // XP DISELARASKAN DENGAN LEVEL, bukan sekadar disalin.
+    //
+    // Klien mengabaikan field `level` yang kita kirim dan menghitung ulang
+    // sendiri lewat Formula.getPetLvByXp(xp). Jadi pet dengan level 5 tapi
+    // xp 0 akan tampil sebagai level 1 -- dan karena penyimpanan level hanya
+    // terjadi saat pet NAIK level, pet yang sudah terlanjur tersimpan dengan
+    // xp 0 tidak akan pernah membaik dengan sendirinya.
+    //
+    // Diselaraskan di sini, saat mengirim, supaya berlaku juga untuk data
+    // lama. Kalau xp tersimpan sudah lebih besar (mis. hasil latihan), yang
+    // besar itu yang dipakai supaya progres menuju level berikutnya tidak
+    // ikut terhapus.
+    xp:       Math.max(Number(p.xp) || 0,
+                       xpPetUntukLevel(Number(p.level) || 1)),
     // parsePetData: `if (petObj.skills)` -> array kosong pun jatuh ke [0].
     // Indeks skill yang SUDAH DILATIH. setupAvailableSkills memakainya
     // sebagai indeks ke skillData -- angka berurut, bukan id skill.
