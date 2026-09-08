@@ -17,7 +17,6 @@ const { buildStub } = require('./stub');
 const chars = require('./chardata');
 const { cloneFrom } = require('./assetclone');
 const HARGA = require('./harga');   // id -> [gold, crystal]
-const { HAIR_DATA } = require('./hairdata');   // tabel rambut Style Shop
 
 const PORT = 8080;
 const LOG = path.join(__dirname, 'amf-log.txt');
@@ -91,305 +90,111 @@ function systemDataFields() {
 }
 
 // ---------------------------------------------------------------
-/* Isi paket, dibaca langsung dari Anni4_ClaimCode.show() di tiap popup.
+/* Bahan yang dibutuhkan tiap slot implant gauntlet.
  *
- * PENTING: jangan memakai ClaimRewardArr dari konstruktor. Nilai di situ
- * ('hair_757','set_1255','back_684','wpn_1498') ternyata sisa salinan yang
- * SAMA di p8 maupun p11, dan langsung ditimpa oleh show() @21-80:
+ * Dibaca dari GAUNTLET_UPGRADE_COST di konstruktor Gauntleluptade @3-143:
+ *     item1144 Fire Stone Fragment       220 + 100.000 gold
+ *     item1145 Wind Stone Fragment       220 + 200.000 gold
+ *     item1146 Water Stone Fragment      220 + 300.000 gold
+ *     item1147 Lightning Stone Fragment  220 + 400.000 gold
+ *     item1148 Earth Stone Fragment      220 + 500.000 gold
+ *     item1150 Chakra Stone Fragment     220 + 700.000 gold
  *
- *     if (CHAR_GENDER == 0) ClaimRewardArr = [ ...versi laki-laki... ];
- *     else                  ClaimRewardArr = [ ...versi perempuan... ];
+ * Tombol Implant (uBtn1..uBtn6) baru hidup kalau SEMUA syarat ini terpenuhi
+ * (setPanelContent @1875-1995):
+ *     toolkit.hasItem('wpn1596')
+ *     stateObj<N> != 2                       slot belum ter-implant
+ *     toolkit.getItemCount(<batu>) >= 220     bahannya cukup
  *
- * Baju, rambut, dan senjata punya versi per jenis kelamin; tas, skill, dan
- * pet dipakai bersama. Sudah dicocokkan dengan data_library_en.swf:
- *     set2248 BOY / set2249 GIRL      hair683 gender 0 / hair684 gender 1
- *     set1430 BOY / set1431 GIRL      hair429 gender 0 / hair430 gender 1
+ * Batu-batu ini tidak dijual lewat servis AMF mana pun di panel -- di server
+ * aslinya didapat dari event. Karena itu disediakan di sini: setel true untuk
+ * membekali karakter 220 batu tiap jenis saat login, sehingga tombol Implant
+ * bisa ditekan. Setel false kalau mau mengumpulkannya sendiri.
  */
-const PAKET_AGUSTUS = {
-  0: ['set_2248', 'wpn_1343', 'hair_683', 'back_557', 'skill_719', 'pet_71'],
-  1: ['set_2249', 'wpn_1343', 'hair_684', 'back_557', 'skill_719', 'pet_71'],
+// HARUS false. Memenuhi syarat 220 batu berarti menaruh 220 x 6 = 1320 entri
+// di inventaris, dan MapMenu.countArrItems menelusuri seluruh entri tiap kali
+// panel dibuka -- akibatnya
+//     Error #1502: A script has executed for longer than 15 seconds
+//         at MapMenu/countArrItems()
+// dan Gear tidak pernah selesai digambar (tab barang tampak kosong).
+//
+// Syarat batunya sudah diturunkan ke 0 di Popup_Gauntlet_menu.swf, jadi
+// tombol Implant hidup tanpa perlu satu batu pun. Nilai false di sini juga
+// MEMBERSIHKAN 1320 entri yang telanjur masuk saat login berikutnya.
+//
+// Setel true hanya kalau memakai Popup_Gauntlet_menu.swf yang asli.
+const BEKALI_BATU_GAUNTLET = false;
+const BATU_GAUNTLET = ['1144', '1145', '1146', '1147', '1148', '1150'];
+
+/* Mysterious Merchant / Legendary Skill Package
+ * (swf/panels/limited_package_store_2018.swf, kelas LimitSkill2018).
+ *
+ * Papan "under construction" muncul kalau paketnya dianggap tidak ada.
+ * getstatus @16-43 memutuskan begini:
+ *
+ *     if (result.package_data != null && result.package_type != 9) {
+ *         typeleft   = result.package_type
+ *         packageDataleft = result.package_data
+ *         countdownRemainTimeleft = result.time_limit
+ *         haveleft   = true
+ *     } else if (typeleft == 9) haveleft = false
+ *
+ * Jadi package_type 9 (atau package_data null) = tutup. Nilai lainnya
+ * memilih tata letak di check() @100-624:
+ *     1 -> kotak tunggal 'leftone'
+ *     2 -> 'twoboxleft' / 'threeboxleft' / 'fourboxleft'  menurut
+ *          package_data.length (2 / 3 / selain itu)
+ *     3 -> versi "update" dari ketiganya
+ *
+ * Tiap entri package_data cuma perlu DUA field:
+ *     id    dipakai buyPackage @158-173 (packageIdForBuy) dan dikirim ke
+ *           SkillPackageLimit.buySkillLimit([sessionKey, id])
+ *     cost  STRING "hargaEmblem_hargaNormal", dipecah dengan "_".
+ *           buyPackage @103-155: pemilik Emblem membayar potongan [0],
+ *           pengguna biasa potongan [1]. display() @18-64 memakai keduanya
+ *           untuk menghitung teks diskon: (normal - emblem) / normal * 100.
+ *
+ * Isi hadiahnya TIDAK ada di panel (gambar kotaknya tertanam di timeline),
+ * jadi ditentukan di sini. buySkillLimit membalas res.cost yang dipakai
+ * getBuyPackage @16-29 untuk mengurangi saldo akun di layar.
+ */
+const PAKET_MERCHANT = {
+  // JANGAN pakai tipe 2 dengan daftar datar.
+  //
+  // getstatus @85-121: kalau typeleft == 2, klien menjalankan
+  //     packageDataright = result.package_data[1]
+  // sedangkan field packageDataright DIDEKLARASIKAN bertipe Array. Jadi
+  // elemen ke-2 harus berupa LARIK (daftar paket untuk sisi kanan panel),
+  // bukan satu entri paket. Mengirim daftar datar menghasilkan
+  //     #1034 Type Coercion failed: cannot convert Object to Array
+  //         at LimitSkill2018/getstatus()
+  // dan panel berhenti sebelum sempat digambar.
+  //
+  // Tipe 1 hanya memakai sisi kiri ('leftone') dan tidak pernah menyentuh
+  // cabang itu, jadi paling aman. Isi `daftar` boleh lebih dari satu entri;
+  // dengan tipe 1 yang ditampilkan entri pertama (display() @18-27 membaca
+  // packageDataleft[0].cost).
+  tipe: 1,               // 1 = satu kotak (aman), 3 = versi "update", 9 = tutup
+  batas_waktu: 604800,   // hitung mundur di panel, dalam detik (7 hari)
+
+  // `id` HARUS STRING, dan isinya NOMOR SKILL saja (tanpa awalan "skill").
+  //
+  //   setPanelContent @483-498 menjalankan  packageDataleft[i].id.split('_')
+  //   -> mengirim angka menghasilkan "#1006 value is not a function",
+  //      karena Number tidak punya metode split.
+  //
+  //   @523-547 lalu mencari  SKILL_DATA['skill' + id]  dan @601-624 memakai
+  //   hasilnya untuk mengisi teks skillName. Jadi id "902" -> skill902,
+  //   yaitu Kinjutsu: Unstoppable Rage. Nama dan ikonnya diambil klien
+  //   sendiri dari data_library, server tidak perlu mengirimnya.
+  //
+  // Catatan: sisi KANAN panel memakai bentuk berbeda (@3935-3957 memeriksa
+  // potongan pertama terhadap 'skill', jadi id di sana berbentuk
+  // "skill_902"). Sisi kanan belum dipakai karena butuh package_type 2.
+  daftar: [
+    { id: '902', cost: '1039_1299', isi: ['skill_902'] },
+  ],
 };
-const PAKET_PATRIOT = {
-  0: ['set_1430', 'wpn_1109', 'hair_429', 'back_427', 'skill_896', 'pet_205'],
-  1: ['set_1431', 'wpn_1109', 'hair_430', 'back_427', 'skill_896', 'pet_205'],
-};
-
-/* Magic Package -- popup_4th_claim_code_p15.swf, servis
- * SpecialReward.claimMagicPackage.
- *
- * Dibaca dari Anni4_ClaimCode.show() @21-83, yang menimpa ClaimRewardArr
- * menurut CHAR_GENDER (ingat: nilai di KONSTRUKTOR sama di semua popup dan
- * bukan isi paket):
- *     @27  gender 0 -> set_2424 wpn_1502 hair_765 back_688 skill_914 pet_157
- *     @59  gender 1 -> set_2425 wpn_1502 hair_766 back_688 skill_914 pet_157
- *
- * Semua id dicocokkan ke data_library_en.swf -- "Magic Emissary Set":
- *     set2424  BODY_SET_BOY    set2425  BODY_SET_GIRL
- *     hair765  gender 0        hair766  gender 1
- *     wpn1502 Magic Emissary Sword, back688 Magic Emissary Wing,
- *     skill914 Kinjutsu: Advanced Black Light, pet157 Mini Bat
- * Senjata, tas, skill, dan pet dipakai bersama kedua jenis kelamin.
- */
-const PAKET_MAGIC = {
-  0: ['set_2424', 'wpn_1502', 'hair_765', 'back_688', 'skill_914', 'pet_157'],
-  1: ['set_2425', 'wpn_1502', 'hair_766', 'back_688', 'skill_914', 'pet_157'],
-};
-
-const perGender = tabel => c => tabel[Number(c && c.gender) === 1 ? 1 : 0];
-
-/* Peta servis paket -> isi hadiah.
- *
- * Di peta ada beberapa tombol paket (PackageBtn10, PackageBtn13, ...). Tiap
- * tombol memuat popup_4th_claim_code_pNN.swf yang berbeda, tapi SEMUANYA
- * memakai kelas Anni4_ClaimCode yang sama dan callback ClaimItemResponse yang
- * hanya membaca res.message. Yang berbeda cuma nama servisnya:
- *
- *     p8   -> SpecialReward.claimAugustPackage
- *     p11  -> SpecialReward.claimPatriotPackage
- *     p15  -> SpecialReward.claimMagicPackage
- */
-const PAKET_KLAIM = {
-  'SpecialReward.claimAugustPackage':  perGender(PAKET_AGUSTUS),
-  'SpecialReward.claimPatriotPackage': perGender(PAKET_PATRIOT),
-  'SpecialReward.claimMagicPackage':   perGender(PAKET_MAGIC),
-};
-
-/* Pemberi hadiah generik untuk semua servis di PAKET_KLAIM. */
-function klaimPaket(namaServis) {
-  const pilih = PAKET_KLAIM[namaServis];
-  const balas = pesan => ({ status: 1, error: null, result: [], data: {}, message: pesan });
-
-  if (!pilih) {
-    return balas('Paket ini belum tersedia di server.');
-  }
-
-  const aktif = chars.getActiveId();
-  const c = (aktif && chars.characterById(aktif)) || chars.firstCharacter();
-  if (!c) return balas('Karakter tidak ditemukan.');
-
-  const baru = pilih(c).filter(id => !sudahPunya(c, id));
-  if (!baru.length) return balas('Kamu sudah mengambil semua hadiah paket ini.');
-
-  // skill dan pet punya jalurnya sendiri; sisanya lewat addItem.
-  for (const id of baru) {
-    const sk = String(id).match(/^skill_?(\d+)$/);
-    const pt = String(id).match(/^pet_?(\d+)$/);
-    if (sk)      chars.addSkill(sk[1]);
-    else if (pt) chars.addPet({ id: pt[1] });
-    else         chars.addItem(String(id).replace('_', ''), 1);
-  }
-  log('   paket ' + namaServis + ' diberikan: ' + baru.join(', '));
-  return balas('Kamu mendapat ' + baru.join(', ') +
-               '. Muat ulang permainan supaya muncul di inventaris.');
-}
-
-/* Berikan satu hadiah ke karakter aktif.
- *
- * Hadiah datang dalam bentuk "<jenis>_<nomor>" dan disimpan lewat jalur yang
- * berbeda-beda di chardata.js: skill dan pet punya fungsinya sendiri,
- * sisanya (senjata, baju, rambut, tas, aksesori, dan barang biasa) lewat
- * addItem yang sudah mengenali awalannya.
- */
-function beriHadiah(id) {
-  const sk = String(id).match(/^skill_?(\d+)$/);
-  if (sk) return chars.addSkill(sk[1]);
-  const pt = String(id).match(/^pet_?(\d+)$/);
-  if (pt) return chars.addPet({ id: pt[1] });
-  return chars.addItem(String(id).replace('_', ''), 1);
-}
-
-/* Apakah karakter sudah memiliki perlengkapan ini?
- * ClaimRewardArr memakai "hair_757"; kantong di characters.json menyimpan
- * nomornya saja ("757"), jadi garis bawahnya dipisah di sini.
- */
-function sudahPunya(c, id) {
-  const m = String(id).match(/^(wpn|set|hair|back|acsy)_?(\d+)$/);
-  if (m) {
-    const bag = { wpn: 'weapons', set: 'bodysets', hair: 'hairs',
-                  back: 'backitems', acsy: 'accessories' }[m[1]];
-    return Array.isArray(c[bag]) && c[bag].includes(m[2]);
-  }
-  const sk = String(id).match(/^skill_?(\d+)$/);
-  if (sk) return Array.isArray(c.skills) && c.skills.map(String).includes(sk[1]);
-  const pt = String(id).match(/^pet_?(\d+)$/);
-  if (pt) return Array.isArray(c.pets) &&
-                 c.pets.some(x => String(x && x.id != null ? x.id : x) === pt[1]);
-  return false;
-}
-
-/* Kode klaim manual (panel dua kotak). Kunci = isi kotak pertama + "-" +
- * kotak kedua, huruf besar semua. Isinya mengikuti paket Agustus, urutan
- * indeksnya sama dengan PAKET_AGUSTUS di atas:
- *     0 set   1 wpn   2 hair   3 back   4 skill   5 pet
- */
-const agustus = perGender(PAKET_AGUSTUS);
-const KODE_ANNI4 = {
-  'ANNI4-SET':   c => [agustus(c)[0]],
-  'ANNI4-WPN':   c => [agustus(c)[1]],
-  'ANNI4-HAIR':  c => [agustus(c)[2]],
-  'ANNI4-BACK':  c => [agustus(c)[3]],
-  'ANNI4-SKILL': c => [agustus(c)[4]],
-  'ANNI4-PET':   c => [agustus(c)[5]],
-  'ANNI4-ALL':   agustus,
-};
-
-/* ====================================================================
- * DAFTAR MUSUH: Eudemon Garden dan Hunting House
- *
- * Pakai kolom "kunci" dari database/enemy.csv (enemy1 ... enemy346).
- * Hanya 209 di antaranya berstat lengkap (kolom stat_lengkap = ya);
- * yang tidak lengkap tetap tampil tapi bisa aneh saat bertarung.
- * ==================================================================== */
-
-/* Eudemon Garden — satu entri = satu "room" di panel.
- *
- *   boss     larik id musuh, MAKSIMAL 2 (panel cuma punya previewMc0 & 1)
- *   rank     nomor frame lencana rankMc; 1 = paling rendah
- *   rewards  larik id barang yang ditampilkan sebagai kemungkinan hadiah
- *   time     sisa pertarungan hari ini; 0 membuat tombol serang mati
- *   xp/gold  angka yang dipamerkan di panel
- *
- * Panel menampilkan 5 room per halaman dan menghitung halaman sendiri,
- * jadi jumlah entri boleh berapa pun.
- */
-const EUDEMON_ROOM = [
-  { boss: ['enemy338'],            rank: 1, time: 3, xp: 550,  gold: 400,
-    rewards: ['wpn_1498', 'set_2248'] },
-  { boss: ['enemy339', 'enemy340'], rank: 2, time: 3, xp: 900,  gold: 700,
-    rewards: ['wpn_1343', 'back_557'] },
-];
-
-/* Hunting House — dikelompokkan per zona di peta dunia panel.
- *
- *   zone0   diperlakukan khusus: hanya elemen pertama tiap sub-larik
- *           yang dipakai, dan masuk daftar SpecialBoss
- *   zoneN   larik id musuh biasa; N menentukan movieclip EasyBoss<N>
- *           mana yang ditampilkan di peta
- *
- * Kosongkan zona yang tidak dipakai dengan larik kosong.
- */
-const HUNTING_ZONE = {
-  zone0: [],
-  zone1: ['enemy338', 'enemy339'],
-  zone2: ['enemy340', 'enemy341'],
-};
-
-/* Balasan baku untuk semua servis akhir-pertarungan.
- *
- * Battle memakai TIGA callback berbeda tergantung jalurnya:
- *     Battle.callBattleFinishHAV -> getBossRewardResponse02  (paling rewel)
- *     Battle.actionFinish_CB     -> getBossRewardResponse04
- *     jalur bos lain             -> getBossRewardResponse03
- *
- * Servis yang bisa mendarat di salah satunya: ItemDAO.getBossReward,
- * EudemonGarden.finishHunting, ValentinesDay2017.finishHunting, dan
- * CharacterDAO.finishHunting. Karena satu servis bisa dipanggil dari jalur
- * berbeda, SEMUANYA memakai bentuk balasan yang sama di bawah ini.
- *
- * Syarat dari Response02 (yang paling ketat):
- *
- *   reward, reward_get   WAJIB larik. @329/@342 di-coerce Array lalu @878
- *                        dibaca .length. Field yang tak dikirim jadi
- *                        undefined -> coerce Array -> null -> #1009.
- *
- *   result               null ATAU objek. @356 hanya menjaga terhadap null,
- *                        lalu langsung membaca result.add_favorability.
- *                        Mengirim angka (mis. result: 1) menghasilkan
- *                        "#1069 Property add_favorability not found on Number"
- *                        karena Number kelas tertutup, tak punya properti
- *                        dinamis. Jadi null adalah pilihan paling aman.
- *
- *   extra_reward,        diuji dengan Boolean(). Larik kosong bernilai TRUE
- *   extra_reward_get,    di AS3, jadi dikirim null supaya blok hadiah
- *   pet                  tambahan dilewati bersih.
- *
- *   z9f, message         dijaga terhadap null; ikut dikirim agar Response03
- *                        dan Response04 juga aman.
- */
-/* Isi hadiah yang muncul di jendela akhir pertarungan.
- *
- * Tiap entri adalah STRING berbentuk "<jenis>_<nilai>", dipecah klien dengan
- * "_" di Main.itemPrototype / Battle.itemPrototype. Cabangnya diuji dengan
- * indexOf di getBossRewardResponse02 @433-857, dengan URUTAN yang penting:
- *
- *     petxp_N   -> bossRewardPetXp = N          (diperiksa PALING AWAL,
- *                                                karena "petxp" mengandung
- *                                                "xp" dan akan tertangkap
- *                                                cabang xp kalau dibalik)
- *     xp_N      -> bossRewardXp, lalu updateXP + showLevelUp
- *     gold_N    -> bossRewardGold, lalu updateGold
- *     item_N    -> masuk daftar barang
- *     wpn_N / set_N / hair_N / back_N / skill_N / pet_N
- *               -> ditampilkan sebagai barang yang didapat
- *
- * Yang berupa perlengkapan juga DISIMPAN ke characters.json oleh handler di
- * bawah, supaya tidak hilang saat muat ulang — klien hanya menampilkannya,
- * tidak menyimpannya sendiri.
- *
- * Kosongkan lariknya kalau tidak mau ada hadiah sama sekali.
- */
-const HADIAH_BOS = [
-  'xp_1000',
-  'gold_500',
-];
-
-/* Barang yang ditampilkan sebagai ikon di jendela akhir pertarungan.
- *
- * Rantai lengkapnya (MissionResult di swf/panels/mission_complete.swf):
- *
- *   MissionResult.init(isComplete, tampilkan, missionData, effectData,
- *                      rewardList, rewardGetList, callBack)
- *       @43  rewardList    <- parameter ke-5  = slot3 = field `reward`
- *       @37  rewardGetList <- parameter ke-6  = slot4 = field `reward_get`
- *
- *   MissionResult.rewardDisplay @45-100
- *       mengulang rewardList, lalu rewardIcon(rewardList[i], rewardIcon_<i>)
- *       -> INILAH yang menggambar ikon. Hanya `reward` yang tampil.
- *
- *   MissionResult.rewardIcon @138-149
- *       rewardGetList.indexOf(id)  -> menandai barang mana yang BENAR-BENAR
- *       didapat; rewardList sendiri hanya daftar kemungkinan hadiah.
- *
- * Jadi peran keduanya berbeda, dan kemarin saya menyimpulkannya terbalik:
- *     `reward`      = apa yang DITAMPILKAN
- *     `reward_get`  = mana yang DIDAPAT (penanda saja, tidak menggambar apa pun)
- *
- * Karena itu barang harus masuk ke DUA-DUANYA. Entri xp_/gold_ tidak perlu:
- * angkanya sudah digambar terpisah dari missionData, dan cabangnya di
- * Response02 @525-617 tidak pernah mendorongnya ke rewardList.
- *
- * Batas: panel hanya punya rewardIcon_0 sampai rewardIcon_9, jadi maksimal
- * 10 barang. Lebih dari itu, skin-nya undefined dan panelnya melempar error.
- */
-const HADIAH_MATERIAL = [
-  'item_600',    // Wolf's Bone
-  'item_604',    // Beast's Bone
-];
-
-/* Semua hadiah, dan hanya bagian barangnya. */
-const semuaHadiah  = () => HADIAH_BOS.concat(HADIAH_MATERIAL);
-const barangHadiah = () => semuaHadiah().filter(h => !/^(xp|gold|petxp)_/.test(h));
-
-function balasanHadiah(tambahan) {
-  return Object.assign({
-    status: 1,
-    error: null,
-    result: null,          // JANGAN angka
-    reward: semuaHadiah(),                 // WAJIB larik -- yang DITAMPILKAN
-    reward_get: barangHadiah(),            // WAJIB larik -- penanda DIDAPAT
-    reward_items: [],
-    player_pet: [],
-    extra_reward: null,
-    extra_reward_get: null,
-    pet: null,
-    gold: 0,
-    xp: 0,
-    dmg: 0,
-    double_reward: false,
-    message: '',
-    z9f: null,
-  }, tambahan || {});
-}
 
 const handlers = {
 
@@ -496,7 +301,45 @@ const handlers = {
     }
     log('   karakter dipilih: ' + c.name + ' lv' + c.level +
         ' (id=' + (chars.getActiveId() || '?') + ')');
-    return { status: 1, error: null, result: chars.rawCharacter(c, args && args[0]) };
+
+    // Bekali batu gauntlet kalau kurang dari 220. Tombol Implant memeriksa
+    // toolkit.getItemCount(<batu>) >= 220 dari inventaris hasil login, jadi
+    // penambahannya harus terjadi SEBELUM rawCharacter() disusun.
+    if (BEKALI_BATU_GAUNTLET) {
+      // Ditulis sebagai BAHAN, bukan barang biasa. Dua alasan:
+      //   - Toolkit.getItemCount @101-131 memakai getDisplayData(id).type
+      //     lalu mencari di inventaris TYPE_MATERIAL; batu di character_item
+      //     tidak akan pernah terhitung, jadi tetap tampil 0/220
+      //   - character_material memakai format "id:jumlah", jadi 6 potongan
+      //     saja -- bukan 1320 entri yang membuat tab Consumable Item
+      //     kelebihan kapasitas
+      // Buang dulu batu yang pernah masuk ke inventaris BARANG. Selama masih
+      // di sana, MapMenu.countArrItems menelusuri 1300+ entri dan tiap
+      // pencarian gagal ("(count) Item not exist :: ID-item1147-"), sampai
+      // Flash memutusnya dengan
+      //     #1502 A script has executed for longer than 15 seconds
+      // di updateEquipmentList -- itulah sebab panel Gear tidak pernah
+      // selesai menggambar isinya.
+      const dibuang = chars.bersihkanBatuGauntlet(BATU_GAUNTLET);
+      if (dibuang) log('   batu salah tempat dibuang dari inventaris: ' + dibuang + ' entri');
+
+      const kurang = [];
+      for (const b of BATU_GAUNTLET) {
+        const punya = Number((c.materials || {})[b]) || 0;
+        if (punya < 220) { chars.setMaterial(b, 220); kurang.push('item' + b); }
+      }
+      if (kurang.length) log('   bahan gauntlet dilengkapi (220): ' + kurang.join(', '));
+    } else {
+      // Buang batu yang terlanjur masuk, supaya Gear tidak lagi kelebihan
+      // kapasitas. Barang lain tidak disentuh.
+      const dibuang = chars.bersihkanBatuGauntlet(BATU_GAUNTLET);
+      if (dibuang) log('   batu gauntlet dibersihkan dari inventaris: ' + dibuang + ' entri');
+      for (const b of BATU_GAUNTLET) chars.setMaterial(b, 0);
+    }
+
+    return { status: 1, error: null,
+             result: chars.rawCharacter(chars.characterById(chars.getActiveId()) || c,
+                                        args && args[0]) };
   },
 
   // Pemilihan kelas Special Jounin. args: [sessionKey, nomorKelas]
@@ -1639,86 +1482,6 @@ const handlers = {
     status: 1, error: null, result: [],
   }),
 
-  // --- Paket / kode klaim ulang tahun ke-4 -----------------------------
-  //
-  // ClaimItemResponse (popup_4th_claim_code_p8.swf) HANYA membaca satu field:
-  //
-  //    @58-65:  if (res.message == 'You do not have a claim for this package.')
-  //                  -> buka toko (webview / postMessage), selesai
-  //             else Central.main.showOk(res.message);
-  //    ConfirmationDoc.onShow @26-30:  displayTxt.htmlText = confirmationTxt
-  //
-  // Tanpa `message`, showOk() menerima undefined dan set htmlText melempar
-  // #2007 "Parameter text must be non-null". Jadi field ini WAJIB string.
-  //
-  // Tombol "claim code" di panel depan (onShow @296-315) terikat ke
-  // gotoClaimPanel, yang memanggil SpecialReward.claimAugustPackage dan
-  // hasilnya cuma pesan -- tombol itu memang tidak pernah membuka panel kode.
-  // Panel kodenya dibuka lewat detailBtn -> gotoRewardListPanel -> pilih
-  // hadiah -> rewardGotoClaimPanel @330.
-  // Tombol "Claim" di panel depan -> gotoClaimPanel @19 -> servis ini,
-  // callback ClaimItemResponse. Inilah SATU-SATUNYA jalur klaim yang terbukti
-  // jalan di log: panel kode (popupClaimCodeMc) terbuka tapi klik pada
-  // claimItemBtn tidak pernah sampai ke claimReward, jadi hadiahnya diberikan
-  // langsung dari sini.
-  //
-  // ClaimItemResponse @58-65 hanya membaca res.message:
-  //     == 'You do not have a claim for this package.' -> buka toko
-  //     selain itu                                     -> showOk(res.message)
-  // Jadi pesan di bawah sekaligus jadi tampilan hasilnya.
-  'SpecialReward.claimAugustPackage':  () => klaimPaket('SpecialReward.claimAugustPackage'),
-  'SpecialReward.claimPatriotPackage': () => klaimPaket('SpecialReward.claimPatriotPackage'),
-  'SpecialReward.claimMagicPackage':   () => klaimPaket('SpecialReward.claimMagicPackage'),
-
-  // Jalur kode klaim: claimReward @449-486 mengirim
-  // [sessionKey, ClaimCode_1, ClaimCode_2].
-  //
-  // MAX_CHARS_ONE / MAX_CHARS_TWO tidak pernah diisi di SWF, jadi
-  // pemeriksaan panjang di claimReward @49-113 tinggal "tidak boleh kosong"
-  // -- panjang kode bebas.
-  //
-  // Server tidak menerima hadiah mana yang dipilih (selectedClaimID hanya
-  // ada di klien), jadi KODE-lah yang menentukan hadiahnya.
-  'Anni4th.claimStickerGift': (args) => {
-    const gabung = (a, b) => (String(a || '').trim() + '-' + String(b || '').trim()).toUpperCase();
-    const kode = gabung(args[1], args[2]);
-    const pilih = KODE_ANNI4[kode];
-
-    if (!pilih) {
-      log('   kode klaim ditolak: ' + JSON.stringify(kode));
-      return { status: 1, error: null, result: [], data: {},
-               message: 'Kode klaim tidak dikenal.' };
-    }
-
-    const aktif = chars.getActiveId();
-    const c = (aktif && chars.characterById(aktif)) || chars.firstCharacter();
-    if (!c) {
-      return { status: 1, error: null, result: [], data: {},
-               message: 'Karakter tidak ditemukan.' };
-    }
-
-    const baru = pilih(c).filter(id => !sudahPunya(c, id));
-    if (!baru.length) {
-      return { status: 1, error: null, result: [], data: {},
-               message: 'Hadiah untuk kode ini sudah pernah kamu ambil.' };
-    }
-
-    for (const id of baru) {
-      const sk = String(id).match(/^skill_?(\d+)$/);
-      const pt = String(id).match(/^pet_?(\d+)$/);
-      if (sk)      chars.addSkill(sk[1]);
-      else if (pt) chars.addPet({ id: pt[1] });
-      else         chars.addItem(String(id).replace('_', ''), 1);
-    }
-    log('   kode klaim ' + kode + ' -> ' + baru.join(', '));
-
-    return {
-      status: 1, error: null, result: [], data: {},
-      message: 'Berhasil! Kamu mendapat ' + baru.join(', ') +
-               '. Muat ulang permainan supaya muncul di inventaris.',
-    };
-  },
-
   // Tanpa Facebook, daftar teman selalu kosong.
   // RequestBox.gotoHide() berbunyi:
   //     Central.main.currRequest = this.requestListResult.requests.length;
@@ -1820,29 +1583,43 @@ const handlers = {
   //
   // Jadi mengirim 1..9 mengembalikan panel ke perilaku bawaannya, dan
   // defaultPost = method_tokenBuy[length-1] = 9 seperti semula.
+  // Panel pet ekor (popup_tail_pet.swf, kelas paymentTailPet).
+  //
+  // Konstanta panel, dibaca dari konstruktornya:
+  //     tailPetArr        = [0, 146, 141, 131, 86, 74, 73, 71, 68, 65]
+  //     tailPetCanShowArr = [1, 2, 3, 4]        <- EMPAT ekor bisa tampil
+  //     method_tokenBuy   = [1..9]              <- DITIMPA active_tail_number
+  //
+  // getCanBuyTailsResponse @19-130:
+  //     method_tokenBuy = res.active_tail_number
+  //     for i in 0..tailPetCanShowArr.length-1:
+  //         if (method_tokenBuy.indexOf(tailPetCanShowArr[i]) < 0)
+  //             tailPetOverDateArr.push(...)      <- dianggap kedaluwarsa
+  //     defaultPost = method_tokenBuy[method_tokenBuy.length - 1]
+  //
+  // Larik ini punya DUA tugas sekaligus, dan itu jebakannya:
+  //
+  //   a) Tiap nomor ekor 1..4 HARUS ada di sini. Yang tidak ada masuk
+  //      tailPetOverDateArr, jadi tombol beli-token tidak pernah dibuat.
+  //      Nilai lama [1,2,0] itulah sebab Sanbi (3) dan Yonbi (4) tidak
+  //      punya tombol dan tidak bisa dibeli dengan token.
+  //
+  //   b) Elemen TERAKHIR dipakai sebagai defaultPost = nowPost, yaitu
+  //      INDEKS ke tailPetCanShowArr -- bukan nomor ekor:
+  //          updateDetail @66-86: getTailDetail(tailPetCanShowArr[nowPost])
+  //          getTailDetail @14-31: PET_DATA.find("pet" + tailPetArr[tailNum])
+  //      Jadi nilainya harus 0..3. Kalau diisi 4, tailPetCanShowArr[4]
+  //      undefined -> petObj null -> #1009 di setUpGetMethodBtn, persis
+  //      yang dicetak panel sendiri di flashlog:
+  //          Jane..............this.tailPetArr[tailNum] = 0
+  //          Jane..............petObj = null
+  //
+  // [1,2,3,4,0] memenuhi keduanya: 1-4 membuat keempat ekor bisa dibeli,
+  // lalu 0 di akhir menjadikan nowPost = 0 -> tailPetCanShowArr[0] = 1 ->
+  // tailPetArr[1] = 146, pet yang terbukti ditemukan PET_DATA di log Anda.
   'Anni5th.getTailPet': () => ({
     status: 1, error: null, result: [],
-    // Nilai TERAKHIR-nya yang menentukan, karena:
-    //     defaultPost = method_tokenBuy[method_tokenBuy.length - 1];
-    // dan defaultPost dipakai sebagai `nowPost`, yaitu INDEKS ke
-    // tailPetCanShowArr — bukan nomor tail. Rantainya:
-    //     getTailDetail( tailPetCanShowArr[nowPost] )
-    //         -> PET_DATA.find("pet" + tailPetArr[tailNum])
-    //
-    // tailPetCanShowArr = [1, 2]  (hanya dua indeks sah: 0 dan 1)
-    // tailPetArr[1] = 141  -> PET_DATA.find("pet141")  KETEMU
-    // tailPetArr[9] = 0    -> PET_DATA.find("pet0")    null -> #1009
-    //
-    // Dengan [1,2,3,...,9] nilai terakhirnya 9, dan itu menembak slot kosong
-    // tailPetArr[9] = 0 — persis yang dicetak panel sendiri di log:
-    //     Jane..............this.tailPetArr[tailNum] = 0
-    //     Jane..............petObj = null
-    //
-    // Jadi: 1 dan 2 di depan supaya kedua tail dianggap masih aktif
-    // (method_tokenBuy.indexOf(tailPetCanShowArr[i]) >= 0), lalu 0 di akhir
-    // supaya defaultPost menunjuk indeks 0 -> tail 141, yang terbukti
-    // ditemukan PET_DATA di log Anda.
-    active_tail_number: [1, 2, 0],
+    active_tail_number: [1, 2, 3, 4, 0],
     owned_tail_number: [],
   }),
 
@@ -1904,86 +1681,10 @@ const handlers = {
     return { status: 1, error: null };
   },
 
-  // ---- Eudemon Garden (hunting_house.swf, kelas OldHuntingHouse) --------
-  //
-  // OldHuntingHouse.getBattleStatus @19 memanggil servis ini, lalu
-  // BattleStatusResponse @90-233 menyalin tiap entri result.room jadi:
-  //
-  //     { enemyId: room[i].boss,     <- ARRAY id musuh, maksimal 2
-  //       rank:    room[i].rank,     <- nomor frame rankMc.gotoAndStop()
-  //       rewards: room[i].rewards,  <- ARRAY id barang
-  //       status:  room[i].status,
-  //       time:    room[i].time,     <- sisa pertarungan hari ini
-  //       xp:      room[i].xp,
-  //       gold:    room[i].gold }
-  //
-  // Konstanta panelnya: enemyPerPage=5 (5 room per halaman), maxEnemy=2
-  // (hanya previewMc0 dan previewMc1 ada), maxItem=6 (6 ikon hadiah).
-  //
-  // enemyId dicari di ENEMY_DATA (updateEnemy @33-41), jadi isinya harus id
-  // yang benar-benar ada di tabel ENEMY — lihat database/enemy.csv. Kalau
-  // tidak ketemu, entri itu dilewati diam-diam dan preview-nya kosong.
-  //
-  // `time` menentukan tampilan tombol serang:
-  //     time == 0  -> "You have used all chances today", tombol mati
-  //     time  > 0  -> "You still have N time(s) to battle"
-  // Kunci level diambil dari minLevel musuh PERTAMA (setPanelContent @1497).
-  //
-  // `rewards` dipisah klien jadi dua kolom di updateItem @18-27: yang
-  // mengandung "wpn" masuk kolom senjata, sisanya kolom pakaian/barang.
-  // Garis bawahnya dibuang, jadi 'wpn_1498' dan 'wpn1498' sama saja.
   'EudemonGarden.getHuntingStatus': () => ({
     status: 1, error: null,
-    result: { room: EUDEMON_ROOM.map(r => ({
-      boss:    r.boss,
-      rank:    r.rank || 1,
-      rewards: r.rewards || [],
-      status:  0,
-      time:    r.time == null ? 3 : r.time,
-      xp:      r.xp || 0,
-      gold:    r.gold || 0,
-    })) },
+    result: { room: [] },
   }),
-
-  // Dipanggil sesudah pertarungan Eudemon Garden selesai
-  // (Battle.callBattleFinishHAV @2124, Battle.actionFinish_CB @1991).
-  'EudemonGarden.finishHunting':     () => balasanHadiah(),
-
-  // ---- Hunting House (hunting_house2.swf, kelas HuntingHouse2) ----------
-  //
-  // HuntingHouse2.show @523 memanggil ItemDAO.getCharacterHuntingList, lalu
-  // getHuntingListResponse @54-122 membaca:
-  //
-  //     hunting_list          objek berisi kunci "zone0", "zone1", ...
-  //     hunting_cost          harga tiket berburu
-  //     update_time           hitung mundur penyegaran
-  //     get_hunting_passport  status paspor
-  //     show_item             STRING dipisah koma (@174 split ',')
-  //     hunting_daren         hanya dibaca kalau fitur material tambahan aktif
-  //
-  // Perlakuan zona berbeda (@221-361):
-  //     "zone0"  -> tiap elemennya diambil [0]-nya saja, masuk SpecialBoss
-  //     "zoneN"  -> seluruh larik masuk HuntingBoss, dan N (tanpa "zone")
-  //                 masuk HuntingBossHolder, dipakai memilih movieclip
-  //                 EasyBoss<N> di peta dunia panel
-  //
-  // Isi tiap zona = id musuh, dicari lewat ENEMY_DATA.find() di
-  // updateBossList @218-243 lalu diambil swfName-nya untuk ikon.
-  'ItemDAO.getCharacterHuntingList': () => ({
-    status: 1, error: null,
-    hunting_list: HUNTING_ZONE,
-    hunting_cost: 0,
-    update_time: 0,
-    get_hunting_passport: 1,
-    hunting_daren: [],
-    show_item: '',
-  }),
-
-  // Mulai & selesai berburu. Argumennya tidak diverifikasi server sendiri.
-  'ItemDAO.startHunting':        () => ({ status: 1, error: null, result: 1 }),
-  'CharacterDAO.startHunting':   () => ({ status: 1, error: null, result: 1 }),
-  'CharacterDAO.finishHunting':      () => balasanHadiah(),
-  'ValentinesDay2017.finishHunting': () => balasanHadiah(),
 
   'CharacterManagement.getInvHair': () => ({
     status: 1, error: null, result: [],
@@ -2252,27 +1953,6 @@ const handlers = {
       else   log('   !! id misi tidak dikenali: ' + missionId);
     }
 
-    // Level pet ikut dikirim di sini. Character.updateDB menyusun 20 argumen
-    // (@624-730), dan dua di antaranya milik pet:
-    //     args[6] = local14.id      args[7] = local14.level
-    // Selama dua nilai itu diabaikan, pet naik level hanya di layar hasil
-    // battle lalu kembali ke level lama begitu dimuat ulang.
-    const petId = args && args[6];
-    const petLv = Number(args && args[7]);
-    if (petId && petLv > 0) {
-      const lama = (chars.listPets() || []).find(x => String(x.id) === String(petId));
-      if (lama && petLv > (Number(lama.level) || 1)) {
-        // XP wajib ikut disimpan. Klien TIDAK memakai field `level` yang kita
-        // kirim -- Pet menghitung ulang levelnya dari `xp` lewat
-        // Formula.getPetLvByXp. Menyimpan level saja membuat pet kembali ke
-        // level 1 tiap muat ulang walau characters.json sudah benar.
-        const xp = chars.xpPetUntukLevel(petLv);
-        chars.addPet({ id: petId, level: petLv, xp });
-        log('   pet ' + petId + ' naik level: ' + lama.level + ' -> ' + petLv +
-            '  (xp disetel ke ' + xp + ')');
-      }
-    }
-
     const hasil = chars.addProgress(xpGain, goldGain);
     if (!hasil) {
       log('   !! updateCharacter tapi belum ada karakter tersimpan');
@@ -2297,39 +1977,9 @@ const handlers = {
     };
   },
 
-  // Hadiah setelah bos dikalahkan.
-  //
-  // Battle.getBossRewardResponse02 membaca field-field ini dari balasan, dan
-  // dua di antaranya DIPAKAI SEBAGAI ARRAY TANPA PENJAGAAN:
-  //
-  //     @329  slot5 = res.reward       -> coerce Array
-  //     @342  slot6 = res.reward_get   -> coerce Array
-  //     @878  slot5.length             <- #1009 kalau slot5 null
-  //
-  // Field yang tidak dikirim menjadi undefined, dan `coerce Array` atas
-  // undefined menghasilkan null — lalu .length pada null melempar
-  //     "#1009 Cannot access a property or method of a null object reference"
-  //     at Battle$/getBossRewardResponse02()
-  // Jadi `reward` dan `reward_get` WAJIB berupa larik, walau kosong.
-  //
-  // Sisanya lebih longgar:
-  //     result           dijaga null (@356); [] aman, add_favorability -> 0
-  //     player_pet       hanya di-push ke petData
-  //     dmg              -> Central.main.crewDamage
-  //     double_reward    -> Central.main.showDoubleCrewWarReward
-  //
-  // extra_reward, extra_reward_get, dan pet diuji dengan Boolean() @1054-1105.
-  // Sengaja dikirim null: larik kosong pun bernilai TRUE di AS3, dan itu
-  // membuat klien masuk ke blok pemrosesan hadiah tambahan tanpa perlu.
-  'ItemDAO.getBossReward': () => {
-    // Klien hanya MENAMPILKAN isi `reward`; penyimpanannya tetap tugas server.
-    // xp_ dan gold_ dilewati karena sudah diterapkan klien lewat
-    // updateXP()/updateGold() di @525-617.
-    for (const h of barangHadiah()) {
-      try { beriHadiah(h); } catch (e) { log('   !! hadiah ' + h + ': ' + e.message); }
-    }
-    return balasanHadiah();
-  },
+  'ItemDAO.getBossReward': () => ({
+    status: 1, error: null, result: [], reward_items: [],
+  }),
 
   // Dipanggil layar pembuatan/pemilihan karakter.
   // args: [sessionKey, TEST_VERSION]
@@ -2338,39 +1988,171 @@ const handlers = {
   // WEAPON_DATA, ENEMY_DATA, BLOODLINE, dan BODY_SET dari data_library_en.swf
   // (lewat dataLib.getSkill(), dst) — jadi server TIDAK perlu mengirimnya.
   // Yang tetap dibaca dari respons hanya field di bawah ini.
-  // Daftar rambut untuk Style Shop.
+  // Genzu's Chronicles (genzu_chronicles.swf, kelas xmas2012_menu).
   //
-  // Tanpa handler ini, panel Style Shop menjatuhkan:
-  //     #1009 at ninjasaga::DataParser/parseHairData()
-  //        <- ninjasaga.linkage.panel::StyleShop/getHairDataResponse()
+  // show() @26-48 memanggil GenzusEvent.getStoryStatus, dan
+  // getStatusResponse @25-37 menyalin dua field saja:
+  //     EventStatus = res.story_status
+  //     BossStatus  = res.reward_status
   //
-  // parseHairData @16-60 langsung membaca param.length untuk mengisi
-  // Central.main.HAIR_DATA. Field yang tidak dikirim jadi undefined, dan
-  // undefined.length melempar #1009; larik kosong sekalipun sudah aman.
+  // onShow @378-439 memasang empat chapter:
+  //     setupStage(stage1, 1, STORY_1) ... setupStage(stage4, 4, STORY_4)
   //
-  // Nama field yang dibaca StyleShop.getHairDataResponse belum dipastikan
-  // (kelasnya ada di swf/panels/style_shop.swf, bukan di code_library),
-  // jadi daftarnya dikirim di BEBERAPA nama sekaligus. Mengirim field
-  // berlebih tidak berbahaya; yang berbahaya adalah field yang dipakai
-  // tapi tidak dikirim.
-  'SystemData.getHairData': () => ({
-    status: 1, error: null,
-    result: HAIR_DATA,
-    data: HAIR_DATA,
-    hair: HAIR_DATA,
-    hair_data: HAIR_DATA,
-    hairData: HAIR_DATA,
-  }),
-
-  // Dua servis di bawah tidak menimbulkan error dengan balasan generik,
-  // tapi didaftarkan supaya tidak lagi tercatat "handler BELUM ADA".
-  'CharacterDAO.getSkillProfiles': () => ({
-    status: 1, error: null, result: [], data: {},
-  }),
-
+  // dan setupStage @2-47 menguncinya begini:
+  //     if (EventStatus < indeksChapter) -> gotoAndStop('locked') + "coming soon"
+  //     else                             -> gotoAndStop('enable') + tombol StoryBtn
+  //
+  // Jadi story_status = nomor chapter TERTINGGI yang terbuka. Nilai 3 membuka
+  // chapter 1, 2, dan 3; chapter 4 tetap terkunci. Ubah ke 4 kalau mau semua.
   'SkillPackageLimit.getPackageStatus': () => ({
-    status: 1, error: null, result: [], data: {},
+    status: 1, error: null,
+    result: {
+      package_type: PAKET_MERCHANT.tipe,
+      package_data: PAKET_MERCHANT.daftar.map(p => ({ id: p.id, cost: p.cost })),
+      time_limit: PAKET_MERCHANT.batas_waktu,
+    },
   }),
+
+  // args: [sessionKey, id paket]
+  'SkillPackageLimit.buySkillLimit': (args) => {
+    const id = args && args[1];
+    const p = PAKET_MERCHANT.daftar.find(x => String(x.id) === String(id));
+    if (!p) {
+      log('   paket merchant tidak dikenal: ' + id);
+      return { status: 1, error: null, cost: 0 };
+    }
+    for (const h of (p.isi || [])) {
+      try { beriHadiah(h); } catch (e) { log('   !! ' + h + ': ' + e.message); }
+    }
+    // Pemilik Emblem membayar potongan pertama, pengguna biasa yang kedua.
+    const harga = String(p.cost).split('_');
+    const bayar = Number(EMBLEM ? harga[0] : harga[1]) || 0;
+    log('   paket merchant ' + id + ' dibeli (' + bayar + ' token): ' +
+        (p.isi || []).join(', '));
+    return { status: 1, error: null, cost: bayar };
+  },
+
+  // Nama servis alternatif yang juga ada di panel yang sama.
+  'SkillPackageLimit.buyLimitPackage': (args) =>
+    handlers['SkillPackageLimit.buySkillLimit'](args),
+
+  'GenzusEvent.getStoryStatus': () => ({
+    status: 1, error: null,
+    story_status: 3,
+    reward_status: 0,
+  }),
+
+  // Dipanggil Popup_Gauntlet_menu. Balasan generik sudah tidak menimbulkan
+  // error; didaftarkan supaya tidak lagi tercatat "handler BELUM ADA".
+  // Six-Element Gauntlet (Popup_Gauntlet_menu.swf, kelas Gauntleluptade).
+  //
+  // confirmBuynew @84-129 memilih servis menurut btnNum:
+  //     btnNum 1 -> GodSnap.buyPackage        (senjata gauntlet)
+  //     btnNum 2 -> GodSnap.buySkillPackage   (kinjutsu)
+  // keduanya mengirim [sessionKey, 1] dan memakai callback buyItemResponse.
+  //
+  // Kedua id barangnya terbaca langsung di buyItemResponse:
+  //     @284 toolkit.hasItem('wpn1596')   -> senjata Six-Element Gauntlet
+  //     @205 trainingSkill id 'skill902'  -> Kinjutsu: Unstoppable Rage
+  //
+  // buyItemResponse @100-346 membaca:
+  //     res.stateInv   opsional (@13 iffalse -> dilewati kalau tidak ada)
+  //     res.result     diuji Boolean(); harus bernilai benar supaya lanjut
+  //     res.result.train.remaining_time
+  //
+  // PERHATIAN: `result` HARUS OBJEK, bukan true. @114-143 memang tampak
+  // seperti hubung-singkat:
+  //     Boolean(res.result) && Boolean(res.result.train)
+  // tapi Boolean() itu PANGGILAN FUNGSI, jadi res.result.train tetap
+  // dievaluasi lebih dulu. Kalau result bernilai true, Flash membaca
+  // .train pada Boolean -- kelas TERTUTUP tanpa properti dinamis --
+  // dan melempar
+  //     #1069 Property train not found on Boolean
+  // Panel lalu menggantung di layar loading karena hideAmfLoading()
+  // tidak pernah tercapai. Objek kosong {} lolos: truthy, dan .train-nya
+  // undefined sehingga blok timer dilewati.
+  //
+  // PENTING: klien TIDAK menyimpan pembelian ini sendiri. Sesudah
+  // "Purchase Successful~" ia cuma memanggil loadPanelContent() lalu
+  // memeriksa hasItem('wpn1596') dari inventaris yang dimuat saat login.
+  // Jadi kalau server tidak menambahkan barangnya, pembelian terlihat
+  // berhasil tapi hilang begitu muat ulang -- persis gejalanya.
+  // Tiga servis upgrade di panel yang sama. Argumennya (confirmU @28-35,
+  // confirmUnlockPower @28, confirmLearnSlotSkill @28-35):
+  //     GodSnap.upgradeWeapon   [sessionKey, btnNum - 10]   -> slot 1..6
+  //     GodSnap.unlockPower     [sessionKey, 1]
+  //     GodSnap.learnSlotSkill  [sessionKey, btnNum - 20]   -> slot 1..6
+  //
+  // Ketiga callback-nya (upgradeWeaponUResponse, unlockPowerResponse,
+  // learnSlotSkillResponse) berpola sama seperti buyItemResponse:
+  // validateAmfResponse, lalu Boolean(res.result) harus TRUE.
+  // res.result HARUS OBJEK, bukan true -- lihat catatan di buyPackage:
+  // res.result.train dievaluasi walau Boolean(res.result) sudah false-kan
+  // hubung-singkatnya, dan .train pada Boolean melempar #1069.
+  // upgradeWeaponUResponse juga membaca res.stateInv, tapi @26-43
+  // menjaganya terhadap undefined DAN null, jadi boleh tidak dikirim.
+  //
+  // Penyimpanannya lewat chars.setGauntlet -> characters.json, dan dikirim
+  // balik saat login sebagai rawCharacter.stateInv "wpn_1596" (lihat
+  // stateGauntlet() di chardata.js). Tanpa itu upgrade hilang tiap login.
+  'GodSnap.upgradeWeapon': (args) => {
+    const slot = Number(args && args[1]);
+    if (!(slot >= 1 && slot <= 6)) {
+      log('   upgradeWeapon: slot tidak sah (' + slot + ')');
+      return { status: 1, error: null, result: false };
+    }
+    // Nilai 2, bukan 1. setPanelContent @1946-1956 menguji
+    //     stateObj<N> == 2
+    // untuk menandai slot yang SUDAH ter-implant (tombolnya lalu dimatikan).
+    // Nilai 1 akan tampak seperti belum ter-implant.
+    const g = chars.setGauntlet('slot', slot - 1, 2);
+    log('   gauntlet slot ' + slot + ' di-implant -> ' +
+        (g ? g.slot.join(',') : 'gagal'));
+    return { status: 1, error: null, result: {},
+             stateInv: { 'wpn_1596': (g ? g.slot : [0,0,0,0,0,0]).join(',') } };
+  },
+
+  'GodSnap.unlockPower': () => {
+    const g = chars.setGauntlet('power', 0, 1);
+    log('   gauntlet power dibuka' + (g ? '' : ' (gagal)'));
+    return { status: 1, error: null, result: {} };
+  },
+
+  'GodSnap.learnSlotSkill': (args) => {
+    const slot = Number(args && args[1]);
+    if (!(slot >= 1 && slot <= 6)) {
+      log('   learnSlotSkill: slot tidak sah (' + slot + ')');
+      return { status: 1, error: null, result: false };
+    }
+    const g = chars.setGauntlet('slotSkill', slot - 1, 1);
+    log('   gauntlet slot skill ' + slot + ' dipelajari -> ' +
+        (g ? g.slotSkill.join(',') : 'gagal'));
+    return { status: 1, error: null, result: {} };
+  },
+
+  'GodSnap.buyPackage': () => {
+    const c = chars.characterById(chars.getActiveId()) || chars.firstCharacter();
+    if (!c) return { status: 1, error: null, result: false };
+    if (!(Array.isArray(c.weapons) && c.weapons.includes('1596'))) {
+      chars.addItem('wpn1596', 1);
+      log('   gauntlet dibeli: wpn1596');
+    } else {
+      log('   gauntlet sudah dimiliki, tidak ditambah lagi');
+    }
+    return { status: 1, error: null, result: {} };
+  },
+
+  'GodSnap.buySkillPackage': () => {
+    const c = chars.characterById(chars.getActiveId()) || chars.firstCharacter();
+    if (!c) return { status: 1, error: null, result: false };
+    if (!(Array.isArray(c.skills) && c.skills.map(String).includes('902'))) {
+      chars.addSkill('902');
+      log('   kinjutsu dibeli: skill902 (Unstoppable Rage)');
+    } else {
+      log('   kinjutsu sudah dimiliki, tidak ditambah lagi');
+    }
+    return { status: 1, error: null, result: {} };
+  },
 
   'SystemData.get': () => ({
     status: 1, error: null, result: systemDataFields(),
@@ -2405,18 +2187,6 @@ function dispatch(target, args) {
       return { status: 1, error: null, result: [], data: {} };
     }
   }
-  // Jaring pengaman untuk semua servis klaim paket. Callback ClaimItemResponse
-  // (Anni4_ClaimCode) meneruskan res.message langsung ke showOk(), lalu
-  // ConfirmationDoc.onShow menulis displayTxt.htmlText = confirmationTxt.
-  // Balasan tanpa `message` berarti htmlText = null -> #2007 "Parameter text
-  // must be non-null". Jadi setiap tombol paket -- termasuk yang belum pernah
-  // saya lihat -- tetap harus menerima string.
-  if (/^SpecialReward\.claim.*Package$/.test(target)) {
-    log('   -> servis paket belum terdaftar, balas message aman');
-    return { status: 1, error: null, result: [], data: {},
-             message: 'Paket ini belum tersedia di server.' };
-  }
-
   log('   -> handler BELUM ADA, balas status=1 kosong');
   return { status: 1, error: null, result: [], data: {} };
 }
@@ -2426,19 +2196,6 @@ const missing = new Set();
 
 // Folder aset. Server ada di C:\ninjasaga\server, web di C:\ninjasaga\web
 const WEB_ROOT = path.resolve(__dirname, '..', 'web');
-
-/* Header anti-cache untuk semua aset.
- *
- * Tanpa ini peramban menyimpan ninja_saga.swf selamanya (URL-nya tidak punya
- * "?_t=<timestamp>" seperti SWF lain), sehingga setiap patch bytecode pada
- * berkas itu tidak pernah sampai ke klien -- gejalanya: patch yang sudah
- * disalin ke folder web tapi log tetap menunjukkan perilaku versi lama.
- */
-const TANPA_CACHE = {
-  'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
-  'Pragma': 'no-cache',
-  'Expires': '0',
-};
 
 const MIME = {
   '.swf': 'application/x-shockwave-flash',
@@ -2471,25 +2228,10 @@ function serveStatic(req, res) {
 
   if (fs.existsSync(full) && fs.statSync(full).isFile()) {
     const data = fs.readFileSync(full);
-
-    // Catat ukuran SWF utama setiap kali diminta.
-    //
-    // ninja_saga.swf adalah SATU-SATUNYA berkas yang URL-nya tanpa pembusuk
-    // cache: semua SWF lain dimuat Preloader dengan "?_t=<timestamp>",
-    // sedangkan yang ini dipanggil halaman sebagai
-    //     cdn.ninjasaga.cc/ninja_saga.swf?fb_uid=...   (querynya tetap)
-    // Jadi tanpa header cache, peramban memakai salinan lamanya terus dan
-    // patch bytecode apa pun terlihat "hilang sendiri". Baris log ini
-    // memastikan versi mana yang benar-benar terkirim.
-    if (path.basename(full).toLowerCase() === 'ninja_saga.swf') {
-      log('   [aset] ninja_saga.swf terkirim, ' +
-          data.length.toLocaleString('id-ID') + ' byte');
-    }
-
-    res.writeHead(200, Object.assign({
+    res.writeHead(200, {
       'Content-Type': MIME[path.extname(full).toLowerCase()] || 'application/octet-stream',
       'Content-Length': data.length,
-    }, TANPA_CACHE));
+    });
     return res.end(data);
   }
 
@@ -2523,10 +2265,10 @@ function serveStatic(req, res) {
     // Donor asli punya ABC lengkap, jadi cukup diganti namanya.
     // Hasilnya terlihat seperti donor, tapi tidak error.
     const swf = cloneOrStub(path.dirname(full), name);
-    res.writeHead(200, Object.assign({
+    res.writeHead(200, {
       'Content-Type': 'application/x-shockwave-flash',
       'Content-Length': swf.length,
-    }, TANPA_CACHE));
+    });
     return res.end(swf);
   }
 

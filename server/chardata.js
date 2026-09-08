@@ -2357,6 +2357,97 @@ function expiryBlock(sessionKey) {
   };
 }
 
+/* Status Six-Element Gauntlet dalam bentuk yang dibaca klien.
+ *
+ * Disimpan di characters.json sebagai
+ *     c.gauntlet = { slot: [6 angka], power: 0|1, slotSkill: [6 angka] }
+ * tapi yang dikirim hanya deretan enam angka `slot`, karena itulah satu-satunya
+ * yang dibaca panel lewat getStateDictionary.
+ *
+ * Kunci "wpn_1596": garis bawahnya dibuang klien saat menyimpan, sehingga
+ * cocok dengan pembacaan getStateDictionary(charId, 'wpn', 'wpn1596').
+ */
+/* Bahan milik karakter dalam bentuk "id:jumlah" dipisah koma.
+ *
+ * Disimpan di characters.json sebagai c.materials = { "1144": 220, ... }.
+ * Kalau belum ada, dikembalikan string kosong -- parseRawCharacter @2975
+ * memang menjaga nilai kosong.
+ */
+function daftarMaterial(c) {
+  const m = (c && c.materials) || {};
+  const bagian = [];
+  for (const id of Object.keys(m)) {
+    const n = Number(m[id]) || 0;
+    if (n > 0) bagian.push(String(id).replace(/^item/, '') + ':' + n);
+  }
+  return bagian.join(',');
+}
+
+/* Setel jumlah satu bahan. */
+function setMaterial(id, jumlah) {
+  const all = load();
+  const key = String(getActiveId() || Object.keys(all)[0]);
+  const c = all[key];
+  if (!c) return null;
+  c.materials = c.materials || {};
+  const bersih = String(id).replace(/^item/, '');
+  c.materials[bersih] = Math.max(0, Number(jumlah) || 0);
+  all[key] = c;
+  save(all);
+  return c.materials;
+}
+
+function stateGauntlet(c) {
+  const g = (c && c.gauntlet) || {};
+  const slot = Array.isArray(g.slot) ? g.slot : [];
+  const enam = [];
+  for (let i = 0; i < 6; i++) enam.push(Number(slot[i]) || 0);
+  return { 'wpn_1596': enam.join(',') };
+  // Nilai tiap slot: 2 = sudah ter-implant, selain itu belum.
+  // setPanelContent @1946-1956 menguji  stateObj<N> == 2  lalu me-not-kannya
+  // untuk menentukan tombol Implant masih boleh ditekan.
+}
+
+/* Catat satu perubahan gauntlet ke characters.json. */
+/* Buang semua batu gauntlet dari inventaris karakter aktif.
+ *
+ * Dipakai saat BEKALI_BATU_GAUNTLET dimatikan: 220 batu x 6 jenis = 1320
+ * entri, dan panel Gear menolak menggambar isinya begitu lewat kapasitas.
+ * Mengembalikan jumlah entri yang dibuang.
+ */
+function bersihkanBatuGauntlet(daftarId) {
+  const all = load();
+  const key = String(getActiveId() || Object.keys(all)[0]);
+  const c = all[key];
+  if (!c || !Array.isArray(c.items)) return 0;
+  const buang = new Set((daftarId || []).map(String));
+  const sebelum = c.items.length;
+  c.items = c.items.filter(x => !buang.has(String(x)));
+  const dibuang = sebelum - c.items.length;
+  if (dibuang) { all[key] = c; save(all); }
+  return dibuang;
+}
+
+function setGauntlet(bagian, indeks, nilai) {
+  const all = load();
+  const key = String(getActiveId() || Object.keys(all)[0]);
+  const c = all[key];
+  if (!c) return null;
+  c.gauntlet = c.gauntlet || { slot: [0,0,0,0,0,0], power: 0, slotSkill: [0,0,0,0,0,0] };
+  if (bagian === 'power') {
+    c.gauntlet.power = Number(nilai) || 0;
+  } else {
+    const arr = Array.isArray(c.gauntlet[bagian]) ? c.gauntlet[bagian] : [0,0,0,0,0,0];
+    const i = Number(indeks);
+    if (!(i >= 0 && i < 6)) return null;
+    arr[i] = Number(nilai) || 0;
+    c.gauntlet[bagian] = arr;
+  }
+  all[key] = c;
+  save(all);
+  return c.gauntlet;
+}
+
 function rawCharacter(c, sessionKey) {
   const r = {
     bloodline:                             daftarBloodline(c),
@@ -2395,7 +2486,20 @@ function rawCharacter(c, sessionKey) {
     character_level:                       '',
     character_lightning:                   0,
     character_magatama:                    '',
-    character_material:                    '',
+    // Bahan (material). BUKAN sekadar daftar id seperti character_item --
+    // formatnya "id:jumlah" dipisah koma, dan parseRawCharacter @3000-3196
+    // memuainya sendiri:
+    //     untuk tiap potongan "1144:220"
+    //         push('item' + '1144') sebanyak int('220') kali
+    //
+    // Itu sebabnya batu gauntlet tidak boleh ditaruh di character_item:
+    //     - Toolkit.getItemCount @101-131 memakai getDisplayData(id).type
+    //       lalu mencarinya di inventaris TYPE_MATERIAL, bukan TYPE_ITEM,
+    //       sehingga 220 batu di character_item terbaca 0/220
+    //     - dan 220 x 6 entri membuat tab Consumable Item lewat kapasitas
+    //
+    // Dengan format ini cuma 6 potongan yang dikirim, bukan 1320 entri.
+    character_material:                    daftarMaterial(c),
     character_mission:                     '',
     character_name:                        '',
     character_ninja_essence:               '',
@@ -2432,7 +2536,21 @@ function rawCharacter(c, sessionKey) {
     stateInventory:                        {},
     senjutsu:                              daftarSenjutsu(c),
     senjutsu_spirit:                       '',
-    stateInv:                              {},
+    // Status upgrade Six-Element Gauntlet.
+    //
+    // parseRawCharacter @5093-5187 mengulang rawCharacter.stateInv, lalu untuk
+    // tiap kunci memanggil:
+    //     stateInventory.setStateDictionary(charId, kunci.replace('_',''), nilai)
+    // dan setStateDictionary @36-87 memecah nilainya dengan "," lalu parseInt
+    // tiap potongan -- jadi nilainya STRING angka dipisah koma.
+    //
+    // Panel Gauntleluptade.setPanelContent @31/@67 membacanya kembali lewat
+    //     getStateOnCount(charId, 'wpn', 'wpn1596')
+    //     getStateDictionary(charId, 'wpn', 'wpn1596')  -> stateObj1..stateObj6
+    // (enam slot implant, dirujuk 24 kali di panel).
+    //
+    // Tanpa field ini, semua upgrade gauntlet kembali kosong tiap login.
+    stateInv:                              stateGauntlet(c),
   };
 
   // Diberikan langsung ke dbChar[INVSLOT] tanpa diparsing, lalu klien
@@ -2441,7 +2559,16 @@ function rawCharacter(c, sessionKey) {
   // melempar #1010 di onAmfGetCharacterResult — callback berhenti dan
   // spinner loading tidak pernah ditutup.
   r.character_inv_slots = {
-    item:      40,
+    // Dinaikkan dari 40. Panel Gear menampilkan "Capacity: 1328/280" dan
+    // menolak menggambar isinya begitu lewat batas. Angka 1328 itu wajar:
+    // klien menghitung jumlah barang dari BANYAKNYA entri di
+    // character_item (duplikat = jumlah), jadi 220 batu x 6 jenis = 1320
+    // entri, bukan 6 baris ber-qty.
+    //
+    // Hubungan 40 -> 280 di layar belum bisa saya pastikan (konstanta
+    // INV_SPACE_ITEM_* di klien namanya di-resolve dinamis), jadi angkanya
+    // dibuat jauh di atas kebutuhan supaya aman pada rumus mana pun.
+    item:      2000,   // dinaikkan dari 40; lihat catatan di atas
     weapon:    200,
     body_set:  200,
     back:      200,
@@ -2848,6 +2975,8 @@ function buildExtraData(c, sessionKey) {
 }
 
 module.exports = {
+  setGauntlet, stateGauntlet, bersihkanBatuGauntlet,
+  daftarMaterial, setMaterial,
   validate, DB_TYPES, extraDataHash, rawCharacter,
   getLvByXp, xpForLevel, addProgress, mergeStats,
   recordMission, serializeMissions, simpanKelasSJ,
