@@ -2574,7 +2574,10 @@ function rawCharacter(c, sessionKey) {
     back:      200,
     accessory: 200,
     essence:   200,
-    material:  200,
+    // Inventaris bahan memuai jadi satu entri per keping: 220 x 6 = 1320.
+    // Dengan batas 200, tab Material ikut kelebihan kapasitas seperti tab
+    // barang tadi.
+    material:  4000,
     pet:       99,
   };
 

@@ -196,6 +196,122 @@ const PAKET_MERCHANT = {
   ],
 };
 
+/* ====================================================================
+ * DAFTAR MUSUH: Eudemon Garden dan Hunting House
+ *
+ * Pakai kolom "kunci" dari database/enemy.csv (enemy1 ... enemy346).
+ * Hanya 209 di antaranya berstat lengkap; yang tidak lengkap tetap tampil
+ * tapi bisa aneh saat bertarung.
+ * ==================================================================== */
+
+/* Eudemon Garden -- satu entri = satu "room" di panel OldHuntingHouse.
+ *
+ * BattleStatusResponse @90-233 memetakan tiap entri result.room jadi:
+ *     boss    -> enemyId   LARIK id musuh, MAKSIMAL 2
+ *                (panel cuma punya previewMc0 dan previewMc1)
+ *     rank    -> nomor frame lencana rankMc
+ *     rewards -> LARIK id barang, ditampilkan sebagai kemungkinan hadiah
+ *     time    -> sisa pertarungan hari ini; 0 mematikan tombol serang
+ *     xp/gold -> angka yang dipamerkan
+ *
+ * Konstanta panel: 5 room per halaman, maxEnemy 2, maxItem 6.
+ * Kunci level diambil dari minLevel musuh PERTAMA.
+ */
+const EUDEMON_ROOM = [
+  { boss: ['enemy338'],             rank: 1, time: 3, xp: 550, gold: 400,
+    rewards: ['wpn_1498', 'set_2248'] },
+  { boss: ['enemy339', 'enemy340'], rank: 2, time: 3, xp: 900, gold: 700,
+    rewards: ['wpn_1343', 'back_557'] },
+];
+
+/* Hunting House (HuntingHouse2) -- dikelompokkan per zona di peta panel.
+ *
+ * getHuntingListResponse @54-122 membaca hunting_list, hunting_cost,
+ * update_time, get_hunting_passport, dan show_item (STRING dipisah koma).
+ *     zone0  diperlakukan khusus: hanya elemen pertama tiap sub-larik
+ *     zoneN  larik id musuh; N memilih movieclip EasyBoss<N> di peta
+ */
+const HUNTING_ZONE = {
+  zone0: [],
+  zone1: ['enemy338', 'enemy339'],
+  zone2: ['enemy340', 'enemy341'],
+};
+
+/* Hadiah yang tampil di jendela akhir pertarungan.
+ *
+ * MissionResult.init(..., rewardList, rewardGetList, ...):
+ *     rewardList    <- field `reward`      = yang DIGAMBAR
+ *     rewardGetList <- field `reward_get`  = penanda mana yang DIDAPAT
+ * rewardDisplay @45-100 hanya mengulang rewardList. Batas 10 barang
+ * (panel cuma punya rewardIcon_0 sampai rewardIcon_9).
+ *
+ * Entri berupa STRING "<jenis>_<nilai>", dipecah klien dengan "_".
+ * Urutan pemeriksaannya memakai indexOf dan KRITIS: petxp diperiksa
+ * sebelum xp, karena "petxp" mengandung "xp".
+ *     petxp_N / xp_N / gold_N  -> masuk penghitung, TIDAK jadi ikon
+ *     item_N / wpn_N / set_N / hair_N / back_N / skill_N / pet_N -> ikon
+ */
+const HADIAH_BOS = ['xp_1000', 'gold_500'];
+const HADIAH_MATERIAL = ['item_600', 'item_604'];
+
+const semuaHadiah  = () => HADIAH_BOS.concat(HADIAH_MATERIAL);
+const barangHadiah = () => semuaHadiah().filter(h => !/^(xp|gold|petxp)_/.test(h));
+
+/* Berikan satu hadiah ke karakter aktif.
+ * Bentuknya "<jenis>_<nomor>"; skill dan pet punya jalur sendiri di
+ * chardata.js, sisanya lewat addItem yang sudah mengenali awalannya.
+ */
+function beriHadiah(id) {
+  const sk = String(id).match(/^skill_?(\d+)$/);
+  if (sk) return chars.addSkill(sk[1]);
+  const pt = String(id).match(/^pet_?(\d+)$/);
+  if (pt) return chars.addPet({ id: pt[1] });
+  return chars.addItem(String(id).replace('_', ''), 1);
+}
+
+/* Balasan baku untuk semua servis akhir-pertarungan.
+ *
+ * Battle memakai TIGA callback tergantung jalurnya:
+ *     callBattleFinishHAV -> getBossRewardResponse02   (paling ketat)
+ *     actionFinish_CB     -> getBossRewardResponse04
+ *     jalur bos lain      -> getBossRewardResponse03
+ *
+ * Syarat Response02:
+ *   reward, reward_get   WAJIB larik. @329/@342 di-coerce Array lalu @878
+ *                        dibaca .length -> field hilang = null = #1009.
+ *   result               null ATAU objek. @356 hanya menjaga terhadap null
+ *                        lalu membaca result.add_favorability; mengirim
+ *                        angka menghasilkan #1069 pada Number.
+ *   extra_reward, extra_reward_get, pet
+ *                        diuji Boolean(). Larik kosong bernilai TRUE di
+ *                        AS3, jadi dikirim null supaya bloknya dilewati.
+ */
+function balasanHadiah(tambahan) {
+  return Object.assign({
+    status: 1, error: null,
+    result: null,                  // JANGAN angka
+    reward: semuaHadiah(),         // WAJIB larik -- yang DIGAMBAR
+    reward_get: barangHadiah(),    // WAJIB larik -- penanda DIDAPAT
+    reward_items: [],
+    player_pet: [],
+    extra_reward: null,
+    extra_reward_get: null,
+    pet: null,
+    gold: 0, xp: 0, dmg: 0,
+    double_reward: false,
+    message: '',
+    z9f: null,
+  }, tambahan || {});
+}
+
+/* Peta nomor ekor -> id pet, disalin dari tailPetArr di konstruktor
+ * paymentTailPet: [0,146,141,131,86,74,73,71,68,65]. Indeks 0 dibuang,
+ * jadi elemen ke-0 di sini = ekor 1.
+ *     1 Ichibi  2 Nibi   3 Sanbi   4 Yobi    5 Gobi
+ *     6 Rokubi  7 Nanabi 8 Hachibi 9 Kyubi
+ */
+const EKOR_KE_PET = ['146', '141', '131', '86', '74', '73', '71', '68', '65'];
+
 const handlers = {
 
   'SystemService.requireLogin': () => ({ status: 1, error: null }),
@@ -1617,10 +1733,76 @@ const handlers = {
   // [1,2,3,4,0] memenuhi keduanya: 1-4 membuat keempat ekor bisa dibeli,
   // lalu 0 di akhir menjadikan nowPost = 0 -> tailPetCanShowArr[0] = 1 ->
   // tailPetArr[1] = 146, pet yang terbukti ditemukan PET_DATA di log Anda.
+  // Pembelian pet ekor dengan token.
+  //
+  // confirmBuyPet @21-71 mengirim
+  //     Anni5th.buyPet([sessionKey, String(petObj.id), petObj.name, lang])
+  // dengan petObj = getTailDetail(tailPetCanShowArr[nowPost]), yaitu entri
+  // PET_DATA hasil pencarian "pet" + tailPetArr[tailNum]. Jadi args[1]
+  // berbentuk "pet86" (Yobi), "pet131" (Sanbi), "pet141" (Nibi),
+  // "pet146" (Ichibi).
+  //
+  // onAmfBuyItemResult @48-404 TIDAK menyimpan apa pun:
+  //     res.result -> kalau truthy DAN .equipped, pet langsung dipasang
+  //                   (parsePetData + initPet + muat swf/pets/<swfName>.swf)
+  //     Account.balance dikurangi petObj.token yang dibaca dari PET_DATA
+  //                   milik KLIEN, bukan dari balasan server
+  //     ownedTailArr.push(...), updateDetail, updateGoldDisplay
+  // Jadi tanpa handler ini pembelian cuma terlihat berhasil di layar lalu
+  // hilang saat muat ulang -- pola yang sama seperti gauntlet dulu.
+  //
+  // result dikirim null supaya blok pemasangan otomatis dilewati: pet baru
+  // disimpan tidak-terpasang, dan pemain memilihnya sendiri lewat panel Pets.
+  // Mengirim objek ber-equipped:true akan memaksa pet langsung aktif, dan
+  // pet ekor tanpa blok skill di data_library bisa membekukan pertarungan.
+  'Anni5th.buyPet': (args) => {
+    const mentah = String((args && args[1]) || '');
+    const id = mentah.replace(/^pet/, '');
+    if (!id) {
+      log('   buyPet: id pet tidak sah (' + mentah + ')');
+      return { status: 1, error: null, result: null };
+    }
+    const sudah = (chars.listPets() || []).some(p => String(p.id) === id);
+    if (sudah) {
+      log('   pet ' + id + ' sudah dimiliki, tidak ditambah lagi');
+    } else {
+      chars.addPet({ id, equipped: false });
+      log('   pet ekor dibeli: pet' + id +
+          ((args && args[2]) ? ' (' + args[2] + ')' : ''));
+    }
+    return { status: 1, error: null, result: null };
+  },
+
+  // Pet hadiah dari panel yang sama (confirmClaimPet @19).
+  'SpecialReward.claimPaymentPet': () => ({
+    status: 1, error: null, result: null, message: '',
+  }),
+
   'Anni5th.getTailPet': () => ({
     status: 1, error: null, result: [],
-    active_tail_number: [1, 2, 3, 4, 0],
-    owned_tail_number: [],
+    // 1..9 = SEMUA ekor bisa dibeli; 0 di akhir = defaultPost (indeks 0).
+    //
+    // Angka 1-9 harus cocok dengan tailPetCanShowArr di panel. Panel ASLI
+    // hanya berisi [1,2,3,4], jadi Gobi..Kyubi tak pernah dibangun sama
+    // sekali -- tak ada tab, tak ada tombol beli. Itu batas KLIEN, tidak
+    // bisa dibuka dari sini: active_tail_number cuma disaring TERHADAP
+    // daftar tersebut.
+    //
+    // Dipakai bersama popup_tail_pet.swf yang sudah dipatch jadi [1..9]
+    // (skrip tail9.py). Kalau memakai panel asli, kembalikan ke
+    // [1, 2, 3, 4, 0] supaya elemen terakhir tetap indeks yang sah.
+    active_tail_number: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0],
+    // Nomor ekor yang SUDAH dimiliki. setUpGetMethodBtn @94-117 menyembunyikan
+    // tombol payBtn untuk tiap nomor yang ada di sini, jadi kalau selalu
+    // dikirim kosong, pet yang sudah dibeli tetap tampak belum dimiliki dan
+    // bisa dibeli berulang kali.
+    //
+    // Dihitung dari koleksi pet karakter lewat peta tailPetArr milik panel:
+    //     ekor 1..9 -> pet146,141,131,86,74,73,71,68,65
+    owned_tail_number: EKOR_KE_PET
+      .map((petId, i) => ({ petId, ekor: i + 1 }))
+      .filter(x => (chars.listPets() || []).some(p => String(p.id) === String(x.petId)))
+      .map(x => x.ekor),
   }),
 
   // args: [sessionKey, characterId, tradingBodySet, tradingWeapon, ?, tradingBackItem, accessory]
@@ -1683,7 +1865,39 @@ const handlers = {
 
   'EudemonGarden.getHuntingStatus': () => ({
     status: 1, error: null,
-    result: { room: [] },
+    result: { room: EUDEMON_ROOM.map(r => ({
+      boss:    r.boss,
+      rank:    r.rank || 1,
+      rewards: r.rewards || [],
+      status:  0,
+      time:    r.time == null ? 3 : r.time,
+      xp:      r.xp || 0,
+      gold:    r.gold || 0,
+    })) },
+  }),
+
+  'ItemDAO.getCharacterHuntingList': () => ({
+    status: 1, error: null,
+    hunting_list: HUNTING_ZONE,
+    hunting_cost: 0,
+    update_time: 0,
+    get_hunting_passport: 1,
+    hunting_daren: [],
+    show_item: '',            // STRING dipisah koma, bukan larik
+  }),
+
+  // Mulai & selesai berburu. Keempat servis akhir-pertarungan memakai
+  // bentuk balasan yang sama karena satu servis bisa dipanggil dari
+  // jalur callback yang berbeda.
+  'ItemDAO.startHunting':           () => ({ status: 1, error: null, result: 1 }),
+  'CharacterDAO.startHunting':      () => ({ status: 1, error: null, result: 1 }),
+  'EudemonGarden.startHunting':     () => ({ status: 1, error: null, result: 1 }),
+  'EudemonGarden.finishHunting':    () => balasanHadiah(),
+  'CharacterDAO.finishHunting':     () => balasanHadiah(),
+  'ValentinesDay2017.finishHunting': () => balasanHadiah(),
+
+  'CharacterDAO.getSkillProfiles': () => ({
+    status: 1, error: null, result: [], data: {},
   }),
 
   'CharacterManagement.getInvHair': () => ({
@@ -1953,6 +2167,29 @@ const handlers = {
       else   log('   !! id misi tidak dikenali: ' + missionId);
     }
 
+    // Level pet ikut dikirim di sini. Character.updateDB @624-730 menyusun 20
+    // argumen, dan dua di antaranya milik pet:
+    //     args[6] = id pet      args[7] = level pet
+    // (args[8] = id misi, dipakai di atas)
+    //
+    // Klien TIDAK menyimpan progres pet sendiri, jadi tanpa blok ini pet naik
+    // level hanya di layar hasil battle lalu kembali ke level lama.
+    //
+    // XP wajib ikut disimpan: klien mengabaikan field `level` yang kita kirim
+    // dan menghitung ulang dari `xp` lewat Formula.getPetLvByXp. Menyimpan
+    // level saja membuat pet tetap terbaca level 1.
+    const petId = args && args[6];
+    const petLv = Number(args && args[7]);
+    if (petId && petLv > 0) {
+      const lama = (chars.listPets() || []).find(x => String(x.id) === String(petId));
+      if (lama && petLv > (Number(lama.level) || 1)) {
+        const xp = chars.xpPetUntukLevel(petLv);
+        chars.addPet({ id: petId, level: petLv, xp });
+        log('   pet ' + petId + ' naik level: ' + lama.level + ' -> ' + petLv +
+            '  (xp disetel ke ' + xp + ')');
+      }
+    }
+
     const hasil = chars.addProgress(xpGain, goldGain);
     if (!hasil) {
       log('   !! updateCharacter tapi belum ada karakter tersimpan');
@@ -1977,9 +2214,13 @@ const handlers = {
     };
   },
 
-  'ItemDAO.getBossReward': () => ({
-    status: 1, error: null, result: [], reward_items: [],
-  }),
+  'ItemDAO.getBossReward': () => {
+    // Klien hanya MENAMPILKAN isi reward; penyimpanannya tugas server.
+    for (const h of barangHadiah()) {
+      try { beriHadiah(h); } catch (e) { log('   !! hadiah ' + h + ': ' + e.message); }
+    }
+    return balasanHadiah();
+  },
 
   // Dipanggil layar pembuatan/pemilihan karakter.
   // args: [sessionKey, TEST_VERSION]

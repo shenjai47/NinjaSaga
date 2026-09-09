@@ -11,7 +11,7 @@
     "level": 80,
     "xp": 55735935,
     "rank": 9,
-    "gold": 887496518,
+    "gold": 887496520,
     "token": 999863669,
     "crystal": 999999999,
     "premium": 0,
@@ -250,7 +250,12 @@
       "604",
       "600",
       "604",
-      "2"
+      "600",
+      "604",
+      "600",
+      "604",
+      "600",
+      "604"
     ],
     "created": 1785943126,
     "stats": {
@@ -640,6 +645,19 @@
         "xp": 0,
         "swfName": "pet_157",
         "clsName": "Pet_157",
+        "equipped": false,
+        "trained": [
+          0
+        ],
+        "skills": []
+      },
+      {
+        "id": "65",
+        "name": "Kyubi",
+        "level": 4,
+        "xp": 188,
+        "swfName": "fox_1",
+        "clsName": "Fox_1",
         "equipped": false,
         "trained": [
           0
