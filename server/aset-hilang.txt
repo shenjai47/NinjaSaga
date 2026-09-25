@@ -1,5 +1,1 @@
-hair_88_0
-popup_reset_skill
-set_935_0
-skill_icon_541-550
-skill_icon_551-560
+popup_4th_claim_code_p16

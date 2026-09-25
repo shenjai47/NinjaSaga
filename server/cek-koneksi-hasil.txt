@@ -1,0 +1,34 @@
+Pemeriksa koneksi Ninja Saga -- 25/9/2026, 06.36.26
+Node v20.20.2 di win32 10.0.19044
+
+1) Berkas hosts
+   [OK]    ninjasaga.cc -> 127.0.0.1
+   [OK]    cdn.ninjasaga.cc -> 127.0.0.1
+   [OK]    amf.ninjasaga.cc -> 127.0.0.1
+
+2) Nama domain yang dipakai Windows
+   [OK]    ninjasaga.cc -> 127.0.0.1
+   [OK]    cdn.ninjasaga.cc -> 127.0.0.1
+   [OK]    amf.ninjasaga.cc -> 127.0.0.1
+
+3) Server Node (node index.js) di port 8080
+   [OK]    ninja_saga.swf dikirim: 2.882.191 byte
+
+4) Caddy (HTTPS) di port 443
+   [OK]    port 443 terbuka
+
+5) Sertifikat HTTPS dan berkas lewat https://cdn.ninjasaga.cc
+   [GAGAL] sertifikat KEDALUWARSA sejak 9/9/2026, 19.31.07
+           Tutup Caddy lalu jalankan lagi -- Caddy memperbarui sertifikatnya saat menyala.
+
+6) Berkas game lewat HTTPS
+   [OK]    https://cdn.ninjasaga.cc/ninja_saga.swf -> 2.882.191 byte
+
+7) Login uji lewat https://amf.ninjasaga.cc/
+   [OK]    server menjawab login (929 byte)
+
+==================================================================
+KESIMPULAN: yang pertama gagal adalah -> SERTIFIKAT HTTPS
+Perbaiki yang itu dulu (petunjuknya ada di atas), lalu jalankan
+pemeriksa ini sekali lagi.
+==================================================================

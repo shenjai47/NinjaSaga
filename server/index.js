@@ -312,7 +312,224 @@ function balasanHadiah(tambahan) {
  */
 const EKOR_KE_PET = ['146', '141', '131', '86', '74', '73', '71', '68', '65'];
 
+/* ====================================================================
+ * PAKET KLAIM (tombol PackageBtnNN di peta)
+ *
+ * Tiap tombol memuat popup_4th_claim_code_pNN.swf yang berbeda, tapi
+ * semuanya kelas Anni4_ClaimCode dengan alur yang sama:
+ *     gotoClaimPanel     -> SpecialReward.claim<Nama>Package([sessionKey])
+ *     ClaimItemResponse  -> HANYA membaca res.message:
+ *         == 'You do not have a claim for this package.'  -> buka toko
+ *         selain itu                                       -> showOk(message)
+ * Tanpa `message`, showOk(undefined) melempar #2007 di ConfirmationDoc.
+ *
+ * Isi paket dibaca dari show() tiap popup, yang menimpa ClaimRewardArr
+ * menurut CHAR_GENDER (daftar di konstruktor cuma sisa salinan -- jangan
+ * dipakai). Urutan: set, wpn, hair, back, skill, pet. Semua id sudah
+ * dicocokkan ke data_library_en.
+ * ==================================================================== */
+const PAKET_KLAIM = {
+  // popup_4th_claim_code_p8
+  'SpecialReward.claimAugustPackage': { nama: 'August Package',
+    g0: ['set_2248', 'wpn_1343', 'hair_683', 'back_557', 'skill_719', 'pet_71'],
+    g1: ['set_2249', 'wpn_1343', 'hair_684', 'back_557', 'skill_719', 'pet_71'] },
+  // popup_4th_claim_code_p11
+  'SpecialReward.claimPatriotPackage': { nama: 'Patriot Package',
+    g0: ['set_1430', 'wpn_1109', 'hair_429', 'back_427', 'skill_896', 'pet_205'],
+    g1: ['set_1431', 'wpn_1109', 'hair_430', 'back_427', 'skill_896', 'pet_205'] },
+  // popup_4th_claim_code_p15 -- Magic Emissary Set
+  'SpecialReward.claimMagicPackage': { nama: 'Magic Package',
+    g0: ['set_2424', 'wpn_1502', 'hair_765', 'back_688', 'skill_914', 'pet_157'],
+    g1: ['set_2425', 'wpn_1502', 'hair_766', 'back_688', 'skill_914', 'pet_157'] },
+  // popup_4th_claim_code_p16 -- Kendo Ronin Set + Hachibi
+  'SpecialReward.claimSeptemberPackage': { nama: 'September Package',
+    g0: ['set_2218', 'wpn_1342', 'hair_679', 'back_606', 'skill_703', 'pet_68'],
+    g1: ['set_2219', 'wpn_1342', 'hair_680', 'back_606', 'skill_703', 'pet_68'] },
+};
+
+const KANTONG_PAKET = { set: 'bodysets', wpn: 'weapons', hair: 'hairs',
+                        back: 'backitems', skill: 'skills' };
+
+/* Apakah karakter sudah memiliki barang "<jenis>_<nomor>"? */
+function sudahPunya(c, id) {
+  const m = String(id).match(/^([a-z]+)_?(\d+)$/);
+  if (!m) return false;
+  const [, jenis, no] = m;
+  if (jenis === 'pet') return (c.pets || []).some(p => String(p.id) === no);
+  const bag = KANTONG_PAKET[jenis];
+  return !!bag && (c[bag] || []).map(String).includes(no);
+}
+
+function klaimPaket(servis) {
+  const p = PAKET_KLAIM[servis];
+  const c = chars.characterById(chars.getActiveId()) || chars.firstCharacter();
+  if (!p) {
+    log('   paket belum dikenal: ' + servis);
+    return { status: 1, error: null, result: null,
+             message: 'Paket ini belum tersedia di server.' };
+  }
+  if (!c) return { status: 1, error: null, result: null, message: 'Karakter tidak ditemukan.' };
+
+  const isi  = Number(c.gender) === 1 ? p.g1 : p.g0;
+  const baru = isi.filter(id => !sudahPunya(c, id));
+  if (!baru.length) {
+    log('   ' + p.nama + ': semua isi sudah dimiliki');
+    // JANGAN pakai kalimat 'You do not have a claim for this package.' --
+    // kalimat persis itu membuat klien membuka toko, bukan menampilkan pesan.
+    return { status: 1, error: null, result: null,
+             message: p.nama + ' sudah pernah kamu klaim.' };
+  }
+  for (const id of baru) {
+    try { beriHadiah(id); } catch (e) { log('   !! ' + id + ': ' + e.message); }
+  }
+  log('   ' + p.nama + ' diberikan: ' + baru.join(', '));
+  return { status: 1, error: null, result: null,
+           message: p.nama + ' berhasil diklaim!\n' +
+                    'Muat ulang game untuk melihat semua barangnya.' };
+}
+
+/* ------------------------------------------------------------------ *
+ * PANEL KAGE (kage_menu.swf, kelas ninjasaga.linkage.nine_kage)
+ *
+ *   Anni9th.kageMissionStatus([sk])            -> showResponseFunction
+ *   Anni9th.selectKageMission([sk, guru 1..5]) -> getStatus
+ *   Anni9th.claimKageMissionReward([sk, id])   -> getmissionStatus
+ *
+ * Bentuk balasan yang dibaca klien:
+ *   kage          null = layar pilih guru; 'e1' Earth, 'l1' Lightning,
+ *                 'f1' Fire, 'wa1' Water, 'wi1' Wind
+ *   mission       14 entri { mission_id:'<prefix><1..14>', reward:['jenis_no'],
+ *                 target:{item_112x:n}, claim_status:0/1/2 }
+ *                 (2 = sudah diklaim/centang; misi ke-n baru bisa dibuka
+ *                 kalau misi sebelumnya 2). getmissionStatus menentukan guru
+ *                 dari mission[0].mission_id, jadi larik ini tidak boleh
+ *                 kosong di balasan klaim.
+ *   learned_kaga  larik prefix guru yang sudah tamat (isKageLearned)
+ *   completed     SELALU false: true membuka popup 'kageskill_package'
+ *                 yang swf-nya tidak ada.
+ *   target        essence yang disyaratkan tombol Claim (getItemCount >= n).
+ *                 Essence aslinya didapat dari 'kage_battle' yang swf-nya
+ *                 tidak ada, jadi syaratnya dikosongkan (KAGE_BUTUH_ESSENCE).
+ * Klien TIDAK menambahkan hadiah ke tas sendiri -> server yang menyimpan.
+ * ------------------------------------------------------------------ */
+const KAGE_BUTUH_ESSENCE = false;   // true = tiap misi minta 1 essence elemennya
+const KAGE_GURU = {
+  1: { prefix: 'e1',  huruf: 'e',  nama: 'Earth',     essence: 'item_1127', skill: ['skill_892', 'skill_893', 'skill_915'] },
+  2: { prefix: 'l1',  huruf: 'l',  nama: 'Lightning', essence: 'item_1128', skill: ['skill_890', 'skill_891', 'skill_914'] },
+  3: { prefix: 'f1',  huruf: 'f',  nama: 'Fire',      essence: 'item_1126', skill: ['skill_888', 'skill_889', 'skill_913'] },
+  4: { prefix: 'wa1', huruf: 'wa', nama: 'Water',     essence: 'item_1129', skill: ['skill_896', 'skill_897', 'skill_916'] },
+  5: { prefix: 'wi1', huruf: 'wi', nama: 'Wind',      essence: 'item_1130', skill: ['skill_894', 'skill_899', 'skill_917'] },
+};
+const KAGE_JUMLAH_MISI = 14;
+// Misi ke-5, ke-10 dan ke-14 memberi tiga skill guru; sisanya essence elemennya.
+const KAGE_MISI_SKILL = { 5: 0, 10: 1, 14: 2 };
+
+function guruDariPrefix(prefix) {
+  for (const n of Object.keys(KAGE_GURU)) if (KAGE_GURU[n].prefix === prefix) return KAGE_GURU[n];
+  return null;
+}
+
+function hadiahMisiKage(guru, no) {
+  return (no in KAGE_MISI_SKILL) ? guru.skill[KAGE_MISI_SKILL[no]] : guru.essence;
+}
+
+function daftarMisiKage(guru, misi) {
+  const out = [];
+  for (let no = 1; no <= KAGE_JUMLAH_MISI; no++) {
+    const id = guru.huruf + no;
+    const target = {};
+    if (KAGE_BUTUH_ESSENCE && !(no in KAGE_MISI_SKILL)) target[guru.essence] = 1;
+    out.push({ mission_id: id, reward: [hadiahMisiKage(guru, no)], target,
+               claim_status: Number(misi[id]) === 2 ? 2 : 1 });
+  }
+  return out;
+}
+
+function karakterKage() {
+  return chars.characterById(chars.getActiveId()) || chars.firstCharacter();
+}
+
+function balasanKage(st, guruPaksa) {
+  const guru = guruPaksa || (st.kage ? guruDariPrefix(st.kage) : null);
+  return {
+    status: 1, error: null, result: null,
+    kage: st.kage || null,
+    mission: guru ? daftarMisiKage(guru, st.misi) : [],
+    learned_kaga: st.learned.slice(),
+    completed: false,
+  };
+}
+
+function kageStatus() {
+  return balasanKage(chars.stateKage(karakterKage()));
+}
+
+function kagePilih(args) {
+  const n = Number(args && args[1]);
+  const guru = KAGE_GURU[n];
+  const st = chars.stateKage(karakterKage());
+  if (!guru) { log('   Kage: guru tak dikenal (' + (args && args[1]) + ')'); return balasanKage(st); }
+  if (st.kage !== guru.prefix) { st.kage = guru.prefix; st.misi = {}; }
+  chars.setKage(st);
+  log('   Kage dipilih: ' + guru.nama + ' (' + guru.prefix + ')');
+  return balasanKage(st);
+}
+
+function kageKlaim(args) {
+  const id = String((args && args[1]) || '');
+  const st = chars.stateKage(karakterKage());
+  const guru = st.kage ? guruDariPrefix(st.kage) : null;
+  if (!guru) {
+    // Klik ganda setelah guru tamat: getmissionStatus tetap membaca
+    // mission[0].mission_id, jadi kirim ulang 14 misi guru itu (semua centang).
+    log('   Kage: klaim tanpa guru aktif (' + id + ')');
+    const hm = id.match(/^([a-z]+)\d+$/);
+    const lama = hm && Object.values(KAGE_GURU).find(g => g.huruf === hm[1]);
+    if (!lama) return balasanKage(st);
+    const semua = {};
+    for (let i = 1; i <= KAGE_JUMLAH_MISI; i++) semua[lama.huruf + i] = st.learned.includes(lama.prefix) ? 2 : 1;
+    return balasanKage({ kage: null, misi: semua, learned: st.learned }, lama);
+  }
+
+  const m = id.match(/^([a-z]+)(\d+)$/);
+  const no = m && m[1] === guru.huruf ? Number(m[2]) : 0;
+  if (!(no >= 1 && no <= KAGE_JUMLAH_MISI)) {
+    log('   Kage: misi ' + id + ' bukan milik guru ' + guru.nama);
+    return balasanKage(st);
+  }
+  if (Number(st.misi[id]) === 2) { log('   Kage: ' + id + ' sudah diklaim'); return balasanKage(st); }
+  if (no > 1 && Number(st.misi[guru.huruf + (no - 1)]) !== 2) {
+    log('   Kage: ' + id + ' terkunci (misi sebelumnya belum diklaim)');
+    return balasanKage(st);
+  }
+
+  const hadiah = hadiahMisiKage(guru, no);
+  try { beriHadiah(hadiah); } catch (e) { log('   !! hadiah ' + hadiah + ': ' + e.message); }
+  st.misi[id] = 2;
+  log('   Kage ' + guru.nama + ' misi ' + no + ' diklaim -> ' + hadiah);
+
+  // Semua misi selesai: guru ditandai tamat dan layar kembali ke pilih guru.
+  // Balasan kali ini tetap membawa 14 misi (klien membaca guru dari
+  // mission[0]); status baru baru terlihat saat panel dibuka lagi.
+  let selesai = true;
+  for (let i = 1; i <= KAGE_JUMLAH_MISI; i++) if (Number(st.misi[guru.huruf + i]) !== 2) selesai = false;
+  const balas = balasanKage(st, guru);
+  if (selesai) {
+    if (!st.learned.includes(guru.prefix)) st.learned.push(guru.prefix);
+    st.kage = null; st.misi = {};
+    balas.learned_kaga = st.learned.slice();
+    log('   Kage ' + guru.nama + ' TAMAT');
+  }
+  chars.setKage(st);
+  return balas;
+}
+
 const handlers = {
+
+  // Panel Kage -- lihat blok PANEL KAGE di atas.
+  'Anni9th.kageMissionStatus':      () => kageStatus(),
+  'Anni9th.selectKageMission':      (args) => kagePilih(args),
+  'Anni9th.claimKageMissionReward': (args) => kageKlaim(args),
 
   'SystemService.requireLogin': () => ({ status: 1, error: null }),
 
@@ -2428,6 +2645,13 @@ function dispatch(target, args) {
       return { status: 1, error: null, result: [], data: {} };
     }
   }
+  // Paket klaim: semua servis SpecialReward.claim<Nama>Package dibalas
+  // lewat klaimPaket(), termasuk yang belum ada di PAKET_KLAIM -- balasan
+  // generik tanpa `message` membuat klien melempar #2007.
+  if (/^SpecialReward\.claim\w*Package$/.test(target)) {
+    log('   -> paket klaim');
+    return klaimPaket(target);
+  }
   log('   -> handler BELUM ADA, balas status=1 kosong');
   return { status: 1, error: null, result: [], data: {} };
 }
@@ -2459,6 +2683,19 @@ const INTI = new Set([
   'action_base',
 ]);
 
+/* Jangan biarkan peramban menyimpan salinan berkas.
+ *
+ * ninja_saga.swf dimuat halaman lewat URL yang querynya selalu sama
+ * (?fb_uid=...), tidak seperti SWF lain yang diberi "?_t=<waktu>" oleh
+ * Preloader. Tanpa header ini peramban terus memakai salinan lama, sehingga
+ * SWF hasil patch "tidak berefek" walaupun berkas di disk sudah benar.
+ */
+const TANPA_CACHE = {
+  'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+  'Pragma': 'no-cache',
+  'Expires': '0',
+};
+
 function serveStatic(req, res) {
   const urlPath = decodeURIComponent(req.url.split('?')[0]);
   const safe = path.normalize(urlPath).replace(/^([/\\])+/, '');
@@ -2469,10 +2706,10 @@ function serveStatic(req, res) {
 
   if (fs.existsSync(full) && fs.statSync(full).isFile()) {
     const data = fs.readFileSync(full);
-    res.writeHead(200, {
+    res.writeHead(200, Object.assign({
       'Content-Type': MIME[path.extname(full).toLowerCase()] || 'application/octet-stream',
       'Content-Length': data.length,
-    });
+    }, TANPA_CACHE));
     return res.end(data);
   }
 
@@ -2506,10 +2743,10 @@ function serveStatic(req, res) {
     // Donor asli punya ABC lengkap, jadi cukup diganti namanya.
     // Hasilnya terlihat seperti donor, tapi tidak error.
     const swf = cloneOrStub(path.dirname(full), name);
-    res.writeHead(200, {
+    res.writeHead(200, Object.assign({
       'Content-Type': 'application/x-shockwave-flash',
       'Content-Length': swf.length,
-    });
+    }, TANPA_CACHE));
     return res.end(swf);
   }
 
@@ -2612,8 +2849,47 @@ function cloneOrStub(dir, name) {
   return buildStub(name);
 }
 
+/* Satu baris per permintaan berkas statis.
+ *
+ * Tanpa ini, log tidak bisa membedakan "peramban tidak pernah sampai ke
+ * server" (Caddy mati, hosts hilang, sertifikat) dari "peramban sampai tapi
+ * game berhenti sebelum login" -- keduanya sama-sama terlihat sebagai log
+ * kosong sesudah banner. Baris pertama sebuah sesi mestinya
+ *     [http] GET /ninja_saga.swf -> 200  2872142 B
+ */
+function catatHttp(req, res) {
+  const url = String(req.url || '').split('?')[0];
+  // Header yang dioper lewat writeHead(status, {...}) tidak bisa dibaca balik
+  // dengan getHeader(), jadi ukurannya dihitung dari yang benar-benar dikirim.
+  let terkirim = 0;
+  const endAsli = res.end;
+  res.end = function (chunk, ...sisa) {
+    if (chunk && typeof chunk !== 'function') terkirim += Buffer.byteLength(chunk);
+    return endAsli.call(this, chunk, ...sisa);
+  };
+  res.on('finish', () => {
+    log('[http] ' + req.method + ' ' + url + ' -> ' + res.statusCode +
+        '  ' + terkirim.toLocaleString('id-ID') + ' B');
+  });
+}
+
 const server = http.createServer((req, res) => {
-  if (req.method !== 'POST') return serveStatic(req, res);
+  if (req.method !== 'POST') {
+    // Dibungkus: satu URL aneh (mis. %-escape rusak yang membuat
+    // decodeURIComponent melempar) dulu cukup untuk MEMATIKAN proses Node,
+    // dan jejaknya hanya tampil di jendela konsol, tidak di amf-log.txt.
+    try {
+      catatHttp(req, res);
+      return serveStatic(req, res);
+    } catch (e) {
+      log('!! ERROR BERKAS STATIS ' + req.url + '\n' + (e && e.stack ? e.stack : String(e)));
+      try {
+        if (!res.headersSent) res.writeHead(500, { 'Content-Type': 'text/plain' });
+        res.end('error\n');
+      } catch { /* koneksi sudah tertutup */ }
+      return;
+    }
+  }
   const chunks = [];
   req.on('data', c => chunks.push(c));
   req.on('end', () => {
@@ -2655,6 +2931,25 @@ const server = http.createServer((req, res) => {
     } catch { /* koneksi sudah tertutup */ }
    }
   });
+});
+
+// Kalau ada error yang lolos dari semua try/catch, catat ke amf-log.txt dan
+// JANGAN matikan server. Dulu proses langsung berhenti dan satu-satunya
+// jejaknya ada di jendela konsol -- yang biasanya sudah tertutup.
+process.on('uncaughtException', e => {
+  try { log('\n!! ERROR TAK TERTANGANI (server tetap jalan):\n' + (e && e.stack ? e.stack : String(e))); }
+  catch { console.log(e); }
+});
+
+// Port 8080 sudah dipakai = server lain (atau jendela lama) masih hidup.
+server.on('error', e => {
+  if (e && e.code === 'EADDRINUSE') {
+    log('\n!! PORT ' + PORT + ' SUDAH DIPAKAI.');
+    log('   Ada server lain (mungkin jendela lama) yang masih jalan.');
+    log('   Tutup semua jendela node, lalu jalankan lagi.');
+    process.exit(1);
+  }
+  log('\n!! SERVER GAGAL: ' + (e && e.stack ? e.stack : String(e)));
 });
 
 server.listen(PORT, '127.0.0.1', () => {

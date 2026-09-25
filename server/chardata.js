@@ -2448,6 +2448,28 @@ function setGauntlet(bagian, indeks, nilai) {
   return c.gauntlet;
 }
 
+/* Status panel Kage (Anni9th / kage_menu.swf) untuk karakter aktif.
+ * Bentuk: { kage: 'f1'|'e1'|'l1'|'wa1'|'wi1'|null, misi: {id: status}, learned: [prefix] } */
+function stateKage(c) {
+  const k = (c && c.kage) || {};
+  return {
+    kage: k.kage || null,
+    misi: (k.misi && typeof k.misi === 'object') ? k.misi : {},
+    learned: Array.isArray(k.learned) ? k.learned : [],
+  };
+}
+
+function setKage(state) {
+  const all = load();
+  const key = String(getActiveId() || Object.keys(all)[0]);
+  const c = all[key];
+  if (!c) return null;
+  c.kage = { kage: state.kage || null, misi: state.misi || {}, learned: state.learned || [] };
+  all[key] = c;
+  save(all);
+  return c.kage;
+}
+
 function rawCharacter(c, sessionKey) {
   const r = {
     bloodline:                             daftarBloodline(c),
@@ -2735,6 +2757,12 @@ function buildExtraData(c, sessionKey) {
         { item_type: 'GOLD', amount: 300 },
       ],
     },
+    // Mata uang ketiga "MCoin" (ikon M ungu di bar atas, sebelah Token).
+    // Klien menyimpannya di extraData.MCoin / extraData.totalMCoin
+    // (Main.validateAmfResponse @1089-1150); tanpa field ini bar atas
+    // menampilkan "undefined". Nilainya disimpan di karakter sebagai c.mcoin.
+    MCoin:      Number(c && c.mcoin) || 0,
+    totalMCoin: Number(c && c.mcoin) || 0,
     GodSnapCountDown: null,
     UnstoppableRageCountDown: null,
     achievement: null,
@@ -2978,7 +3006,7 @@ function buildExtraData(c, sessionKey) {
 }
 
 module.exports = {
-  setGauntlet, stateGauntlet, bersihkanBatuGauntlet,
+  setGauntlet, stateGauntlet, bersihkanBatuGauntlet, stateKage, setKage,
   daftarMaterial, setMaterial,
   validate, DB_TYPES, extraDataHash, rawCharacter,
   getLvByXp, xpForLevel, addProgress, mergeStats,
