@@ -342,6 +342,9 @@ const PAKET_KLAIM = {
     g0: ['set_2424', 'wpn_1502', 'hair_765', 'back_688', 'skill_914', 'pet_157'],
     g1: ['set_2425', 'wpn_1502', 'hair_766', 'back_688', 'skill_914', 'pet_157'] },
   // popup_4th_claim_code_p16 -- Kendo Ronin Set + Hachibi
+  'SpecialReward.claimSpookyPackage': { nama: 'Spooky Package',
+    g0: ['set_2202','wpn_1329','hair_671','back_601','skill_721','pet_67'],
+    g1: ['set_2203','wpn_1329','hair_672','back_601','skill_721','pet_67'] },
   'SpecialReward.claimSeptemberPackage': { nama: 'September Package',
     g0: ['set_2218', 'wpn_1342', 'hair_679', 'back_606', 'skill_703', 'pet_68'],
     g1: ['set_2219', 'wpn_1342', 'hair_680', 'back_606', 'skill_703', 'pet_68'] },
@@ -525,6 +528,26 @@ function kageKlaim(args) {
 }
 
 const handlers = {
+
+  // Event Halloween 2016 (swf/panels/Halloween_battle_2016.swf, kelas
+  // Halloween2016Battle). getEventResponse membaca
+  //   result.remain_heart        jumlah heart (maks 5, atau 8 untuk Emblem)
+  //   result.heart_refill_remain detik menuju heart berikutnya (0 = penuh)
+  //   reward_list                opsional; null = hadiah bawaan swf dipakai
+  // Balasan kosong sebelumnya membuat heart terbaca 0 sehingga pemain harus
+  // "beli heart" dulu tiap kali. Sekarang heart selalu penuh.
+  'HalloweenEvent2016.getBattleStatus': () => ({
+    status: 1, error: null,
+    result: { remain_heart: 8, heart_refill_remain: 0 },
+    reward_list: null,
+  }),
+  // getBuyHeartResponse cukup status valid; klien mengisi heart ke maksimum.
+  'HalloweenEvent2016.buyBattleHeart': () => ({ status: 1, error: null, result: null }),
+  // reduceHeartResponse cukup status valid, lalu klien masuk battle.
+  'HalloweenEvent2016.startBattle': (args) => {
+    log('   battle Halloween 2016 melawan: ' + ((args && args[1]) || '?'));
+    return { status: 1, error: null, result: null };
+  },
 
   // Panel Kage -- lihat blok PANEL KAGE di atas.
   'Anni9th.kageMissionStatus':      () => kageStatus(),
